@@ -1,0 +1,180 @@
+﻿<UserControl x:Class="Inventory.ProductsManagment.Views.IncomingProductFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"    
+             xmlns:ViewModels="clr-namespace:Inventory.ProductsManagment.ViewModels"
+             mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Inventory.Common;component/ApplicationLayer/Resources/CommonControlResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXMessageBoxService x:Name="IncomingProductFormNotifications"/>
+    </dxmvvm:Interaction.Behaviors>
+    <dx:LoadingDecorator>
+        <dxlc:GroupBox>
+            <dxlc:GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Incoming Product Form" HorizontalAlignment="Center" FontSize="16"/>
+                </DataTemplate>
+            </dxlc:GroupBox.HeaderTemplate>
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:GroupBox Background="LightGoldenrodYellow" TitleBackground="AliceBlue" Height="250">
+                    <dxlc:GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Lot Information" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </dxlc:GroupBox.HeaderTemplate>
+                    <dxlc:LayoutGroup Orientation="Vertical">
+                        <dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Lot Number" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit Text="{Binding Lot.LotNumber,Mode=TwoWay}" 
+                                              NullText="Enter Lot Number" 
+                                              HorizontalContentAlignment="Center"
+                                              IsEnabled="{Binding SetLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Supplier Po" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit Text="{Binding Lot.SupplierPoNumber,Mode=TwoWay}" 
+                                              NullText="Enter Po Number" 
+                                              HorizontalContentAlignment="Center"
+                                              IsEnabled="{Binding SetLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Unit Cost" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:SpinEdit EditValue="{Binding UnitCost,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                              MinValue="0" Increment="1" 
+                                              DisplayFormatString="c3"
+                                              HorizontalContentAlignment="Center"
+                                              IsEnabled="{Binding SetLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Recieved" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:DateEdit EditValue="{Binding Lot.Recieved,Mode=TwoWay}" 
+                                              IsEnabled="{Binding SetLotEnabled}"
+                                              HorizontalContentAlignment="Center"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Part Number" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit EditValue="{Binding SelectedProduct.Name}" 
+                                              IsReadOnly="True" Background="AntiqueWhite"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="RMA Number(If Applicable)" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit NullText="Enter RMA Number" EditValue="{Binding RmaNumber}"
+                                              IsEnabled="{Binding SetLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup Orientation="Horizontal" VerticalAlignment="Bottom" Height="50">
+                            <dx:SimpleButton Content="Set Lot" 
+                                             Command="{Binding SetLotCommand}" 
+                                             Glyph="{dx:DXImage Image=Save_32x32.png}"
+                                             IsEnabled="{Binding SetLotEnabled,Mode=OneWay}"/>
+
+                            <dx:SimpleButton Content="Edit Lot" 
+                                             Command="{Binding EditLotCommand}" 
+                                             Glyph="{dx:DXImage Image=Action_Reload_32x32.png}"
+                                             IsEnabled="{Binding EditLotEnabled}"/>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+                </dxlc:GroupBox>
+                <dxlc:GroupBox Background="LightBlue" TitleBackground="AliceBlue">
+                    <dxlc:GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Rank Information" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </dxlc:GroupBox.HeaderTemplate>
+                    <dxlc:LayoutGroup Orientation="Vertical">
+                        <dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Enter Rank" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit EditValue="{Binding Rank.Name}" 
+                                              NullText="Enter Rank Text" 
+                                              HorizontalContentAlignment="Left"
+                                              IsEnabled="{Binding EditLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Enter Quantity" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:SpinEdit EditValue="{Binding Rank.Quantity}" 
+                                              EditValueType="{x:Type sys:Int32}"
+                                              NullText="0" MinValue="0" 
+                                              Increment="1" MaskType="Numeric" 
+                                              IsEnabled="{Binding EditLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Wavelength" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit EditValue="{Binding Rank.Wavelength}" HorizontalContentAlignment="Center" IsEnabled="{Binding EditLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Power" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit EditValue="{Binding Rank.Power}" HorizontalContentAlignment="Center" IsEnabled="{Binding EditLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Voltage" Style="{StaticResource LayoutItemStyle}">
+                                <dxe:TextEdit EditValue="{Binding Rank.Voltage}" HorizontalContentAlignment="Center" IsEnabled="{Binding EditLotEnabled}"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutItem Label="Set Lot" Style="{StaticResource LayoutItemStyle}">
+                            <dxe:TextEdit EditValue="{Binding SetLot,Mode=TwoWay}" Background="Bisque" 
+                                          HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        </dxlc:LayoutItem>
+                        <dx:SimpleButton Content="Add Rank To Lot"
+                                         Command="{Binding AddRankToLotCommand}"
+                                         Glyph="{dx:DXImage Image=Down_16x16.png}"
+                                         ToolTip="Add Rank To Lot" Height="40"/>
+                        <dxg:GridControl x:Name="_lotRanks" Style="{StaticResource GridControlStyle}"
+                                         ItemsSource="{Binding Ranks,Mode=TwoWay}"
+                                         SelectedItem="{Binding SelectedRank,Mode=TwoWay}">
+                            <dxg:GridControl.View>
+                                <dxg:TableView AllowEditing="True"
+                                               ShowEditFormOnDoubleClick="True"
+                                               ShowGroupPanel="False"
+                                               HeaderHorizontalAlignment="Center"
+                                               Header="Lot Ranks">
+                                    <dxg:TableView.RowCellMenuCustomizations>
+                                        <dxb:BarButtonItem Content="Remove From Lot" 
+                                                           Glyph="{dx:DXImage Image=Left_16x16.png}"
+                                                           Command="{Binding Path=View.DataContext.RemoveRankFromLotCommand}"/>
+                                    </dxg:TableView.RowCellMenuCustomizations>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridColumn FieldName="InventoryItem.Name" Header="Product" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="Name" Header="Rank" AllowEditing="True"/>
+                            <dxg:GridColumn FieldName="Quantity" AllowEditing="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:SpinEditSettings MaxValue="10000000" MinValue="1" DisplayFormat="d"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Wavelength" AllowEditing="True"/>
+                            <dxg:GridColumn FieldName="Power" AllowEditing="True"/>
+                            <dxg:GridColumn FieldName="Voltage" AllowEditing="True"/>
+                        </dxg:GridControl>
+                        <dxlc:LayoutGroup Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <dx:SimpleButton Content="Add Lot To Incoming"
+                                                 Command="{Binding AddLotToIncomingCommand}"
+                                                 Glyph="{dx:DXImage Image=Down_16x16.png}"
+                                                 ToolTip="Add To Incoming List" Height="50"/>
+                            <dx:SimpleButton Content="Cancel Incoming"
+                                                 Command="{Binding CancelIncomingCommand}"
+                                                 Glyph="{dx:DXImage Image=Cancel_16x16.png}"
+                                                 ToolTip="Cancel Incoming" Height="50"/>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+                </dxlc:GroupBox>
+            </dxlc:LayoutGroup>
+        </dxlc:GroupBox>
+    </dx:LoadingDecorator>
+</UserControl>

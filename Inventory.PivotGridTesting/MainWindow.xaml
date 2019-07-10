@@ -1,0 +1,28 @@
+﻿<dx:ThemedWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:Model="clr-namespace:Inventory.Common.EntityLayer.Model;assembly=Inventory.Common" xmlns:dxpg="http://schemas.devexpress.com/winfx/2008/xaml/pivotgrid" x:Class="Inventory.PivotGridTesting.MainWindow"
+        Title="MainWindow" Height="350" Width="525">
+    <dx:ThemedWindow.Resources>
+        <dx:EntitySimpleDataSource x:Key="EntitySimpleDataSource" ContextType="{x:Type Model:InventoryContext}" Path="Transactions">
+            <dx:DesignDataManager.DesignData>
+                <dx:DesignDataSettings RowCount="5"/>
+            </dx:DesignDataManager.DesignData>
+        </dx:EntitySimpleDataSource>
+    </dx:ThemedWindow.Resources>
+    <Grid>
+
+        <dxpg:PivotGridControl DataSource="{Binding Data, Source={StaticResource EntitySimpleDataSource}}">
+            <dxpg:PivotGridControl.Fields>
+                <dxpg:PivotGridField Area="ColumnArea" Caption="Date" FieldName="TimeStamp"/>
+                <dxpg:PivotGridField Area="DataArea" Caption="Quantity" FieldName="Quantity" SummaryType="Sum"/>
+                <dxpg:PivotGridField Area="RowArea" Caption="Action" FieldName="InventoryAction"/>
+                <dxpg:PivotGridField Area="RowArea" Caption="Rank" FieldName="Instance.Name"/>
+                <dxpg:PivotGridField Area="DataArea" Caption="Unit Cost"/>
+            </dxpg:PivotGridControl.Fields>
+        </dxpg:PivotGridControl>
+
+    </Grid>
+</dx:ThemedWindow>

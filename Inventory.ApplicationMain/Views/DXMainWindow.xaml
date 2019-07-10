@@ -1,0 +1,15 @@
+﻿<dx:ThemedWindow
+    x:Class="Inventory.ApplicationMain.Views.DXMainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Title="{Binding Title}" Height="350" Width="525"  
+    WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Grid>
+        <ContentControl prism:RegionManager.RegionName="{x:Static common:Regions.MainWindow}"/>
+    </Grid>
+</dx:ThemedWindow>

@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Inventory.UsersManagment.Views.ManageExistingUsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:ViewModels="clr-namespace:Inventory.UsersManagment.ViewModels"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="700">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding LoadedCommand,IsAsync=False}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXMessageBoxService x:Name="ManageExistingUsersNotification"/>
+    </dxmvvm:Interaction.Behaviors>
+    <dx:LoadingDecorator>
+        <dxlc:LayoutControl>
+            <dxlc:GroupBox dxlc:DockLayoutControl.AllowHorizontalSizing="True">
+                <dxlc:GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="SET Inventory Users" HorizontalAlignment="Center" FontSize="16"/>
+                            <TextBlock Text="Selected Existing User to Edit" HorizontalAlignment="Center" FontSize="16"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </dxlc:GroupBox.HeaderTemplate>
+                <dxb:BarManager AllowCustomization="False"
+                                AllowDrop="False" MenuGlyphSize="Small" dxlc:DockLayoutControl.Dock="Client">
+                    <dxb:BarManager.Bars>
+                        <dxb:Bar Caption="Actions" ShowDragWidget="False" ShowSizeGrip="False" 
+                                    AllowHide="True" AllowQuickCustomization="False">
+                            <dxb:Bar.DockInfo>
+                                <dxb:BarDockInfo ContainerType="Top"/>
+                            </dxb:Bar.DockInfo>
+                            <dxb:BarButtonItem x:Name="_deleteUse" 
+                                           Command="{Binding DeleteCommand}"
+                                           CommandParameter="{Binding SelectedItem, ElementName=_listOfInventoryUsers}"
+                                           BarItemDisplayMode="ContentAndGlyph" 
+                                           Content="Delete User and Clear Permissions" 
+                                           Glyph="{dx:DXImage Image=Close_16x16.png}" />
+                        </dxb:Bar>
+                    </dxb:BarManager.Bars>
+                    <dxg:GridControl x:Name="_listOfInventoryUsers"                                          
+                                     ItemsSource="{Binding InventoryUsers,IsAsync=True,Mode=TwoWay}" 
+                                     SelectedItem="{Binding SelectedInventoryUser,Mode=TwoWay}"
+                                     AutoGenerateColumns="None" SelectionMode="Row" dx:DXSerializer.Enabled="False"
+                                     AllowUpdateTwoWayBoundPropertiesOnSynchronization="True">
+                        <dxg:GridControl.View>
+                            <dxg:TableView ShowSearchPanelMode="Always" 
+                                           SearchPanelNullText="Search By User's First Name" 
+                                           AllowGrouping="False" ShowGroupPanel="False" 
+                                           SearchColumns="FirstName" NavigationStyle="Row"/>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="FirstName" AllowSearchPanel="true"/>
+                            <dxg:GridColumn FieldName="LastName"/>
+                            <dxg:GridColumn FieldName="UserName"/>
+                            <dxg:GridColumn FieldName="Permission.Name" Header="Permission"/>
+                            <dxg:GridColumn FieldName="Email"/>
+                            <dxg:GridColumn FieldName="Extension"/>
+                        </dxg:GridControl.Columns>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <prism:InvokeCommandAction Command="{Binding InventoryUserSelectedCommand}"
+                                                           CommandParameter="{Binding SelectedItem, ElementName=_listOfInventoryUsers}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </dxg:GridControl>
+                </dxb:BarManager>
+            </dxlc:GroupBox>
+        </dxlc:LayoutControl>
+    </dx:LoadingDecorator>
+</UserControl>
