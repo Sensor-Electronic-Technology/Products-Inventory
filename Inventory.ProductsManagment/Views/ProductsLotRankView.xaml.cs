@@ -22,5 +22,14 @@ namespace Inventory.ProductsManagment.Views {
         public ProductsLotRankView() {
             InitializeComponent();
         }
+
+        private void _listOfRanks_CopyingToClipboard(object sender, CopyingToClipboardEventArgs e) {
+            var selected = this._listOfRanks.SelectedItem as ProductInstance;
+            Clipboard.Clear();
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("{0}\t{1}", selected.LotNumber, selected.Name);
+            Clipboard.SetData(DataFormats.Text, builder.ToString());
+            e.Handled = true;
+        }
     }
 }

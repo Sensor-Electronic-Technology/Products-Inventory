@@ -6,7 +6,7 @@ using DevExpress.Mvvm.UI;
 using System.Windows.Controls;
 using DevExpress.Xpf.Editors;
 
-namespace Inventory.Common.ApplicationLayer.UI_Services {
+namespace Inventory.Common.ApplicationLayer.Services {
 
     public interface IControlUpdateService {
         void BeginUpdate();

@@ -54,16 +54,29 @@ namespace Inventory.Common.DataLayer.EntityOperations {
         }
 
         public Product Update(Product entity) {
-            var product = this._context.InventoryItems.OfType<Product>().FirstOrDefault(e => e.Id == entity.Id);
+            var product = this._context.InventoryItems.OfType<Product>()
+                .Include(e=>e.Lots.Select(x=>x.ProductInstances))
+                .FirstOrDefault(e => e.Id == entity.Id);
             if(product != null) {
                 product.Name = entity.Name;
                 product.CustomPartName = entity.CustomPartName;
                 product.LegacyName = entity.LegacyName;
-                product.Obsolete = entity.Obsolete;
                 product.Description = entity.Description;
                 var category=this._context.Categories.AsNoTracking().OfType<ProductType>().Include(e=>e.Products).FirstOrDefault(e => e.Id == entity.ProductTypeId);
                 if(category != null) {
                     product.ProductTypeId = category.Id;
+                }
+
+                if(entity.Obsolete != product.Obsolete) {
+                    product.Obsolete = entity.Obsolete;
+                    product.Lots.ToList().ForEach(lot => {
+                        lot.Obsolete = product.Obsolete;
+                        lot.ProductInstances.ToList().ForEach(rank=> {
+                            rank.Obsolete = product.Obsolete;
+                            this._context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                        });
+                        this._context.Entry<Lot>(lot).State = EntityState.Modified;
+                    });
                 }
                 this._context.Entry<Product>(product).State = EntityState.Modified;
                 try {

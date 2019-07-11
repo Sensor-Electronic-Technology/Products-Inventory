@@ -17,13 +17,14 @@
         <Setter Property="SelectionMode" Value="Row"/>
         <Setter Property="dx:DXSerializer.Enabled" Value="False"/>
         <Setter Property="AllowUpdateTwoWayBoundPropertiesOnSynchronization" Value="True"/>
+        <Setter Property="AllowLiveDataShaping" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleEdit" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Never"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="True"/>
         <Setter Property="EditorShowMode" Value="Default"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
@@ -33,19 +34,21 @@
         <Setter Property="ShowFilterPanelMode" Value="Never"/>
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMaster" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Always"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
         <Setter Property="BestFitMode" Value="Default"/>
         <Setter Property="AllowBestFit" Value="True"/>
         <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoSearch" TargetType="dxg:TableView">
@@ -56,9 +59,10 @@
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
+        <Setter Property="BestFitMode" Value="Smart"/>
         <Setter Property="AllowBestFit" Value="True"/>
         <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMaster_NavCell" TargetType="dxg:TableView">
@@ -72,13 +76,14 @@
         <Setter Property="BestFitMode" Value="Default"/>
         <Setter Property="AllowBestFit" Value="True"/>
         <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoGroup" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Always"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
@@ -86,6 +91,7 @@
         <Setter Property="AllowBestFit" Value="True"/>
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoGroupNoSearch" TargetType="dxg:TableView">
@@ -108,26 +114,28 @@
         <Setter Property="AllowMasterDetail" Value="True"/>
         <Setter Property="ShowSearchPanelMode" Value="Always"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
+        <Setter Property="BestFitMode" Value="Smart"/>
         <Setter Property="AllowBestFit" Value="True"/>
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleWithMasterGroup" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="True"/>
         <Setter Property="ShowSearchPanelMode" Value="Always"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
+        <Setter Property="BestFitMode" Value="Smart"/>
         <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="LayoutItemStyle" TargetType="{x:Type dxlc:LayoutItem}">
@@ -180,12 +188,12 @@
         <Setter Property="TitleBackground" Value="BlanchedAlmond"/>
     </Style>
     
-    <Style x:Name="SizerStyle" TargetType="{x:Type dxlc:ElementSizer}">
+    <!--<Style x:Name="SizerStyle" TargetType="{x:Type dxlc:ElementSizer}">
         <Setter Property="Background" Value="LightBlue"/>
         <Setter Property="BorderBrush"  Value="Black"/>
         <Setter Property="Width" Value="10"/>
-        <!--<Setter Property="VerticalScrollBarStyle"  Value=""/>-->
-    </Style>
+        --><!--<Setter Property="VerticalScrollBarStyle"  Value=""/>--><!--
+    </Style>-->
 
     <Style x:Name="TabStyle" TargetType="{x:Type dx:DXTabItem}">
         <Setter Property="VerticalAlignment" Value="Stretch"/>

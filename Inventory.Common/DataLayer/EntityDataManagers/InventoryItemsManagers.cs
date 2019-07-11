@@ -377,19 +377,6 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             }
         }
 
-        public InventoryActionResponce ReserveStock(ProductInstance rank,DateTime expiration,int quantity,string customer,string buyerPo,string rma,string note) {
-            if(rank != null) {
-                ProductReservation reservation = new ProductReservation(rank,expiration,quantity,customer,buyerPo,rma,note);
-                var added=this.ReservationOperations.Add(reservation);
-                if(added != null) {
-                    return new InventoryActionResponce(true,"Success");
-                } else {
-                    return new InventoryActionResponce(false, "Failed to Add, Please Check Input");
-                }
-            }
-            return new InventoryActionResponce(false, "Failed to Add, Rank not Found");
-        }
-
         public override void UndoChanges() {
             this._context.UndoDbEntries<Product>();
             this._context.UndoDbEntries<Lot>();

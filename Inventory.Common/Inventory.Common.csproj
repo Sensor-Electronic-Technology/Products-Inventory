@@ -193,6 +193,8 @@
     <Compile Include="ApplicationLayer\IApplicationCommands.cs" />
     <Compile Include="ApplicationLayer\AsyncHelpers\IAsyncCommand.cs" />
     <Compile Include="ApplicationLayer\AsyncHelpers\NotifyTaskCompletion.cs" />
+    <Compile Include="ApplicationLayer\UI Services\GridExportService.cs" />
+    <Compile Include="ApplicationLayer\UI Services\IExportService.cs" />
     <Compile Include="ApplicationLayer\UI Services\UpdateService.cs" />
     <Compile Include="BuisnessLayer\IQRCodeGenerator.cs" />
     <Compile Include="BuisnessLayer\ReportData.cs" />

@@ -34,37 +34,21 @@
                              LabelPosition="Top" 
                              LabelHorizontalAlignment="Center">
                     <dxe:TextEdit Text="{Binding SelectedWarehouse.Name,Mode=TwoWay}"/>
-
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutItem Label="Location Description" 
                              LabelPosition="Top" 
                              LabelHorizontalAlignment="Center">
-                <dxe:TextEdit Text="{Binding SelectedWarehouse.Description,Mode=TwoWay}" 
-                          AcceptsTab="True" AcceptsReturn="True" 
-                          TextWrapping="Wrap" Height="110" />
+                <dxe:TextEdit Text="{Binding SelectedWarehouse.Description,Mode=TwoWay}"
+                              AcceptsTab="True" AcceptsReturn="True" 
+                              TextWrapping="Wrap" Height="110"
+                              HorizontalContentAlignment="Left" VerticalContentAlignment="Top" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Associated Items" 
                              LabelPosition="Top" 
                              LabelHorizontalAlignment="Center"
                          VerticalAlignment="Stretch">
                 <dx:DXTabControl>
-                    <dx:DXTabItem Header="Items At Location">
-                        <dxg:GridControl x:Name="_listOfItemsAtLocation"                                                                              
-                             ItemsSource="{Binding SelectedWarehouse.ItemsAtLocation,Mode=TwoWay}"                                     
-                             AutoGenerateColumns="None" SelectionMode="Row" 
-                             dx:DXSerializer.Enabled="False"                                    
-                             AllowUpdateTwoWayBoundPropertiesOnSynchronization="True">
-                            <dxg:GridControl.View>
-                                <dxg:TableView AllowGrouping="False" ShowGroupPanel="False"  NavigationStyle="Row"/>
-                            </dxg:GridControl.View>
-                            <dxg:GridControl.Columns>
-                                <dxg:GridColumn FieldName="Name" AllowSearchPanel="true"/>
-                                <dxg:GridColumn FieldName="SkuNumber"/>
-                                <dxg:GridColumn FieldName="Quantity"/>
-                            </dxg:GridControl.Columns>
-                        </dxg:GridControl>
-                    </dx:DXTabItem>
                     <dx:DXTabItem Header="Items Stored At Location">
                         <dxg:GridControl x:Name="_listOfStoredItems"                                                                              
                              ItemsSource="{Binding SelectedWarehouse.StoredItems,Mode=TwoWay}"                                     

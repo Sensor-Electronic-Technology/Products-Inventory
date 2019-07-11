@@ -12,7 +12,7 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
-             xmlns:commonservice="clr-namespace:Inventory.Common.ApplicationLayer.UI_Services;assembly=Inventory.Common"
+             xmlns:commonservice="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
              xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"                            
              xmlns:ViewModels="clr-namespace:Inventory.ProductsManagment.ViewModels"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="500">
@@ -46,12 +46,6 @@
                                            Content="New Product" 
                                            Glyph="{dx:DXImage Image=InsertSheetRows_16x16.png}"/>
 
-                        <dxb:BarButtonItem x:Name="_deleteProduct" 
-                                           Command="{Binding DeleteProductCommand}"
-                                           BarItemDisplayMode="ContentAndGlyph" 
-                                           Content="Delete Product" 
-                                           Glyph="{dx:DXImage Image=DeleteSheetRows_16x16.png}"/>
-
                         <dxb:BarButtonItem x:Name="_refresh" 
                                            Command="{Binding RefreshDataCommand}"
                                            BarItemDisplayMode="ContentAndGlyph" 
@@ -76,13 +70,13 @@
                                        AllowGrouping="True" SearchColumns="Name">
                             <dxg:TableView.RowCellMenuCustomizations>
 
-                                <dxb:BarButtonItem Content="Edit Product Details" 
-                                                   Glyph="{dx:DXImage Image=Action_Edit.png}"
-                                                   Command="{Binding Path=View.DataContext.EditProductCommand}"/>
-
                                 <dxb:BarButtonItem Content="View Details" 
                                                    Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                    Command="{Binding Path=View.DataContext.ViewProductDetailsCommand}"/>
+
+                                <dxb:BarButtonItem Content="Edit Product Details" 
+                                                   Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                   Command="{Binding Path=View.DataContext.EditProductCommand}"/>
 
                                 <dxb:BarItemSeparator/>
 

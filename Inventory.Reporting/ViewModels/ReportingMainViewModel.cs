@@ -11,11 +11,13 @@ using System.Threading.Tasks;
 using Inventory.Common.DataLayer.EntityDataManagers;
 using System.Windows.Input;
 using System.Windows;
-using Inventory.Common.ApplicationLayer.UI_Services;
+using Inventory.Common.ApplicationLayer.Services;
 using Inventory.Common.EntityLayer.Model;
 using System.Collections.ObjectModel;
 using Inventory.Common.BuisnessLayer;
 using System.Data.Entity;
+using System.IO;
+using System.Diagnostics;
 
 namespace Inventory.Reporting.ViewModels {
     public class ReportingMainViewModel : InventoryViewModelBase {
@@ -23,6 +25,9 @@ namespace Inventory.Reporting.ViewModels {
 
         private InventoryContext _context;
         private ProductDataManager _dataManager;
+        public IExportService ExportServiceTotalInventory { get => ServiceContainer.GetService<IExportService>("TotalInventoryExportService"); }
+        public IExportService ExportServiceTransactions { get => ServiceContainer.GetService<IExportService>("ItemizedTransactionsExportService"); }
+        public IDispatcherService Dispatcher { get => ServiceContainer.GetService<IDispatcherService>("ReportsDispatcherService"); }
 
         private DateTime _startDate;
         private DateTime _stopDate;
@@ -33,11 +38,13 @@ namespace Inventory.Reporting.ViewModels {
         private double _total = 0;
         private ObservableCollection<ReportDataRow> _summaryData = new ObservableCollection<ReportDataRow>();
         private ObservableCollection<TotalReportDataRow> _totals = new ObservableCollection<TotalReportDataRow>();
-        private ObservableCollection<Transaction> _transactions = new ObservableCollection<Transaction>();
+        private ObservableCollection<ProductTransaction> _transactions = new ObservableCollection<ProductTransaction>();
 
         public AsyncCommand GatherData { get; private set; }
         public AsyncCommand GatherTotalData { get; private set; }
         public AsyncCommand GatherTransactions { get; private set; }
+        public DelegateCommand<ExportFormat> ExportTotalInventoryCommand { get; private set; }
+        public DelegateCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
 
         public ReportingMainViewModel(InventoryContext context,ProductDataManager dataManager) {
             this._dataManager = dataManager;
@@ -45,6 +52,8 @@ namespace Inventory.Reporting.ViewModels {
             this.GatherData = new AsyncCommand(this.CollectDataHandler);
             this.GatherTotalData = new AsyncCommand(this.CollectTotalDataHandler);
             this.GatherTransactions = new AsyncCommand(this.CollectItemizedTransactionsHandler);
+            this.ExportTotalInventoryCommand = new DelegateCommand<ExportFormat>(this.ExportTotalSummaryHandler);
+            this.ExportTransactionsCommand = new DelegateCommand<ExportFormat>(this.ExportTransactionsHandler);
             this.StartDate = DateTime.Now;
             this.StopDate = DateTime.Now;
             this.TransactionStartDate = DateTime.Now;
@@ -82,7 +91,7 @@ namespace Inventory.Reporting.ViewModels {
             set => SetProperty(ref this._totals, value);
         }
 
-        public ObservableCollection<Transaction> Transactions {
+        public ObservableCollection<ProductTransaction> Transactions {
             get => this._transactions;
             set => SetProperty(ref this._transactions, value);
         }
@@ -106,18 +115,38 @@ namespace Inventory.Reporting.ViewModels {
             get => true;
         }
 
+        private void ExportTransactionsHandler(ExportFormat format) {
+            var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+            using(FileStream file = File.Create(path)) {
+                this.ExportServiceTransactions.Export(file, format);
+            }
+            Process.Start(path);
+        }
+
+        private void ExportTotalSummaryHandler(ExportFormat format) {
+            var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+            using(FileStream file = File.Create(path)) {
+                this.ExportServiceTotalInventory.Export(file, format);
+            }
+            Process.Start(path);
+        }
+
         private async Task CollectDataHandler() {
             ObservableCollection<ReportDataRow> data = new ObservableCollection<ReportDataRow>();
 
             this.IsLoading = true;
             //this.SummaryData =(ObservableCollection<ReportDataRow>)await this._dataManager.CollectReportDataAsync(this.StartDate, this.StopDate);
-            await this._context.Transactions.Include(e => e.Location).Include(e => e.Instance.InventoryItem).LoadAsync();
-            await this._context.Instances.OfType<ProductInstance>().Include(e => e.Transactions.Select(x => x.Location)).Include(e => e.InventoryItem).Include(e => e.Lot.Cost).LoadAsync();
+            await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Location).Include(e => e.Instance.InventoryItem).LoadAsync();
+            await this._context.Instances.OfType<ProductInstance>()
+                .Include(e => e.Transactions.Select(x => x.Location))
+                .Include(e => e.InventoryItem)
+                .Include(e => e.Lot.Cost).LoadAsync();
+
             var transactions = await this._context.Transactions.OfType<ProductTransaction>()
                 .AsNoTracking()
                 .Include(e => e.Instance.InventoryItem)
                 .Include(e => e.Location)
-                .Where(t => t.TimeStamp >= this.StartDate && t.TimeStamp <= this.StopDate)
+                .Where(t => (t.TimeStamp >= this.StartDate && t.TimeStamp <= this.StopDate))
                 .ToListAsync();
 
             await Task.Run(() => {
@@ -129,6 +158,7 @@ namespace Inventory.Reporting.ViewModels {
                     data.Add(new ReportDataRow(transaction, rank.Lot));
                 });
             });
+
             lock(SyncRoot) {
                 this.SummaryData = data;
                 this.IsLoading = false;
@@ -156,11 +186,13 @@ namespace Inventory.Reporting.ViewModels {
                     var row = new TotalReportDataRow();
                     var pTotal = product.Lots.Sum(lot => {
 
-                        var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
+                        var quantity = lot.ProductInstances.Where(rank=>!rank.Obsolete).Sum(rank => rank.Quantity);
                         if(lot.Cost!=null) {
                             return quantity * lot.Cost.Amount;
                         } else {
-                            var cost = this._context.Rates.OfType<Cost>().Include(e => e.Lot).FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
+                            var cost = this._context.Rates.OfType<Cost>()
+                            .Include(e => e.Lot)
+                            .FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
                             if(cost != null) {
                                 return quantity * cost.Amount;
                             } else {
@@ -168,7 +200,6 @@ namespace Inventory.Reporting.ViewModels {
                             }
                         }
                     });
-
                     total += pTotal;
                     row.Product = product;
                     row.TotalCost = pTotal;
@@ -184,7 +215,10 @@ namespace Inventory.Reporting.ViewModels {
         }
 
         private async Task CollectItemizedTransactionsHandler() {
-            var list=await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance.InventoryItem).Include(e => e.Location).ToListAsync();
+            var list=await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance.InventoryItem)
+                .Include(e => e.Location).Where(e=>e.TimeStamp>=this.TransactionStartDate && e.TimeStamp<=this.TransactionStopDate)
+                .ToListAsync();
+
             lock(this.SyncRoot) {
                 this.Transactions.Clear();
                 this.Transactions.AddRange(list);
@@ -192,8 +226,12 @@ namespace Inventory.Reporting.ViewModels {
         }
 
         private async void LoadData() {
-            await this._context.Transactions.Include(e=>e.Location).Include(e=>e.Instance.InventoryItem).LoadAsync();
-            await this._context.Instances.OfType<ProductInstance>().Include(e => e.Transactions.Select(x=>x.Location)).Include(e=>e.InventoryItem).Include(e=>e.Lot.Cost).LoadAsync();
+            await this._context.Transactions.OfType<ProductTransaction>().Include(e=>e.Location).Include(e=>e.Instance.InventoryItem).LoadAsync();
+            await this._context.Instances.OfType<ProductInstance>().Include(e => e.Transactions.Select(x=>x.Location))
+                .Include(e=>e.InventoryItem)
+                .Include(e=>e.Lot.Cost)
+                .LoadAsync();
+
             await this._context.InventoryItems.OfType<Product>()
                         .Include(e => e.Attachments)
                         .Include(e => e.Lots.Select(x => x.ProductInstances))

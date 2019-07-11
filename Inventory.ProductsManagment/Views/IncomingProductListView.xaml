@@ -11,7 +11,7 @@
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:Services="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
              xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"   
              xmlns:ViewModels="clr-namespace:Inventory.ProductsManagment.ViewModels"
              mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="400">
@@ -34,59 +34,86 @@
                 </DataTemplate>
             </dxlc:GroupBox.HeaderTemplate>
             <dxlc:LayoutGroup Orientation="Vertical">
-                <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
+                <DockPanel>
+                    <dxb:BarContainerControl DockPanel.Dock="Top">
+                        <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                                            AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
+                                            BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+
+                            <dxb:BarButtonItem x:Name="_exportExcel" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Xlsx"                                                   
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export Excel" 
+                                                   Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
+
+                            <dxb:BarButtonItem x:Name="_exportPDF" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Pdf"                                                                                                     
+                                                   Content="Export PDF" 
+                                                   Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
+                                                   BarItemDisplayMode="ContentAndGlyph"/>
+
+                            <dxb:BarButtonItem x:Name="_exportCSV" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Csv"
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export CSV" 
+                                                   Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
+                        </dxb:ToolBarControl>
+                    </dxb:BarContainerControl>
+                    <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
                                  ItemsSource="{Binding IncomingList,Mode=TwoWay}"
                                  SelectedItem="{Binding SelectedLot,Mode=TwoWay}">
-                    <dxg:GridControl.View>
-                        <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}"
-                                       ShowSearchPanelMode="Never">
-                            <dxg:TableView.RowCellMenuCustomizations>
-                                <dxb:BarButtonItem Content="Remove From Incoming" 
-                                                   Glyph="{dx:DXImage Image=Left_16x16.png}"
-                                                   Command="{Binding Path=View.DataContext.RemoveLotFromIncomingCommand}"/>
-                            </dxg:TableView.RowCellMenuCustomizations>
-                        </dxg:TableView>
-                    </dxg:GridControl.View>
-                    <dxg:GridColumn FieldName="Recived"/>
-                    <dxg:GridColumn FieldName="LotNumber" Header="Lot Number"/>
-                    <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
-                    <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>
-                    <dxg:GridColumn FieldName="Quarantined" />
-                    <dxg:GridColumn FieldName="Obsolete" />
-                    <dxg:GridControl.DetailDescriptor>
-                        <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances,Mode=TwoWay}">
-                            <dxg:DataControlDetailDescriptor.DataControl>
-                                <dxg:GridControl x:Name="_lotRanks" Style="{StaticResource GridControlStyle}" 
-                                                 SelectedItem="{Binding SelectedRank}"
-                                                 SelectionMode="Row">
-                                    <dxg:GridColumn FieldName="Name" Header="Rank"/>
-                                    <dxg:GridColumn FieldName="Quantity" AllowEditing="True">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:SpinEditSettings MaxValue="10000000" MinValue="1" DisplayFormat="d"/>
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn FieldName="Wavelength"/>
-                                    <dxg:GridColumn FieldName="Power"/>
-                                    <dxg:GridColumn FieldName="Voltage"/>
-                                    <dxg:GridControl.View>
-                                        <dxg:TableView x:Name="LotDetails" AllowEditing="True" 
-                                                       ShowEditFormOnDoubleClick="True" 
-                                                       ShowGroupPanel="False" 
-                                                       HeaderHorizontalAlignment="Center">
-                                            <!--<dxg:TableView.RowCellMenuCustomizations>
-                                                <dxb:BarButtonItem Content="Remove From Incoming" 
-                                                                   Glyph="{dx:DXImage Image=Left_16x16.png}"
-                                                                   Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}},Path=DataContext.RemoveRankFromIncomingCommand}"
-                                                                   CommandParameter="{Binding View.Grid}"/>
-                                            </dxg:TableView.RowCellMenuCustomizations>-->
-                                        </dxg:TableView>
-                                    </dxg:GridControl.View>
-                                </dxg:GridControl>
-                            </dxg:DataControlDetailDescriptor.DataControl>
+                        <dxmvvm:Interaction.Behaviors>
+                            <Services:GridExportService/>
+                        </dxmvvm:Interaction.Behaviors>
+                        <dxg:GridControl.View>
+                            <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}"
+                                           ShowSearchPanelMode="Never" AllowEditing="True" EditFormShowMode="Inline"
+                                           ShowEditFormOnDoubleClick="True" >
+                                <dxg:TableView.RowCellMenuCustomizations>
+                                    <dxb:BarButtonItem Content="Remove From Incoming" 
+                                                       Glyph="{dx:DXImage Image=Left_16x16.png}"
+                                                       Command="{Binding Path=View.DataContext.RemoveLotFromIncomingCommand}"/>
+                                </dxg:TableView.RowCellMenuCustomizations>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+                        <dxg:GridColumn FieldName="Recived"/>
+                        <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowEditing="True"/>
+                        <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po" AllowEditing="True"/>
+                        <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost" AllowEditing="True"/>
+                        <dxg:GridColumn FieldName="Quarantined" AllowEditing="True"/>
+                        <dxg:GridColumn FieldName="Obsolete" AllowEditing="True"/>
+                        <dxg:GridControl.DetailDescriptor>
+                            <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances,Mode=TwoWay}">
+                                <dxg:DataControlDetailDescriptor.DataControl>
+                                    <dxg:GridControl x:Name="_lotRanks" Style="{StaticResource GridControlStyle}" 
+                                                     SelectedItem="{Binding SelectedRank}"
+                                                     SelectionMode="Row">
+                                        <dxg:GridColumn FieldName="Name" Header="Rank"/>
+                                        <dxg:GridColumn FieldName="Quantity" AllowEditing="True">
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:SpinEditSettings MaxValue="10000000" MinValue="1" DisplayFormat="d"/>
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
+                                        <dxg:GridColumn FieldName="Wavelength"/>
+                                        <dxg:GridColumn FieldName="Power"/>
+                                        <dxg:GridColumn FieldName="Voltage"/>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView x:Name="LotDetails" AllowEditing="True" 
+                                                           ShowEditFormOnDoubleClick="True" 
+                                                           ShowGroupPanel="False" 
+                                                           HeaderHorizontalAlignment="Center">
+                                            </dxg:TableView>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </dxg:DataControlDetailDescriptor.DataControl>
 
-                        </dxg:DataControlDetailDescriptor>
-                    </dxg:GridControl.DetailDescriptor>
-                </dxg:GridControl>
+                            </dxg:DataControlDetailDescriptor>
+                        </dxg:GridControl.DetailDescriptor>
+                    </dxg:GridControl>
+                </DockPanel>
                 <dxlc:LayoutGroup Orientation="Horizontal">
                     <dx:SimpleButton Content="Process Incoming Lots" 
                                      Command="{Binding CheckInCommand}"

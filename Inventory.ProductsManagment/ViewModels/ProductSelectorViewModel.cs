@@ -14,7 +14,7 @@ using Inventory.Common.DataLayer.EntityDataManagers;
 using Inventory.Common.DataLayer.Providers;
 using System.Windows.Input;
 using System.Windows;
-using Inventory.Common.ApplicationLayer.UI_Services;
+using Inventory.Common.ApplicationLayer.Services;
 using System.Threading;
 
 namespace Inventory.ProductsManagment.ViewModels {

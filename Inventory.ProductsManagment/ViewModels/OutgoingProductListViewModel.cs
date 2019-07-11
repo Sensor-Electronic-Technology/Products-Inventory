@@ -14,6 +14,8 @@ using System.Text;
 using Inventory.Common.DataLayer.Providers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Inventory.Common.ApplicationLayer.Services;
+using System.IO;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class OutgoingProductListViewModel : InventoryViewModelNavigationBase {
@@ -23,6 +25,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductDataManager _dataManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("OutgoingProductListNotifications"); } }
         public IDispatcherService Dispatcher { get => ServiceContainer.GetService<IDispatcherService>("OutgoingListDispatcher"); }
+        public IExportService ExportService { get => ServiceContainer.GetService<IExportService>(); }
 
         private ObservableCollection<ProductInstance> _outgoingList = new ObservableCollection<ProductInstance>();
         private ProductInstance _selectedRank = new ProductInstance();
@@ -36,6 +39,7 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         public PrismCommands.DelegateCommand CheckOutCommand { get; private set; }
         public PrismCommands.DelegateCommand CancelCommand { get; private set; }
+        public AsyncCommand<ExportFormat> ExportCommand { get; private set; }
 
 
         public OutgoingProductListViewModel(ProductDataManager productDataManager, IEventAggregator eventAggregator, IRegionManager regionManager) {
@@ -46,6 +50,8 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.RemoveFromOutgoingDelegate = new PrismCommands.DelegateCommand(this.RemoveFromOutgoingHandler);
             this.CheckOutCommand = new PrismCommands.DelegateCommand(this.CheckOutHandler);
             this.CancelCommand = new PrismCommands.DelegateCommand(this.CancelHandler);
+            this.ExportCommand = new AsyncCommand<ExportFormat>(this.ExportHandler);
+
             this._eventAggregator.GetEvent<AddToOutgoingEvent>().Subscribe(this.AddToOutgoingHandler);
 
             this.PopulateConsumers();
@@ -128,6 +134,18 @@ namespace Inventory.ProductsManagment.ViewModels {
         private void CancelHandler() {
             this._eventAggregator.GetEvent<CancelOutgoingListEvent>().Publish();
             this.OutgoingList.Clear();
+        }
+
+        private async Task ExportHandler(ExportFormat format) {
+            await Task.Run(() => {
+                this.Dispatcher.BeginInvoke(() => {
+                    var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                    using(FileStream file = File.Create(path)) {
+                        this.ExportService.Export(file, format);
+                    }
+                    System.Diagnostics.Process.Start(path);
+                });
+            });
         }
 
         public override bool IsNavigationTarget(NavigationContext navigationContext) {

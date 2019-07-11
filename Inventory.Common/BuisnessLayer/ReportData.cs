@@ -22,7 +22,7 @@ namespace Inventory.Common.BuisnessLayer {
             this.LotNumber = lot.LotNumber;
             this.SupplierPoNumber = lot.SupplierPoNumber;
             this.UnitCost = (transaction.UnitCost != null) ? transaction.UnitCost.Value : 0;
-            this.Cost =(transaction.TotalCost!=null) ? transaction.TotalCost.Value:0;
+            this.Cost = (transaction.TotalCost != null) ? transaction.TotalCost.Value : 0;
         }
     }
 

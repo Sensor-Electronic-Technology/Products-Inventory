@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 using Inventory.Common.DataLayer.EntityDataManagers;
 using System.Windows.Input;
 using System.Windows;
-using Inventory.Common.ApplicationLayer.UI_Services;
+using Inventory.Common.ApplicationLayer.Services;
 using System.Collections.ObjectModel;
 using Inventory.Common.BuisnessLayer;
 using System.Text;
+using System.IO;
+using System.Diagnostics;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class ProductsLotRankViewModel : InventoryViewModelNavigationBase {
@@ -24,6 +26,12 @@ namespace Inventory.ProductsManagment.ViewModels {
         private IRegionManager _regionManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductRankLotNotifications"); } }
         public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductRankLotDispatcher"); } }
+        public IExportService CostSummaryExportServive { get => ServiceContainer.GetService<IExportService>("CostSummaryExportService"); }
+
+        public IExportService RankExportService { get => ServiceContainer.GetService<IExportService>("RankExportService"); }
+        public IExportService LotExportService { get => ServiceContainer.GetService<IExportService>("LotExportService"); }
+        public IExportService TransactionExportService { get => ServiceContainer.GetService<IExportService>("TransactionExportService"); }
+
         public IControlUpdateService GridUpdaterService { get { return ServiceContainer.GetService<IGridUpdateService>(); } }
 
         private ProductInstance _selectedRank = new ProductInstance();
@@ -50,6 +58,12 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand CheckOutCommand { get; private set; }
         public PrismCommands.DelegateCommand SaveProductCommand { get; private set; }
         public PrismCommands.DelegateCommand CancelProductCommand { get; private set; }
+
+        public AsyncCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
+        public AsyncCommand<ExportFormat> ExportLotsCommand { get; private set; }
+        public AsyncCommand<ExportFormat> ExportRanksCommand { get; private set; }
+        public AsyncCommand<ExportFormat> ExportCostSummaryCommand { get; private set; }
+
         public ICommand EditRankCommand { get; private set; }
         public ICommand EditLotCommand { get; private set; }
 
@@ -67,7 +81,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand<object> DownloadFileCommand { get; private set; }
         public PrismCommands.DelegateCommand<object> OpenFileCommand { get; private set; }
 
-        //Table Right Click
+        //Exports
 
 
 
@@ -83,6 +97,10 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.SaveProductCommand = new PrismCommands.DelegateCommand(this.SaveProductChangesHandle, this.CanExecuteNewProduct);
             this.CancelProductCommand = new PrismCommands.DelegateCommand(this.DiscardChangesHandler);
 
+            this.ExportCostSummaryCommand = new AsyncCommand<ExportFormat>(this.ExportCostSummaryHandler);
+            this.ExportLotsCommand = new AsyncCommand<ExportFormat>(this.ExportLotsHandler);
+            this.ExportRanksCommand = new AsyncCommand<ExportFormat>(this.ExportRanksHandler);
+            this.ExportTransactionsCommand = new AsyncCommand<ExportFormat>(this.ExportTransactionsHandler);
 
             this.EditLotCommand = new PrismCommands.DelegateCommand(this.EditLotHandler, this.CanExecute);
             this.EditRankCommand = new PrismCommands.DelegateCommand(this.EditRankHandler, this.CanExecute);
@@ -369,6 +387,56 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.Visibility = Visibility.Collapsed;
             this._eventAggregator.GetEvent<ProductEditingDoneEvent>().Publish();
             this.ReloadAsync();
+        }
+
+        private async Task ExportTransactionsHandler(ExportFormat format) {
+            await Task.Run(() => { 
+                this.DispatcherService.BeginInvoke(() => {
+                    var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                    using(FileStream file = File.Create(path)) {
+                        this.TransactionExportService.Export(file, format);
+                    }
+                    Process.Start(path);
+                });
+            });
+        }
+
+        private async Task ExportLotsHandler(ExportFormat format) {
+            await Task.Run(() => { 
+            this.DispatcherService.BeginInvoke(() => {
+                var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                using(FileStream file = File.Create(path)) {
+                    this.LotExportService.Export(file, format, new DevExpress.XtraPrinting.XlsxExportOptionsEx() {
+                        ExportType = DevExpress.Export.ExportType.WYSIWYG
+                    });
+                }
+                Process.Start(path);
+            });
+            });
+        }
+
+        private async Task ExportRanksHandler(ExportFormat format) {
+            await Task.Run(() => {
+                this.DispatcherService.BeginInvoke(() => {
+                    var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                    using(FileStream file = File.Create(path)) {
+                        this.RankExportService.Export(file, format);
+                    }
+                    Process.Start(path);
+                });
+            });
+        }
+
+        private async Task ExportCostSummaryHandler(ExportFormat format) {
+            await Task.Run(() => { 
+            this.DispatcherService.BeginInvoke(() => {
+                var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                using(FileStream file = File.Create(path)) {
+                    this.CostSummaryExportServive.Export(file, format);
+                }
+                Process.Start(path);
+            });
+            });
         }
 
         private async void ReloadAsync() {

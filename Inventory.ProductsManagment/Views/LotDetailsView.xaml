@@ -55,6 +55,24 @@
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutGroup>
+                    <dxlc:LayoutItem Label="Quarantined?" Style="{StaticResource LayoutItemStyle}">
+                        <dxe:ToggleSwitch IsChecked="{Binding SelectedLot.Quarantined}" HorizontalAlignment="Center" 
+                                          IsThreeState="False" CheckedStateContent="True" 
+                                          UncheckedStateContent="False" ContentPlacement="Both"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Obsolete?" Style="{StaticResource LayoutItemStyle}">
+                        <dxe:ToggleSwitch IsChecked="{Binding SelectedLot.Obsolete}" HorizontalAlignment="Center" 
+                                          IsThreeState="False" CheckedStateContent="True" 
+                                          UncheckedStateContent="False" ContentPlacement="Both"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup>
+                    <dxlc:LayoutItem Label="Recieved" 
+                                 LabelPosition="Top" 
+                                 LabelHorizontalAlignment="Center"
+                                 BorderBrush="Black">
+                        <dxe:DateEdit EditValue="{Binding SelectedLot.Recieved,Mode=TwoWay}"/>
+                    </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Unit Cost" 
                                  LabelPosition="Top" 
                                  LabelHorizontalAlignment="Center"
@@ -65,12 +83,6 @@
                                       MinValue="0" Increment="1" 
                                       DisplayFormatString="c3"
                                       HorizontalContentAlignment="Center"/>
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Recieved" 
-                                 LabelPosition="Top" 
-                                 LabelHorizontalAlignment="Center"
-                                 BorderBrush="Black">
-                        <dxe:DateEdit EditValue="{Binding SelectedLot.Recieved}"/>
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
                 <dxlc:LayoutItem Label="Associated Items" 
@@ -94,44 +106,11 @@
                                 </dxg:GridControl>
                             </dxlc:LayoutControl>
                         </dx:DXTabItem>
-                        <dx:DXTabItem Header="Product Reservations" Glyph="{dx:DXImage Image=Appointment_16x16.png}">
-                            <dxg:GridControl x:Name="_rankReservations" Style="{StaticResource GridControlStyle}" 
-                                             ItemsSource="{Binding SelectedLot.ProductReservations,Mode=TwoWay}">
-                                <dxg:GridControl.View>
-                                    <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroup}" 
-                                                   SearchColumns="UserName" SearchPanelNullText="Search by Username" />
-                                </dxg:GridControl.View>
-                                <dxg:GridControl.Columns>
-                                    <dxg:GridColumn FieldName="User.UserName" Header="Username"/>
-                                    <dxg:GridColumn FieldName="Quantity"/>
-                                    <dxg:GridColumn FieldName="RMANumber"/>
-                                    <dxg:GridColumn FieldName="BuyerPoNumber"/>
-                                    <dxg:GridColumn FieldName="Customer"/>
-                                    <dxg:GridColumn FieldName="Note"/>
-                                    <dxg:GridColumn FieldName="TimeStamp" Header="Date Reserved"/>
-                                    <dxg:GridColumn FieldName="Expiration" Header="Date Expires"/>
-                                </dxg:GridControl.Columns>
-                            </dxg:GridControl>
+                        <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
+                            Coming In next Release
+                            </TextBlock>
                         </dx:DXTabItem>
-                        <dx:DXTabItem Header="Transactions" Glyph="{dx:DXImage Image=AgendaView_16x16.png}">
-                            <dxg:GridControl x:Name="_lotTransactions" Style="{StaticResource GridControlStyle}"
-                                             ItemsSource="{Binding SelectedLot.Transactions,Mode=TwoWay}">
-                                <dxg:GridControl.View>
-                                    <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroup}"
-                                                   SearchColumns="Action" SearchPanelNullText="Search by Action"/>
-                                </dxg:GridControl.View>
-                                <dxg:GridControl.Columns>
-                                    <dxg:GridColumn FieldName="TimeStamp"/>
-                                    <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
-                                    <dxg:GridColumn FieldName="Instance.Name" Header="Rank"/>
-                                    <dxg:GridColumn FieldName="InventoryAction" Header="Action"/>
-                                    <dxg:GridColumn FieldName="Quantity"/>
-                                    <dxg:GridColumn FieldName="BuyerPoNumber" Header="Buyer Po"/>
-                                    <dxg:GridColumn FieldName="RMA_Number" Header="RMA"/>
-                                </dxg:GridControl.Columns>
-                            </dxg:GridControl>
-                        </dx:DXTabItem>
-                        <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}"/>
                     </dx:DXTabControl>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Save or Cancel Changes" 

@@ -41,9 +41,6 @@
     }
 
     public partial class ProductTransaction : Transaction {
-        //public virtual Lot Lot { get; set; }
-        //public string LotNumber { get; set; }
-        //public string SupplierPoNumber { get; set; }
 
         public string ProductName { get; set; }
         public string BuyerPoNumber { get; set; }    //Outgoing
@@ -58,6 +55,7 @@
 
         public ProductTransaction(ProductInstance instance,int quantity)
         {
+            
             this.Quantity = quantity;
             this.Instance = instance;
             this.ProductName = instance.InventoryItem.Name;

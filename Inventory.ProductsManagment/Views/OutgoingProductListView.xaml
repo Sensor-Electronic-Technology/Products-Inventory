@@ -11,7 +11,7 @@
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:Services="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
              xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"            
              xmlns:ViewModels="clr-namespace:Inventory.ProductsManagment.ViewModels"
              mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="500">
@@ -50,8 +50,8 @@
                                      LabelPosition="Top" 
                                      LabelHorizontalAlignment="Center"
                                      BorderBrush="Black">
-                        <dxe:ComboBoxEdit ItemsSource="{Binding Consumers,Mode=TwoWay}" 
-                                          SelectedItem="{Binding SelectedConsumer,Mode=TwoWay,NotifyOnSourceUpdated=True}"
+                        <dxe:ComboBoxEdit ItemsSource="{Binding Consumers,Mode=TwoWay,IsAsync=True}" 
+                                          SelectedItem="{Binding SelectedConsumer,Mode=TwoWay,IsAsync=True}"
                                           ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
                             <dxe:ComboBoxEdit.ItemTemplate>
                                 <DataTemplate>
@@ -59,10 +59,41 @@
                                 </DataTemplate>
                             </dxe:ComboBoxEdit.ItemTemplate>
                         </dxe:ComboBoxEdit>
-                    </dxlc:LayoutItem>                
+                    </dxlc:LayoutItem>
+                    <DockPanel>
+                    <dxb:BarContainerControl DockPanel.Dock="Top">
+                        <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                                            AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
+                                            BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+
+                            <dxb:BarButtonItem x:Name="_exportExcel" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Xlsx"                                                   
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export Excel" 
+                                                   Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
+
+                            <dxb:BarButtonItem x:Name="_exportPDF" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Pdf"                                                                                                     
+                                                   Content="Export PDF" 
+                                                   Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
+                                                   BarItemDisplayMode="ContentAndGlyph"/>
+
+                            <dxb:BarButtonItem x:Name="_exportCSV" 
+                                                   Command="{Binding ExportCommand}"
+                                                   CommandParameter="Csv"
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export CSV" 
+                                                   Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
+                        </dxb:ToolBarControl>
+                    </dxb:BarContainerControl>
                     <dxg:GridControl x:Name="_outgoingProducts" Style="{StaticResource GridControlStyle}"
                                      ItemsSource="{Binding OutgoingList,Mode=TwoWay}"
                                      SelectedItem="{Binding SelectedRank,Mode=TwoWay}">
+                            <dxmvvm:Interaction.Behaviors>
+                                <Services:GridExportService/>
+                            </dxmvvm:Interaction.Behaviors>
                     <dxg:GridControl.View>
                         <dxg:TableView AllowEditing="True"
                                        ShowEditFormOnDoubleClick="True"
@@ -89,6 +120,7 @@
                     <dxg:GridColumn FieldName="SupplierPoNumber" AllowEditing="False" EditFormVisible="False"/>
                     <dxg:GridColumn FieldName="Lot.Cost.Amount" Header="Unit Cost" AllowEditing="False" EditFormVisible="False"/>
                 </dxg:GridControl>
+                    </DockPanel>
                 </dxlc:LayoutGroup>
 
                 <dxlc:LayoutGroup Orientation="Horizontal">

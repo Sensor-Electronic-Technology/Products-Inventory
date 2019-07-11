@@ -44,29 +44,16 @@
                              LabelPosition="Top" 
                              LabelHorizontalAlignment="Center">
                 <dxe:TextEdit Text="{Binding SelectedConsumer.Description,Mode=TwoWay}" 
-                          AcceptsTab="True" AcceptsReturn="True" 
-                          TextWrapping="Wrap" Height="110" />
+                              AcceptsTab="True" AcceptsReturn="True" 
+                              TextWrapping="Wrap" Height="110" 
+                              HorizontalContentAlignment="Left" 
+                              VerticalContentAlignment="Top"/>
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Associated Items" 
                              LabelPosition="Top" 
                              LabelHorizontalAlignment="Center"
                          VerticalAlignment="Stretch">
                 <dx:DXTabControl>
-                    <dx:DXTabItem Header="Items At Location">
-                        <dxg:GridControl x:Name="_listOfItemsAtConsumer"                                                                              
-                             ItemsSource="{Binding SelectedConsumer.ItemsAtLocation,Mode=TwoWay}"                                     
-                             AutoGenerateColumns="None" SelectionMode="Row" 
-                             dx:DXSerializer.Enabled="False">
-                            <dxg:GridControl.View>
-                                <dxg:TableView AllowGrouping="False" ShowGroupPanel="False"  NavigationStyle="Row"/>
-                            </dxg:GridControl.View>
-                            <dxg:GridControl.Columns>
-                                <dxg:GridColumn FieldName="Name" AllowSearchPanel="true"/>
-                                <dxg:GridColumn FieldName="SkuNumber"/>
-                                <dxg:GridColumn FieldName="Quantity"/>
-                            </dxg:GridControl.Columns>
-                        </dxg:GridControl>
-                    </dx:DXTabItem>
                     <dx:DXTabItem Header="Associated Transactions">
 
                         <dxg:GridControl x:Name="_listOfConsumerTransactions"                                                                              

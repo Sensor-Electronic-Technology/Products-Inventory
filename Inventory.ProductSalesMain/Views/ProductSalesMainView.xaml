@@ -25,7 +25,8 @@
     <dxb:BarManager>
         <DockPanel>
             <!--#region Ribbon Button Region-->
-            <dxr:RibbonControl x:Name="_ribbonControl" DockPanel.Dock="Top" RibbonStyle="Office2010"  ToolbarShowMode="Hide">
+            <dxr:RibbonControl x:Name="_ribbonControl" DockPanel.Dock="Top" RibbonStyle="Office2010" 
+                               ToolbarShowMode="Hide" AllowCustomization="False" ShowApplicationButton="False">
                 <dxr:RibbonDefaultPageCategory>
                     <dxr:RibbonPage x:Name="HomePage" Caption="Home">
                         <dxr:RibbonPageGroup Caption="Main Commands">
@@ -34,20 +35,6 @@
                                                CommandParameter="{x:Static common:AppViews.ProductsMainView}"
                                                Glyph="{dx:DXImage Image=BOProduct_16x16.png}"
                                                LargeGlyph="{dx:DXImage Image=BOProduct_16x16.png}"/>
-
-                            <dxb:BarButtonItem x:Name="distributorView" Content="Distributor Managment"                                               
-                                               Command="{Binding LoadModuleCommand}"
-                                               CommandParameter="{x:Static common:AppViews.ProductsMainView}"
-                                               Glyph="{dx:DXImage Image=BOCountry_32x32.png}" 
-                                               LargeGlyph="{dx:DXImage Image=BOCountry_32x32.png}"
-                                               IsEnabled="False"/>
-
-                            <dxb:BarButtonItem x:Name="manufacturerView" Content="Manufacturer Managment"                                              
-                                               Command="{Binding LoadModuleCommand}"
-                                               CommandParameter="{x:Static common:AppViews.ProductsMainView}"
-                                               LargeGlyph="{dx:DXImage Image=ManageDatasource_32x32.png}"
-                                               Glyph="{dx:DXImage Image=ManageDatasource_16x16.png}"
-                                               IsEnabled="False"/>
 
                             <dxb:BarButtonItem x:Name="locationView" Content="Location Managment"                                             
                                                Command="{Binding LoadModuleCommand}" 

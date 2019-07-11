@@ -10,10 +10,12 @@ using Prism.Events;
 using PrismCommands = Prism.Commands;
 using System.Threading.Tasks;
 using Inventory.Common.DataLayer.EntityDataManagers;
+using Inventory.Common.ApplicationLayer.Services;
 using System.Text;
 using Inventory.Common.DataLayer.Providers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.IO;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class IncomingProductListViewModel : InventoryViewModelNavigationBase {
@@ -22,6 +24,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductDataManager _dataManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("IncomingProductListNotifications"); } }
         public IDispatcherService Dispatcher { get { return ServiceContainer.GetService<IDispatcherService>("IncomingProductListDispatcher"); } }
+        public IExportService ExportService { get => ServiceContainer.GetService<IExportService>(); }
 
         private ObservableCollection<Lot> _incomingList = new ObservableCollection<Lot>();
         private Lot _selectedLot = new Lot();
@@ -31,16 +34,18 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductInstance _selectedRank = new ProductInstance();
         
         public PrismCommands.DelegateCommand CheckInCommand { get; private set; }
+        public AsyncCommand<ExportFormat> ExportCommand { get; private set; }
         public ICommand RemoveLotFromIncomingCommand { get; private set; }
 
         public IncomingProductListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, ProductDataManager dataManager) {
             this._eventAggregator = eventAggregator;
             this._regionManager = regionManager;
             this._dataManager = dataManager;
-
-            this._eventAggregator.GetEvent<AddToIncomingEvent>().Subscribe(this.AddToIncomingHandler);
             this.RemoveLotFromIncomingCommand = new PrismCommands.DelegateCommand(this.RemoveLotFromIncomingHandler);
             this.CheckInCommand = new PrismCommands.DelegateCommand(this.CheckInHandler);
+            this.ExportCommand = new AsyncCommand<ExportFormat>(this.ExportHandler);
+
+            this._eventAggregator.GetEvent<AddToIncomingEvent>().Subscribe(this.AddToIncomingHandler);
         }
 
         public ObservableCollection<Lot> IncomingList {
@@ -93,6 +98,20 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.IncomingList.Clear();
             this._dataManager.UpdateProductTotals();
             this._eventAggregator.GetEvent<DoneIncomingListEvent>().Publish();
+        }
+
+        private async Task ExportHandler(ExportFormat format) {
+            await Task.Run(() => {
+                this.Dispatcher.BeginInvoke(() => {
+                    var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                    using(FileStream file = File.Create(path)) {
+                        this.ExportService.Export(file, format, new DevExpress.XtraPrinting.XlsxExportOptionsEx() {
+                            ExportType = DevExpress.Export.ExportType.WYSIWYG
+                        });
+                    }
+                    System.Diagnostics.Process.Start(path);
+                });
+            });
         }
 
         public override bool IsNavigationTarget(NavigationContext navigationContext) { return true; }

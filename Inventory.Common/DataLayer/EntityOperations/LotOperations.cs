@@ -44,6 +44,14 @@ namespace Inventory.Common.DataLayer.EntityOperations {
                         this._context.Entry<Cost>(cost).State = EntityState.Modified;
                     }
                 }
+
+                if(entity.Obsolete != lot.Obsolete) {
+                    lot.Obsolete = entity.Obsolete;
+                    lot.ProductInstances.ToList().ForEach(rank => {
+                        rank.Obsolete = entity.Obsolete;
+                        this._context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                    });
+                }
                 lot.Recieved = entity.Recieved;
                 this._context.Entry<Lot>(lot).State = EntityState.Modified;
                 try {
