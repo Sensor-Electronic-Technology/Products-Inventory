@@ -36,22 +36,23 @@ namespace Inventory.ConsoleTesting {
             //generate.ReadFromFile();
             //generate.Generate();
 
-            //using(InventoryContext context = new InventoryContext()) {
-            //    IUserService userService = new UserService();
-            //    DomainManager domainManager = new DomainManager();
-            //    UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
-            //    LogInService logInService = new LogInService(domainManager, userServiceProvider);
-            //    var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
-            //    userService = responce.Service;
+            using (InventoryContext context = new InventoryContext()) {
+                IUserService userService = new UserService();
+                DomainManager domainManager = new DomainManager();
+                UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
+                LogInService logInService = new LogInService(domainManager, userServiceProvider);
+                var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
+                userService = responce.Service;
 
-            //    var consumer = context.Locations.OfType<Consumer>().FirstOrDefault(x => x.Name == "Customer");
-            //    var warehouse = context.Locations.OfType<Warehouse>().FirstOrDefault(x => x.Name == "Products");
+                var consumer = context.Locations.OfType<Consumer>().FirstOrDefault(x => x.Name == "Customer");
+                var warehouse = context.Locations.OfType<Warehouse>().FirstOrDefault(x => x.Name == "Products");
 
-            //    AddMissingTransactions(context, userService.CurrentSession, InventoryAction.OUTGOING, consumer, "TCD1BNMA", "Sample TCD1BNMA", "6/5/2019", "CBVQX4", "", 1);
-            //    //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.OUTGOING, consumer, "CUN06B1B", "p2B20Z6", "6/4/2019", "052019JB", "", 10);
-            //    //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "CUD4GF1B", "p1H2Z3", "6/4/2019", "", "", 200);
-            //    //AddMissingTransactions(userService.CurrentSession, InventoryAction.OUTGOING, consumer,"p1H2Z3", "6/4/2019", "052019JB", "", 10);
-            //}
+                AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "TUD69H1B", "260nm~266nm","190412DS-01-001","36139", "5/20/2019","","", 100);
+                //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.OUTGOING, consumer, "CUN06B1B", "p2B20Z6", "6/4/2019", "052019JB", "", 10);
+                //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "CUD4GF1B", "p1H2Z3", "6/4/2019", "", "", 200);
+                //AddMissingTransactions(userService.CurrentSession, InventoryAction.OUTGOING, consumer,"p1H2Z3", "6/4/2019", "052019JB", "", 10);
+                //Console.WriteLine("Should be added");
+            }
 
             //using(InventoryContext context = new InventoryContext()) {
             //    int ID = 120;
@@ -155,9 +156,10 @@ namespace Inventory.ConsoleTesting {
             //    context.SaveChanges();
             //}
             //ProductReservationDeleteTesting();
-            ProductReservationAddTesting();
+            //ProductReservationAddTesting();
             // Console.WriteLine("Should Be Done");
-            Console.ReadKey();
+
+            //Console.ReadKey();
         }
 
         private static void FixLocationRepeats() {
@@ -244,6 +246,41 @@ namespace Inventory.ConsoleTesting {
                     Console.WriteLine("Rank: {0} not found in Lot.  Press Any Key To Continue");
                     Console.ReadKey();
                 }
+        }
+
+        private static void AddMissingTransactions(InventoryContext context, Session session, InventoryAction action, Location location, string partName, string rankName,string lotNumber,string Ponum,string date, string po, string rma, int quantity) {
+            var tran = context.Transactions.Create<ProductTransaction>();
+            //tran.Lot = lot;
+            //var rank = context.Instances.OfType<ProductInstance>()
+            //    .Include(e => e.InventoryItem)
+            //    .FirstOrDefault(x => x.Name == rankName && x.InventoryItem.Name == partName);
+            var lot = context.Lots.Include(e=>e.ProductInstances.Select(r=>r.InventoryItem)).FirstOrDefault(e=>e.LotNumber==lotNumber && e.SupplierPoNumber==Ponum);
+            if (lot != null) {
+                var rank = lot.ProductInstances.FirstOrDefault(e => e.Name == rankName);
+                if (rank != null) {
+                    tran.TimeStamp = DateTime.Parse(date);
+                    tran.InstanceId = rank.Id;
+                    tran.ProductName = rank.InventoryItem.Name;
+                    tran.Quantity = quantity;
+                    tran.BuyerPoNumber = po;
+                    tran.RMA_Number = rma;
+                    tran.Location = location;
+                    tran.InventoryAction = action;
+                    tran.IsReturning = false;
+                    tran.Session = session;
+                    context.Transactions.Add(tran);
+                    context.SaveChanges();
+                    Console.WriteLine("Created! Part: {0})", tran.ProductName);
+                    Console.ReadKey();
+                } else {
+                    Console.WriteLine("Rank: {0} not found in Lot.  Press Any Key To Continue");
+                    Console.ReadKey();
+                }
+
+            } else {
+                Console.WriteLine("Rank: {0} not found in Lot.  Press Any Key To Continue");
+                Console.ReadKey();
+            }
         }
 
         private static void ProductReservationAddTesting() {
