@@ -42,6 +42,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand DeleteProductCommand { get; private set; }
         public PrismCommands.DelegateCommand OnCopyingToClipboardCommand { get; private set; }
         public AsyncCommand RefreshDataCommand { get; private set; }
+        public PrismCommands.DelegateCommand ClearDetailViewsCommand { get; private set; }
 
         public ProductSelectorViewModel(ProductDataManager dataManager, IEventAggregator eventAggregator, IRegionManager regionManager) {
             this._dataManager = dataManager;
@@ -54,6 +55,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.SetInIncomingFormDelegate = new PrismCommands.DelegateCommand(this.SetInIncomingHandler, this.CanExecuteIncoming);
             this.EditProductDelegate = new PrismCommands.DelegateCommand(this.EditProductHandler, this.CanExecute);
             this.RefreshDataCommand = new AsyncCommand(this.RefreshHandler, this.CanExecute);
+            this.ClearDetailViewsCommand = new PrismCommands.DelegateCommand(this.ClearDetailViewsHandler, this.CanExecute);
 
             this.OnCopyingToClipboardCommand = new PrismCommands.DelegateCommand(this.OnCopyingToClipboardHandler);
 
@@ -190,6 +192,11 @@ namespace Inventory.ProductsManagment.ViewModels {
                     this.MessageBoxService.ShowMessage("Invalid Selection, Please Try Selecting Again", "Error", MessageButton.OK, MessageIcon.Error);
                 });
             }
+        }
+
+        private void ClearDetailViewsHandler() {
+            this._regionManager.Regions[Regions.ProductLotRankRegion].RemoveAll();
+            this._regionManager.Regions[Regions.ProductDetailsRegion].RemoveAll();
         }
 
         private bool CanExecuteViewDetails() {

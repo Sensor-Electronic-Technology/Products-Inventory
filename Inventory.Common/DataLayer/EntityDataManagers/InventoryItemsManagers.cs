@@ -211,7 +211,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
                         var transaction = this._context.Transactions.Create<ProductTransaction>();
                         transaction.InstanceId = newRank.Id;
                         transaction.LocationId = warehouse.Id;
-                        transaction.TimeStamp = DateTime.Now;
+                        transaction.TimeStamp = items[i].Recieved.HasValue ? items[i].Recieved.Value:DateTime.Now;
                         transaction.SessionId = this._userService.CurrentSession.Id;                   
                         transaction.Quantity = newRank.Quantity;
                         transaction.InventoryAction = InventoryAction.INCOMING;
@@ -313,7 +313,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             return new InventoryActionResponce(false, "Lot Exist,Check input and try again");
         }
 
-        public InventoryActionResponce Checkout(IList<ProductInstance> items,Consumer selectedConsumer,string buyerPo=null,string rma=null) {
+        public InventoryActionResponce Checkout(IList<ProductInstance> items,Consumer selectedConsumer,DateTime timeStamp,string buyerPo=null,string rma=null) {
             StringBuilder failedBuilder = new StringBuilder();
             StringBuilder successBuilder = new StringBuilder();
             StringBuilder message = new StringBuilder();
@@ -331,7 +331,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
                     if(item.Quantity <= rank.Quantity && item.Quantity>0) {
                         rank.Quantity -= item.Quantity;
                         var transaction = this._context.Transactions.Create<ProductTransaction>();
-                        transaction.TimeStamp = DateTime.UtcNow;
+                        transaction.TimeStamp = timeStamp;
                         transaction.InstanceId = rank.Id;
                         transaction.Quantity = item.Quantity;
                         transaction.LocationId = consumer.Id;

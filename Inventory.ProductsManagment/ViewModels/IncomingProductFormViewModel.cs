@@ -216,7 +216,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private void SetLotDefaults() {
-            this.Lot.Recieved = DateTime.UtcNow;
+            this.Lot.Recieved = DateTime.Now;
             this.Lot.LotNumber = Constants.DefaultLotNumber;
             this.Lot.SupplierPoNumber = Constants.DefaultSupplierPo;
             this.UnitCost = 0.00;

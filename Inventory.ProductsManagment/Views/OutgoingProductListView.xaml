@@ -46,20 +46,26 @@
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
                 <dxlc:LayoutGroup Orientation="Vertical">
-                    <dxlc:LayoutItem Label="Consumer"
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Consumer"
                                      LabelPosition="Top" 
                                      LabelHorizontalAlignment="Center"
                                      BorderBrush="Black">
-                        <dxe:ComboBoxEdit ItemsSource="{Binding Consumers,Mode=TwoWay,IsAsync=True}" 
+                            <dxe:ComboBoxEdit ItemsSource="{Binding Consumers,Mode=TwoWay,IsAsync=True}" 
                                           SelectedItem="{Binding SelectedConsumer,Mode=TwoWay,IsAsync=True}"
                                           ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
-                            <dxe:ComboBoxEdit.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
-                                </DataTemplate>
-                            </dxe:ComboBoxEdit.ItemTemplate>
-                        </dxe:ComboBoxEdit>
-                    </dxlc:LayoutItem>
+                                <dxe:ComboBoxEdit.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </dxe:ComboBoxEdit.ItemTemplate>
+                            </dxe:ComboBoxEdit>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Date">
+                            <dxe:DateEdit EditValue="{Binding TimeStamp,Mode=TwoWay}" HorizontalContentAlignment="Center"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
                     <DockPanel>
                     <dxb:BarContainerControl DockPanel.Dock="Top">
                         <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 

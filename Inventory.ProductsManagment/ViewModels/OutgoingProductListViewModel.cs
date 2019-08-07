@@ -32,6 +32,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private List<Consumer> _consumers = new List<Consumer>();
         private List<string[]> rma_buyers = new List<string[]>();
         private Consumer _selectedConsumer=new Consumer();
+        private DateTime _timeStamp;
         private string _buyerPoNumber;
         private string _rmaNumber;
 
@@ -53,7 +54,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ExportCommand = new AsyncCommand<ExportFormat>(this.ExportHandler);
 
             this._eventAggregator.GetEvent<AddToOutgoingEvent>().Subscribe(this.AddToOutgoingHandler);
-
+            this.TimeStamp = DateTime.Now;
             this.PopulateConsumers();
         }
 
@@ -79,6 +80,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public Consumer SelectedConsumer {
             get => this._selectedConsumer;
             set => SetProperty(ref this._selectedConsumer, value, "SelectedConsumer");
+        }
+
+        public DateTime TimeStamp {
+            get => this._timeStamp;
+            set => SetProperty(ref this._timeStamp, value, "TimeStamp");
         }
 
         public string BuyerPoNumber {
@@ -116,7 +122,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private void CheckOutHandler() {
             if(this.OutgoingList != null) {
                 if(this.SelectedConsumer != null) {
-                    var responce = this._dataManager.Checkout(this.OutgoingList, this.SelectedConsumer, this.BuyerPoNumber, this.RMA_Number);
+                    var responce = this._dataManager.Checkout(this.OutgoingList, this.SelectedConsumer, this.TimeStamp,this.BuyerPoNumber, this.RMA_Number);
                     if(responce.Success) {
                         this.MessageBoxService.ShowMessage(responce.Message, "Success", MessageButton.OK, MessageIcon.Information);
                         this.OutgoingList.Clear();

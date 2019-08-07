@@ -24,9 +24,11 @@ using System.Data.Entity;
 
 namespace Inventory.ConsoleTesting {
     public class Program {
-
         private static void Main(string[] args) {
-
+            DeleteTransaction(254);
+            //DeleteLotFix("190717DS-01-057-7890040", "0336162");
+            //RankChangs();
+            //FixTransaction(395);
             //GenerateTables generate = new GenerateTables();
             //generate.ReadFromFile();
             //generate.GeneratePackageTypes();
@@ -36,23 +38,26 @@ namespace Inventory.ConsoleTesting {
             //generate.ReadFromFile();
             //generate.Generate();
 
-            using (InventoryContext context = new InventoryContext()) {
-                IUserService userService = new UserService();
-                DomainManager domainManager = new DomainManager();
-                UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
-                LogInService logInService = new LogInService(domainManager, userServiceProvider);
-                var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
-                userService = responce.Service;
+            //using (InventoryContext context = new InventoryContext()) {
+            //    IUserService userService = new UserService();
+            //    DomainManager domainManager = new DomainManager();
+            //    UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
+            //    LogInService logInService = new LogInService(domainManager, userServiceProvider);
+            //    var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
+            //    userService = responce.Service;
 
-                var consumer = context.Locations.OfType<Consumer>().FirstOrDefault(x => x.Name == "Customer");
-                var warehouse = context.Locations.OfType<Warehouse>().FirstOrDefault(x => x.Name == "Products");
+            //    var consumer = context.Locations.OfType<Consumer>().FirstOrDefault(x => x.Name == "Customer");
+            //    var warehouse = context.Locations.OfType<Warehouse>().FirstOrDefault(x => x.Name == "Products");
 
-                AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "TUD69H1B", "260nm~266nm","190412DS-01-001","36139", "5/20/2019","","", 100);
+            //    AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "TUD69H1B", "260nm~266nm","190412DS-01-001","36139", "5/20/2019","","", 100);
                 //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.OUTGOING, consumer, "CUN06B1B", "p2B20Z6", "6/4/2019", "052019JB", "", 10);
                 //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "CUD4GF1B", "p1H2Z3", "6/4/2019", "", "", 200);
                 //AddMissingTransactions(userService.CurrentSession, InventoryAction.OUTGOING, consumer,"p1H2Z3", "6/4/2019", "052019JB", "", 10);
                 //Console.WriteLine("Should be added");
-            }
+            //}
+
+
+
 
             //using(InventoryContext context = new InventoryContext()) {
             //    int ID = 120;
@@ -160,6 +165,112 @@ namespace Inventory.ConsoleTesting {
             // Console.WriteLine("Should Be Done");
 
             //Console.ReadKey();
+        }
+
+        private static void RankChangs() {
+            using (InventoryContext context = new InventoryContext()) {
+                var lotEntity = context.Lots.Include(e => e.ProductInstances.Select(i => i.Transactions))
+                    .Include(e => e.Cost).FirstOrDefault(x => x.LotNumber == "18A18P00DA-7890048" && x.SupplierPoNumber == "036185");
+                var rank = lotEntity.ProductInstances.FirstOrDefault(x => x.Name == "jB25Z6");
+                if (rank != null) {
+                    //rank.Quantity = 35;
+
+                    var t2 = rank.Transactions.OfType<ProductTransaction>().FirstOrDefault(x => x.InventoryAction == InventoryAction.OUTGOING);
+                    //t2.Quantity = 65;
+                    t2.TotalCost = t2.Quantity * t2.UnitCost;
+                    context.Entry<Transaction>(t2).State = EntityState.Modified;
+                    context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                    context.SaveChanges();
+                    Console.WriteLine("Should be done");
+                    Console.ReadKey();
+                } else {
+                    Console.WriteLine("Null....");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        private static void FixTransaction(int id) {
+            using(InventoryContext context=new InventoryContext()) {
+                var tran = context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance).FirstOrDefault(e => e.Id == id);
+                if (tran != null) {
+                    tran.UnitCost = 2.24;
+                    tran.TotalCost = tran.Quantity * tran.UnitCost;
+                    context.Entry<Transaction>(tran).State = EntityState.Modified;
+                    context.SaveChanges();
+                    Console.WriteLine("Should be done");
+                } else {
+                    Console.WriteLine("Failed");
+                }
+                Console.ReadKey();
+            }
+        }
+
+        private static void DeleteTransaction(int id) {
+            using (InventoryContext context = new InventoryContext()) {
+                var tran = context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance).FirstOrDefault(e => e.Id == id);
+                if (tran != null) {
+                    var rank = context.Instances.OfType<ProductInstance>().Include(e => e.InventoryItem).FirstOrDefault(e => e.Id == tran.InstanceId);
+
+                    if (rank != null) {
+                        var product = context.InventoryItems.OfType<Product>().Include(e => e.Instances).FirstOrDefault(x => x.Id == rank.InventoryItemId);
+                        if (product != null) {
+                            //assumes was outgoing -= if incoming
+                            rank.Quantity += tran.Quantity;
+                            rank.Transactions.Remove(tran);
+                            context.Entry<Instance>(rank).State = EntityState.Modified;
+                            context.Transactions.Remove(tran);
+                            context.SaveChanges();
+                            Console.WriteLine("Should be done,Updating Quantities");
+                            context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e => e.Lots).ToList().ForEach(p=> {
+                                product.Total = product.Instances.Sum(q => q.Quantity);
+                            });
+                            Console.WriteLine("Quantities up to date");
+                            context.SaveChanges();
+                        } else {
+                            Console.WriteLine("Failed,prodcut was null");
+                        }
+
+                    } else {
+                        Console.WriteLine("Failed,rank was null");
+                    }
+
+                } else {
+                    Console.WriteLine("Failed,transaction was null");
+                }
+                Console.ReadKey();
+            }
+        }
+
+        private static void DeleteLotFix(string lotNum,string po) {
+            using (InventoryContext _context = new InventoryContext()) {
+                _context.Lots.Load();
+                _context.Instances.Load();
+                _context.Rates.Load();
+                _context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions)).Include(e => e.Cost).Load();
+                var lotEntity = _context.Lots.Include(e => e.ProductInstances.Select(i => i.Transactions))
+                        .Include(e => e.Cost).FirstOrDefault(x => x.LotNumber == lotNum && x.SupplierPoNumber == po);
+                if (lotEntity != null) {
+                    lotEntity.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            _context.Transactions.Remove(t);
+                        });
+                        _context.Instances.Remove(rank);
+                    });
+                    lotEntity.ProductInstances.Clear();
+                    _context.Rates.Remove(lotEntity.Cost);
+                    lotEntity.Cost = null;
+                    lotEntity.Product = null;
+                    _context.Lots.Remove(lotEntity);
+                    _context.SaveChanges();
+                    Console.WriteLine("Should be done!");
+                    Console.ReadKey();
+                } else {
+                    Console.WriteLine("Lot is Null");
+                    Console.ReadKey();
+                }
+
+            }
         }
 
         private static void FixLocationRepeats() {

@@ -34,6 +34,7 @@
                 </DataTemplate>
             </dxlc:GroupBox.HeaderTemplate>
             <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Date"/>
                 <DockPanel>
                     <dxb:BarContainerControl DockPanel.Dock="Top">
                         <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 

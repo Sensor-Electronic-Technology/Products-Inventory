@@ -389,6 +389,7 @@
                                     </dxg:TableView>
                                 </dxg:GridControl.View>
                                 <dxg:GridControl.Columns>
+                                    <dxg:GridColumn FieldName="Id" Visible="False"/>
                                     <dxg:GridColumn FieldName="TimeStamp"/>
                                     <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
                                     <dxg:GridColumn FieldName="Instance.Name" Header="Rank"/>

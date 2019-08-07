@@ -30,6 +30,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private Lot _selectedLot = new Lot();
         private List<Lot> _lots = new List<Lot>();
         private List<string> rmaList = new List<string>();
+        private DateTime _timeStamp;
 
         private ProductInstance _selectedRank = new ProductInstance();
         
@@ -65,6 +66,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public Lot SelectedLot {
             get => this._selectedLot;
             set => SetProperty(ref this._selectedLot, value, "SelectedLot");
+        }
+
+        public DateTime TimeStamp {
+            get => this._timeStamp;
+            set => SetProperty(ref this._timeStamp, value, "TimeStamp");
         }
 
         private void AddToIncomingHandler(IncomingLotCarrier carrier) {
