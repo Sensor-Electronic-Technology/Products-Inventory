@@ -113,6 +113,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             set => SetProperty(ref this._unitCost, value, "UnitCost");
         }
 
+
         private void SetLotHandler() {
             bool validated= this.Lot.LotNumber != Constants.DefaultLotNumber
                 && this.Lot.SupplierPoNumber != Constants.DefaultSupplierPo;

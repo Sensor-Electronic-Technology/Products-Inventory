@@ -25,146 +25,82 @@ using System.Data.Entity;
 namespace Inventory.ConsoleTesting {
     public class Program {
         private static void Main(string[] args) {
-            DeleteTransaction(254);
-            //DeleteLotFix("190717DS-01-057-7890040", "0336162");
-            //RankChangs();
-            //FixTransaction(395);
-            //GenerateTables generate = new GenerateTables();
-            //generate.ReadFromFile();
-            //generate.GeneratePackageTypes();
-            //generate.CreatePartLots();
+            //DeleteTransaction(254);
+            //DeleteLotFix("Agric Ultra", "18-337");
+            //using(InventoryContext context=new InventoryContext()) {
+            TestingDataSummary();
+        }
 
-            //GenerateTransactions generate = new GenerateTransactions();
-            //generate.ReadFromFile();
-            //generate.Generate();
+        private static void TestingMonthlyReport(DateTime start,DateTime stop) {
+            using (var context = new InventoryContext()) {
+                var products = context.InventoryItems.OfType<Product>()
+                        .AsNoTracking()
+                        .Include(e => e.Attachments)
+                        .Include(e => e.Lots.Select(x => x.ProductInstances))
+                        .Include(e => e.Lots.Select(x => x.Cost))
+                        .Include(e => e.Instances.Select(x => x.Transactions))
+                        .Include(e => e.Warehouse)
+                        .Include(e => e.ProductType)
+                        .Include(e => e.Organization)
+                        .Include(e => e.Manufacturers);
+                var transactions = context.Transactions.OfType<ProductTransaction>()
+                    .Where(t => t.TimeStamp >= start && t.TimeStamp <= stop)
+                    .ToList();
+                transactions.ForEach(transaction => {
+                    var rank = context.Instances.OfType<ProductInstance>()
+                        .AsNoTracking()
+                        .Include(e => e.Lot.Cost)
+                        .FirstOrDefault(e => e.Id == transaction.InstanceId);
 
-            //using (InventoryContext context = new InventoryContext()) {
-            //    IUserService userService = new UserService();
-            //    DomainManager domainManager = new DomainManager();
-            //    UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
-            //    LogInService logInService = new LogInService(domainManager, userServiceProvider);
-            //    var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
-            //    userService = responce.Service;
+                });
+            }
+        }
 
-            //    var consumer = context.Locations.OfType<Consumer>().FirstOrDefault(x => x.Name == "Customer");
-            //    var warehouse = context.Locations.OfType<Warehouse>().FirstOrDefault(x => x.Name == "Products");
+        private static void TestingDataSummary() {
+            using (var context = new InventoryContext()) {
+                var products = context.InventoryItems.OfType<Product>()
+                        .AsNoTracking()
+                        .Include(e => e.Attachments)
+                        .Include(e => e.Lots.Select(x => x.ProductInstances))
+                        .Include(e => e.Lots.Select(x => x.Cost))
+                        .Include(e => e.Warehouse)
+                        .Include(e => e.ProductType)
+                        .Include(e => e.Organization)
+                        .Include(e => e.Manufacturers);
+                double total = 0;
+                foreach (var product in products) {
+                    var pTotal = product.Lots.Sum(lot => {
+                        var quantity = lot.ProductInstances.Where(rank=>!rank.Obsolete).Sum(rank => rank.Quantity);
+                        return quantity * lot.Cost.Amount;
+                    });
+                    total += pTotal;
+                    Console.WriteLine("Product: {0} Cost: {1}", product.Name, pTotal);
+                }
+                Console.WriteLine("Grand Total: {0}", total);
+            }
+            Console.ReadKey();
+        }
 
-            //    AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "TUD69H1B", "260nm~266nm","190412DS-01-001","36139", "5/20/2019","","", 100);
-                //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.OUTGOING, consumer, "CUN06B1B", "p2B20Z6", "6/4/2019", "052019JB", "", 10);
-                //AddMissingTransactions(context, userService.CurrentSession, InventoryAction.INCOMING, warehouse, "CUD4GF1B", "p1H2Z3", "6/4/2019", "", "", 200);
-                //AddMissingTransactions(userService.CurrentSession, InventoryAction.OUTGOING, consumer,"p1H2Z3", "6/4/2019", "052019JB", "", 10);
-                //Console.WriteLine("Should be added");
-            //}
-
-
-
-
-            //using(InventoryContext context = new InventoryContext()) {
-            //    int ID = 120;
-            //    var product = context.InventoryItems.OfType<Product>()
-            //        .Include(e => e.Instances)
-            //        .Include(e => e.Lots.Select(x=>x.ProductInstances))
-            //        .FirstOrDefault(e => e.Id == ID);
-
-            //    var rank = context.Instances.OfType<ProductInstance>().Include(e=>e.Lot).Include(e=>e.Transactions.Select(x=>x.Instance)).FirstOrDefault(e=>e.InventoryItemId==ID);
-
-            //    var lot = context.Lots.Find(rank.LotNumber, rank.SupplierPoNumber);
-            //    lot.ProductInstances.Remove(rank);
-
-            //    rank.InventoryItem = null;
-            //    rank.Lot = null;
-            //    rank.CurrentLocation = null;
-
-
-            //    rank.Transactions.ToList().ForEach(t => {
-            //        t.Instance = null;
-            //        context.Transactions.Remove(t);
-            //    });
-            //    rank.Transactions.Clear();
-            //    rank.ProductReservations.Clear();
-
-            //    context.InventoryItems.Remove(product);
-            //    context.Instances.Remove(rank);
-
-            //    context.SaveChanges();
-            //    Console.WriteLine("ID: {0} Should be removed", ID);
-            //}
-
-            //using(InventoryContext context = new InventoryContext()) {
-            //    var product = context.InventoryItems.OfType<Product>()
-            //        .Include(e => e.Lots)
-            //        .Include(e => e.Instances.Select(x => x.Transactions))
-            //        .FirstOrDefault(e => e.Name == "TCD89B1C");
-            //    if(product != null) {
-            //        var rank = product.Instances.OfType<ProductInstance>().FirstOrDefault(x => x.Name == "280nm~290nm");
-            //        if(rank != null) {
-            //            var transaction = rank.Transactions.OfType<ProductTransaction>().FirstOrDefault(x => x.BuyerPoNumber == "Device failed testing");
-            //            if(transaction != null) {
-            //                rank.Quantity = 1;
-            //                transaction.Quantity = 1;
-            //                context.Entry<Transaction>(transaction).State = EntityState.Modified;
-            //                context.Entry<Instance>(rank).State = EntityState.Modified;
-            //                context.SaveChanges();
-            //            } else {
-            //                Console.WriteLine("Transaction Not Found");
-            //            }
-            //        } else {
-            //            Console.WriteLine("Rank Not Found");
-            //        }
-            //    }
-            //}
-
-
-            //using(StreamWriter writer = new StreamWriter(@"C:\Lots.txt")) {
-            //    foreach(var item in generate.Lots) {
-            //        writer.WriteLine(item);
-            //    }
-            //}
-
-            //using(StreamWriter writer = new StreamWriter(@"C:\Products.txt")) {
-            //    foreach(var item in generate.uniqueNames) {
-            //        writer.WriteLine(item);
-            //    }
-            //}
-
-            //using(StreamWriter writer = new StreamWriter(@"C:\ProductsLots.txt")) {
-            //    foreach(var item in generate.uniqueNameLots) {
-            //        StringBuilder builder = new StringBuilder();
-            //        builder.AppendFormat("({0},{1},{2})", item[0], item[1], item[2]);
-            //        writer.WriteLine(builder.ToString());
-            //    }
-            //}
-            //using(var context = new InventoryContext()) {
-
-            //    var products = context.InventoryItems.OfType<Product>()
-            //   .Include(e => e.Attachments)
-            //   .Include(e => e.Lots)
-            //   .Include(e => e.Warehouse)
-            //   .Include(e => e.ProductType)
-            //   .Include(e => e.Organization)
-            //   .Include(e => e.Instances).ToList();
-
-            //    foreach(var product in products) {
-            //        Console.WriteLine("Product: {0}", product.Name);
-            //        foreach(var rank in product.Instances.OfType<ProductInstance>()) {
-            //            Console.WriteLine("Rank: {0} Unit Cost: {1}", rank.Name, rank.Lot.Cost.Amount);
-            //        }
-            //    }
-            //    Console.WriteLine();
-            //}
-
-            //using(var context=new InventoryContext()) {
-            //    var transaction = context.Transactions.OfType<ProductTransaction>().Include(e=>e.Instance).FirstOrDefault(x=>x.Id==148);
-            //    transaction.Instance.Transactions.Clear();
-            //    context.Transactions.Remove(transaction);
-
-            //    context.SaveChanges();
-            //}
-            //ProductReservationDeleteTesting();
-            //ProductReservationAddTesting();
-            // Console.WriteLine("Should Be Done");
-
-            //Console.ReadKey();
+        private static void UpdateTransactionCost() {
+            using (InventoryContext context = new InventoryContext()) {
+                context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions)).Include(e => e.Cost).ToList().ForEach(lot => {
+                    lot.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            var transaction = context.Entry<ProductTransaction>((ProductTransaction)t);
+                            transaction.Entity.UnitCost = lot.Cost.Amount;
+                            transaction.Entity.TotalCost = transaction.Entity.Quantity * lot.Cost.Amount;
+                            transaction.State = EntityState.Modified;
+                        });
+                    });
+                });
+                try {
+                    context.SaveChanges();
+                    Console.WriteLine("Should be fixed");
+                } catch {
+                    Console.WriteLine("Fix Failed");
+                }
+                Console.ReadKey();
+            }
         }
 
         private static void RankChangs() {
@@ -305,30 +241,6 @@ namespace Inventory.ConsoleTesting {
                 location.Transactions.Clear();
                 context.Locations.Remove(location);
                 context.SaveChanges();
-            }
-        }
-
-        private static void TestingDataSummary() {
-            using(var context = new InventoryContext()) {
-                var products=context.InventoryItems.OfType<Product>()
-                        .AsNoTracking()
-                        .Include(e => e.Attachments)
-                        .Include(e => e.Lots.Select(x => x.ProductInstances))
-                        .Include(e => e.Lots.Select(x => x.Cost))
-                        .Include(e => e.Warehouse)
-                        .Include(e => e.ProductType)
-                        .Include(e => e.Organization)
-                        .Include(e => e.Manufacturers);
-                double total = 0;
-                foreach(var product in products) {
-                    var pTotal=product.Lots.Sum(lot => {
-                        var quantity=lot.ProductInstances.Sum(rank => rank.Quantity);
-                        return quantity * lot.Cost.Amount;
-                    });
-                    total += pTotal;
-                    Console.WriteLine("Product: {0} Cost: {1}",product.Name,pTotal);
-                }
-                Console.WriteLine("Grand Total: {0}",total);
             }
         }
 
@@ -591,8 +503,6 @@ namespace Inventory.ConsoleTesting {
         private Distributor _distributor;
         private Manufacturer _manufacturer;
 
-
-
         public List<string> uniqueNames;
         public List<string[]> uniqueNameLots;
         public Dictionary<string, IEnumerable<string[]>> partLots;
@@ -605,7 +515,6 @@ namespace Inventory.ConsoleTesting {
         public List<string> Lots;
 
         public List<Product> Products;
-
         public List<Cost> Cost;
         public List<ProductInstance> Ranks;
         public Organization organizationCat;

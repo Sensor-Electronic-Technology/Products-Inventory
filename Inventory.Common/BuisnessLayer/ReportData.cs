@@ -22,7 +22,14 @@ namespace Inventory.Common.BuisnessLayer {
             this.LotNumber = lot.LotNumber;
             this.SupplierPoNumber = lot.SupplierPoNumber;
             this.UnitCost = (transaction.UnitCost != null) ? transaction.UnitCost.Value : 0;
-            this.Cost = (transaction.TotalCost != null) ? transaction.TotalCost.Value : 0;
+            if (transaction.InventoryAction == InventoryAction.OUTGOING) {
+                this.Transaction.Quantity *= -1;
+
+            }
+
+            this.Cost = this.UnitCost * this.Transaction.Quantity;
+            
+            //this.Cost = (transaction.TotalCost != null) ? transaction.TotalCost.Value : 0;
         }
     }
 
@@ -62,5 +69,17 @@ namespace Inventory.Common.BuisnessLayer {
             this.TotalCost = unitCost * this.Quantity;
         }
 
+    }
+
+    public class ReportSummaryRow {
+        public double QtyBeginning { get; set; }
+        public double QtyPurchases { get; set; }
+        public double QtyReturns { get; set; }
+        public double ConsumedCustomer{ get; set; }
+        public double ConsumedRnD { get; set; }
+        public double Rejected { get; set; }
+        public double Obsoleted { get; set; }
+        public double TotalConsumed { get; set; }
+        public double QtyEnding { get; set; }
     }
 }

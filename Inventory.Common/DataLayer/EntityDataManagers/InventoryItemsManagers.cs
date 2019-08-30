@@ -41,7 +41,12 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
         private IEntityDataProvider<ProductReservation> _reservationProvider;
 
         private IEntityDataProvider<ProductType> _categoryProvider;
+
         private IEntityDataProvider<Consumer> _consumerProvider;
+        private IEntityDataProvider<Warehouse> _warehouseProvider;
+
+
+
 
         private IEntityDataProvider<ProductTransaction> _productTransactionProvider;
 
@@ -60,7 +65,9 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             this._reservationOperations = new ReservationOperations(this._context, this._userService);
 
             this._categoryProvider = new ProductTypeProvider(this._context, this._userService);
+
             this._consumerProvider = new ConsumerProvider(this._context, this._userService);
+            this._warehouseProvider = new WarehouseProvider(this._context, this._userService);
 
             this._productTransactionProvider = new ProductTransactionProvider(this._context, this._userService);
         }
@@ -97,6 +104,10 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             get => this._consumerProvider;
         }
 
+        public IEntityDataProvider<Warehouse> WarehouseProvider {
+            get => this._warehouseProvider;
+        }
+
         public IEntityDataProvider<ProductTransaction> ProductTransactionProvider {
             get => this._productTransactionProvider;
         }
@@ -114,6 +125,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             await this._lotProvider.LoadDataAsync();
             await this._productDataProvider.LoadDataAsync();
             await this._consumerProvider.LoadDataAsync();
+            await this._warehouseProvider.LoadDataAsync();
             await this._productTransactionProvider.LoadDataAsync();
         }
 
@@ -122,6 +134,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             this._lotProvider.LoadData();
             this._productDataProvider.LoadData();
             this._consumerProvider.LoadData();
+            this._warehouseProvider.LoadData();
             this._productTransactionProvider.LoadData();
         }
 
@@ -139,9 +152,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
 
         public async Task UpdateProductTotalsAsync() {
             await Task.Run(()=>{
-                this._context.Instances.Load();
-                this._context.InventoryItems.Load();
-                this._context.Instances.Load();
+                this.Load();
                 this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e=>e.Lots).ToList().ForEach(product => {
                     product.Total = product.Instances.Sum(q => q.Quantity);
                 });

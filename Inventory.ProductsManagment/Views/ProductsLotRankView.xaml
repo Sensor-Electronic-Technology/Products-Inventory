@@ -63,6 +63,20 @@
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
                                                 </DataTemplate>
+                                            </dxe:ComboBoxEdit.ItemTemplate>                                                                         
+                                        </dxe:ComboBoxEdit>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Warehouse"
+                                                     LabelPosition="Top" 
+                                                     LabelHorizontalAlignment="Center"
+                                                     BorderBrush="Black">
+                                        <dxe:ComboBoxEdit ItemsSource="{Binding Warehouses,Mode=TwoWay,IsAsync=True}" 
+                                          SelectedItem="{Binding SelectedWareHouse,Mode=TwoWay,IsAsync=True}"
+                                          ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
+                                            <dxe:ComboBoxEdit.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                                </DataTemplate>
                                             </dxe:ComboBoxEdit.ItemTemplate>
                                         </dxe:ComboBoxEdit>
                                     </dxlc:LayoutItem>

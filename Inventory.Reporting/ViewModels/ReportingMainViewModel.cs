@@ -36,6 +36,12 @@ namespace Inventory.Reporting.ViewModels {
         private bool _isLoading = false;
         private bool _isTotalsLoading = false;
         private double _total = 0;
+
+        private double _startingQuantity = 0.00;
+        private double _endingQuantity = 0.00;
+        private double _startingCost = 0.00;
+        private double _endingCost = 0.00;
+
         private ObservableCollection<ReportDataRow> _summaryData = new ObservableCollection<ReportDataRow>();
         private ObservableCollection<TotalReportDataRow> _totals = new ObservableCollection<TotalReportDataRow>();
         private ObservableCollection<ProductTransaction> _transactions = new ObservableCollection<ProductTransaction>();
@@ -111,6 +117,27 @@ namespace Inventory.Reporting.ViewModels {
             set => SetProperty(ref this._isTotalsLoading, value);
         }
 
+        public double StartingQuantity {
+            get => this._startingQuantity;
+            set => SetProperty(ref this._startingQuantity, value);
+        }
+
+        public double EndingQuantity {
+            get => this._endingQuantity;
+            set => SetProperty(ref this._endingQuantity, value);
+        }
+
+        public double StartingCost {
+            get => this._startingCost;
+            set => SetProperty(ref this._startingCost, value);
+        }
+
+        public double EndingCost {
+            get => this._endingCost;
+            set => SetProperty(ref this._endingCost, value);
+        }
+
+
         public override bool KeepAlive {
             get => true;
         }
@@ -133,15 +160,8 @@ namespace Inventory.Reporting.ViewModels {
 
         private async Task CollectDataHandler() {
             ObservableCollection<ReportDataRow> data = new ObservableCollection<ReportDataRow>();
-
+            double endingQuantity=0, endingCost=0;
             this.IsLoading = true;
-            //this.SummaryData =(ObservableCollection<ReportDataRow>)await this._dataManager.CollectReportDataAsync(this.StartDate, this.StopDate);
-            await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Location).Include(e => e.Instance.InventoryItem).LoadAsync();
-            await this._context.Instances.OfType<ProductInstance>()
-                .Include(e => e.Transactions.Select(x => x.Location))
-                .Include(e => e.InventoryItem)
-                .Include(e => e.Lot.Cost).LoadAsync();
-
             var transactions = await this._context.Transactions.OfType<ProductTransaction>()
                 .AsNoTracking()
                 .Include(e => e.Instance.InventoryItem)
@@ -155,14 +175,27 @@ namespace Inventory.Reporting.ViewModels {
                                         .AsNoTracking()
                                         .Include(e => e.Lot.Cost)
                                         .FirstOrDefault(e => e.Id == transaction.InstanceId);
-                    data.Add(new ReportDataRow(transaction, rank.Lot));
+                    var row = new ReportDataRow(transaction, rank.Lot);
+                    //if (transaction.InventoryAction == InventoryAction.OUTGOING) {
+                    //     temp=(transaction.Quantity * -1);
+                    //} else if(transaction.InventoryAction == InventoryAction.INCOMING) {
+                    //    temp= transaction.Quantity;
+                    //}
+                    endingQuantity += row.Transaction.Quantity;
+                    endingCost += row.Cost;
+
+                    data.Add(row);
                 });
             });
+            this.EndingQuantity = this.StartingQuantity+endingQuantity;
+            this.EndingCost = this.StartingCost + endingCost;
+            this.SummaryData = data;
+            this.IsLoading = false;
 
-            lock(SyncRoot) {
-                this.SummaryData = data;
-                this.IsLoading = false;
-            }
+            //lock (SyncRoot) {
+            //    this.SummaryData = data;
+            //    this.IsLoading = false;
+            //}
 
         }
 
@@ -185,14 +218,13 @@ namespace Inventory.Reporting.ViewModels {
                 foreach(var product in products) {
                     var row = new TotalReportDataRow();
                     var pTotal = product.Lots.Sum(lot => {
-
-                        var quantity = lot.ProductInstances.Where(rank=>!rank.Obsolete).Sum(rank => rank.Quantity);
+                        var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
                         if(lot.Cost!=null) {
                             return quantity * lot.Cost.Amount;
                         } else {
                             var cost = this._context.Rates.OfType<Cost>()
-                            .Include(e => e.Lot)
-                            .FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
+                                        .Include(e => e.Lot)
+                                        .FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
                             if(cost != null) {
                                 return quantity * cost.Amount;
                             } else {
@@ -227,7 +259,9 @@ namespace Inventory.Reporting.ViewModels {
 
         private async void LoadData() {
             await this._context.Transactions.OfType<ProductTransaction>().Include(e=>e.Location).Include(e=>e.Instance.InventoryItem).LoadAsync();
-            await this._context.Instances.OfType<ProductInstance>().Include(e => e.Transactions.Select(x=>x.Location))
+            await this._context.Instances.OfType<ProductInstance>()
+                .Include(e => e.Transactions.Select(x=>x.Location))
+                .Include(e=>e.Transactions.Select(x=>x.Instance.InventoryItem))
                 .Include(e=>e.InventoryItem)
                 .Include(e=>e.Lot.Cost)
                 .LoadAsync();

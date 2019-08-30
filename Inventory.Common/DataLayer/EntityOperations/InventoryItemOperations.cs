@@ -63,8 +63,13 @@ namespace Inventory.Common.DataLayer.EntityOperations {
                 product.LegacyName = entity.LegacyName;
                 product.Description = entity.Description;
                 var category=this._context.Categories.AsNoTracking().OfType<ProductType>().Include(e=>e.Products).FirstOrDefault(e => e.Id == entity.ProductTypeId);
+                var warehouse = this._context.Locations.AsNoTracking().OfType<Warehouse>().Include(e => e.ItemsAtLocation).FirstOrDefault(e => e.Id == entity.WarehouseId);
                 if(category != null) {
                     product.ProductTypeId = category.Id;
+                }
+
+                if (warehouse != null) {
+                    product.WarehouseId = warehouse.Id;
                 }
 
                 if(entity.Obsolete != product.Obsolete) {

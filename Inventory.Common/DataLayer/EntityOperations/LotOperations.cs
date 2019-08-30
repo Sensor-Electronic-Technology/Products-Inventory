@@ -34,7 +34,7 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             var lot = this._context.Lots
                 .Include(e=>e.Cost)
                 .Include(e=>e.Product)
-                .Include(e=>e.ProductInstances)
+                .Include(e=>e.ProductInstances.Select(x=>x.Transactions))
                 .FirstOrDefault(e=>e.LotNumber==entity.LotNumber && e.SupplierPoNumber==entity.SupplierPoNumber);
             if(lot != null) {
                 if(lot.Cost != null) {
@@ -42,6 +42,14 @@ namespace Inventory.Common.DataLayer.EntityOperations {
                         var cost = lot.Cost;
                         cost.Amount = entity.Cost.Amount;
                         this._context.Entry<Cost>(cost).State = EntityState.Modified;
+                        lot.ProductInstances.ToList().ForEach(rank => {
+                            rank.Transactions.ToList().ForEach(t => {
+                                var transaction=this._context.Entry<ProductTransaction>((ProductTransaction)t);
+                                transaction.Entity.UnitCost = cost.Amount;
+                                transaction.Entity.TotalCost = transaction.Entity.Quantity * cost.Amount;
+                                transaction.State = EntityState.Modified;
+                            });
+                        });
                     }
                 }
 

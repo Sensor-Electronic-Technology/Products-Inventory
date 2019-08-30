@@ -11,6 +11,7 @@
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dxpg="http://schemas.devexpress.com/winfx/2008/xaml/pivotgrid"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
              xmlns:Services="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
@@ -97,25 +98,87 @@
                         </DockPanel>
                     </dxlc:LayoutGroup>
                 </dx:DXTabItem>
-                <dx:DXTabItem Header="Transaction Summary">
+                <dx:DXTabItem Header="Transaction Summary" IsSelected="True">
                     <dxlc:DockLayoutControl>
-                        <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top" IsCollapsible="True">
-                            <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Start Date">
-                                <dxe:DateEdit EditValue="{Binding StartDate}" HorizontalContentAlignment="Center"/>
-                            </dxlc:LayoutItem>
-                            <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Stop Date">
-                                <dxe:DateEdit EditValue="{Binding StopDate}" HorizontalContentAlignment="Center"/>
-                            </dxlc:LayoutItem>
-                            <dx:SimpleButton Content="Get Summary" Command="{Binding GatherData,IsAsync=True}" Glyph="{dx:DXImage Image=Summary_32x32.png}"/>
+                        <dxlc:LayoutGroup Orientation="Horizontal" dxlc:DockLayoutControl.Dock="Left">
+                            <dxlc:LayoutGroup  IsCollapsible="True" Orientation="Vertical">
+                                <dxlc:LayoutGroup>
+                                    <dxlc:LayoutItem Label="Starting Quantity" Style="{StaticResource LayoutItemStyle}">
+                                        <dxe:SpinEdit EditValue="{Binding StartingQuantity,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="n3"
+                                              HorizontalContentAlignment="Center"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Starting Cost" Style="{StaticResource LayoutItemStyle}">
+                                        <dxe:SpinEdit EditValue="{Binding StartingCost,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="c3"
+                                              HorizontalContentAlignment="Center"/>
+                                    </dxlc:LayoutItem>
+                                </dxlc:LayoutGroup>
+
+                                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Start Date">
+                                    <dxe:DateEdit EditValue="{Binding StartDate}" HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Stop Date">
+                                    <dxe:DateEdit EditValue="{Binding StopDate}" HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dx:SimpleButton Content="Get Summary" VerticalAlignment="Top"
+                                                 Command="{Binding GatherData,IsAsync=True}" 
+                                                 Glyph="{dx:DXImage Image=Summary_32x32.png}"/>
+                            </dxlc:LayoutGroup>
                         </dxlc:LayoutGroup>
-                        <dxpg:PivotGridControl DataSource="{Binding SummaryData,Mode=TwoWay,IsAsync=True}"
+                        <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top">
+                            <dxlc:LayoutGroup>
+                                <dxlc:LayoutItem Label="Starting Quantity" Style="{StaticResource LayoutItemStyle}">
+                                    <dxe:SpinEdit EditValue="{Binding StartingQuantity,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="n3"
+                                              HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Starting Cost" Style="{StaticResource LayoutItemStyle}">
+                                    <dxe:SpinEdit EditValue="{Binding StartingCost,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="c3"
+                                              HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Ending Quantity" Style="{StaticResource LayoutItemStyle}">
+                                    <dxe:SpinEdit EditValue="{Binding EndingQuantity,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="n3"
+                                              HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Ending Cost" Style="{StaticResource LayoutItemStyle}">
+                                    <dxe:SpinEdit EditValue="{Binding EndingCost,Mode=TwoWay}" 
+                                              EditValueType="{x:Type sys:Double}"
+                                              NullValue="0" NullText="0.000"
+                                               Increment="1" 
+                                              DisplayFormatString="c3"
+                                              HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutGroup>
+
+                        <dxpg:PivotGridControl DataSource="{Binding SummaryData,Mode=TwoWay,IsAsync=True}" 
+                                               dxlc:DockLayoutControl.Dock="Client"
                                                ShowLoadingPanel="{Binding IsLoading,Mode=TwoWay}" 
-                                               DataFieldArea="ColumnArea" BestFitMode="Smart" BestFitArea="All">
+                                               DataFieldArea="ColumnArea" BestFitMode="Smart" 
+                                               BestFitArea="All" ShowFilterHeaders="False" >
                             <dxpg:PivotGridControl.Fields>
                                 <dxpg:PivotGridField Area="RowArea" Caption="Action" FieldName="Transaction.InventoryAction" AreaIndex="0"/>
                                 <dxpg:PivotGridField Area="RowArea" Caption="Location" FieldName="Transaction.Location.Name" AreaIndex="1"/>
                                 <dxpg:PivotGridField Area="RowArea" Caption="PartNumber" FieldName="ProductName" AreaIndex="2"/>
-                                <dxpg:PivotGridField Area="DataArea"  Caption="Quantity" FieldName="Transaction.Quantity" AreaIndex="0"/>
+                                <dxpg:PivotGridField Area="DataArea"  Caption="Quantity" FieldName="Transaction.Quantity" AreaIndex="0" CellFormat="n"/>
                                 <dxpg:PivotGridField Area="DataArea" Caption="Unit Cost" FieldName="UnitCost" AreaIndex="1" CellFormat="c"/>
                                 <dxpg:PivotGridField Area="DataArea" Caption="Cost" FieldName="Cost" AreaIndex="2" CellFormat="c"/>
                             </dxpg:PivotGridControl.Fields>
@@ -172,7 +235,7 @@
                                 <dxg:GridControl.Columns>
                                     <dxg:GridColumn FieldName="Id" Visible="False"/>
                                     <dxg:GridColumn FieldName="TimeStamp" UnboundType="DateTime"/>
-                                    <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
+                                    <dxg:GridColumn FieldName="Instance.InventoryItem.Name" Header="Product" />
                                     <dxg:GridColumn FieldName="Instance.Name" Header="Rank"/>
                                     <dxg:GridColumn FieldName="InventoryAction" Header="Action" AllowGrouping="True" GroupIndex="0"/>
                                     <dxg:GridColumn FieldName="Quantity">
@@ -195,6 +258,7 @@
                                     <dxg:GridColumn FieldName="Instance.SupplierPoNumber" Header="Supplier Po"/>
                                     <dxg:GridColumn FieldName="BuyerPoNumber" Header="Buyer Po"/>
                                     <dxg:GridColumn FieldName="RMA_Number" Header="RMA"/>
+                                    <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
                                 </dxg:GridControl.Columns>
                                 <dxg:GridControl.GroupSummary>
                                     <dxg:GridSummaryItem FieldName="Quantity" DisplayFormat="[Total Quantity: {0:n}]"  ShowInColumn="True"  SummaryType="Sum" />
@@ -203,6 +267,38 @@
                             </dxg:GridControl>
                         </DockPanel>
                     </dxlc:DockLayoutControl>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Monthly Report" Visibility="Hidden">
+
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:GroupBox Header="User Settings" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top" Orientation="Vertical">
+                                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Starting Amount">
+                                    <dxe:SpinEdit />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Start Date">
+                                    <dxe:DateEdit EditValue="{Binding ReportStart,Mode=TwoWay}" HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}" Label="Stop Date">
+                                    <dxe:DateEdit EditValue="{Binding ReportStop,Mode=TwoWay}" HorizontalContentAlignment="Center"/>
+                                </dxlc:LayoutItem>
+                                <dx:SimpleButton Content="Generate Report" Command="{Binding GenerateReport,IsAsync=True}" 
+                                                 Glyph="{dx:DXImage Image=Summary_32x32.png}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </dxlc:LayoutGroup>
+                        </dxlc:GroupBox>
+                        <DockPanel>
+                            <dxlc:GroupBox Header="Summary" HorizontalAlignment="Stretch" DockPanel.Dock="Top" >
+                                <dxg:GridControl>
+
+                                </dxg:GridControl>
+                            </dxlc:GroupBox>
+                            <dxlc:GroupBox Header="Itemized" HorizontalAlignment="Stretch" DockPanel.Dock="Top" >
+                                <dxg:GridControl>
+
+                                </dxg:GridControl>
+                            </dxlc:GroupBox>
+                        </DockPanel>
+                    </dxlc:LayoutGroup>
                 </dx:DXTabItem>
 
             </dx:DXTabControl>

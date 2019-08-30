@@ -38,12 +38,14 @@ namespace Inventory.ProductsManagment.ViewModels {
         private Lot _selectedLot = new Lot();
         private Product _selectedProduct = new Product();
         private ProductType _selectedProductType = new ProductType();
+        private Warehouse _selectedWarehouse = new Warehouse();
         private ProductReservation _selectedReservation = new ProductReservation();
         private List<Lot> _lots = new List<Lot>();
         private List<ProductInstance> _ranks = new List<ProductInstance>();
         private List<ProductInstance> _outGoingRanks = new List<ProductInstance>();
         private List<ProductType> _productTypes = new List<ProductType>();
         private List<ProductTransaction> _transactions = new List<ProductTransaction>();
+        private ObservableCollection<Warehouse> _warehouses = new ObservableCollection<Warehouse>();
         private ObservableCollection<ProductCostRow> _productCostSummary = new ObservableCollection<ProductCostRow>();
         private ObservableCollection<ProductReservation> _reservations = new ObservableCollection<ProductReservation>();
 
@@ -144,6 +146,11 @@ namespace Inventory.ProductsManagment.ViewModels {
             set => SetProperty(ref this._selectedProductType, value, "SelectedProductType");
         }
 
+        public Warehouse SelectedWareHouse {
+            get => this._selectedWarehouse;
+            set => SetProperty(ref this._selectedWarehouse, value,"SelectedWarehouse");
+        }
+
         public int SelectedTabIndex {
             get => this._selectedTabIndex;
             set => SetProperty(ref this._selectedTabIndex,value,"SelectedTabIndex");
@@ -162,6 +169,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public List<ProductType> ProductTypes {
             get => this._productTypes;
             set => SetProperty(ref this._productTypes, value, "ProductTypes");
+        }
+
+        public ObservableCollection<Warehouse> Warehouses {
+            get => this._warehouses;
+            set => SetProperty(ref this._warehouses, value,"Warehouses");
         }
 
         public List<ProductTransaction> Transactions {
@@ -183,8 +195,6 @@ namespace Inventory.ProductsManagment.ViewModels {
             get => this._visibility;
             set => SetProperty(ref this._visibility, value, "Visibility");
         }
-
- 
 
         private void OutgoingListDoneHandler() {
             this.outGoingInProgress = false;
@@ -348,8 +358,9 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private void SaveProductChangesHandle() {
-            if(this.SelectedProductType != null) {
+            if(this.SelectedProductType != null && this.SelectedWareHouse!=null) {
                 this.SelectedProduct.ProductTypeId = this.SelectedProductType.Id;
+                this.SelectedProduct.WarehouseId = this.SelectedWareHouse.Id;
                 Product entity;
                 if(this.isEditProduct) {
                     entity = this._dataManager.ProductOperations.Update(this.SelectedProduct);
@@ -490,8 +501,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private async Task ReloadAsyncTask() {
-            //await this._dataManager.LotProvider.LoadDataAsync();
-            //await this._dataManager.RankProvider.LoadDataAsync();
+
             //Load Ranks
             await Task.Run(() => {
                 this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
@@ -530,6 +540,13 @@ namespace Inventory.ProductsManagment.ViewModels {
                 }
             });
 
+            await Task.Run(() => {
+                var temp= this._dataManager.WarehouseProvider.GetEntityList().OrderBy(e => e.Name).ToList();
+                if (this.SelectedProduct.Warehouse != null) {
+                    this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
+                }
+            });
+
             //Load Reservations
             await Task.Run(() => {
                 var reservations = this._dataManager.ReservationProvider.GetEntityList(e => e.ProductName == this.SelectedProduct.Name);
@@ -540,7 +557,6 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private async void LoadDataAsync() {
-
             //Load Ranks
             await Task.Run(() => {
                 this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
@@ -585,7 +601,60 @@ namespace Inventory.ProductsManagment.ViewModels {
                 ObservableCollection<ProductReservation> temp = new ObservableCollection<ProductReservation>();
                 temp.AddRange(reservations);
                 this.Reservations = temp;
+            }).ContinueWith(b=> {
+                this.Warehouses = new ObservableCollection<Warehouse>(this._dataManager.WarehouseProvider.GetEntityList().OrderBy(e => e.Name).ToList());
+                if (this.SelectedProduct.Warehouse != null) {
+                    this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
+                }
             });
+        }
+
+        private void Load() {
+            //Load Ranks
+            this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
+
+
+            //load Cost Summary/Lots
+                this.Lots = this._dataManager.LotProvider.GetEntityList(x => x.ProductId == this.SelectedProduct.Id).ToList();
+                ObservableCollection<ProductCostRow> data = new ObservableCollection<ProductCostRow>();
+                this.Lots.ForEach(lot => {
+                    if (lot.Cost != null) {
+                        if (lot.Cost.Amount > 0) {
+                            lot.ProductInstances.ToList().ForEach(rank => {
+                                if (rank.Quantity > 0) {
+                                    data.Add(new ProductCostRow(rank, lot.Cost.Amount));
+                                }
+                            });
+                        }
+                    }
+                });
+                this.ProductCostSummary = data;
+
+
+            //Load Transactions
+                this.Transactions = (from rank in this.Ranks
+                                     from transaction in rank.Transactions
+                                     select (ProductTransaction)transaction).ToList();
+
+
+            //Load ProductTypes
+                this.ProductTypes = this._dataManager.CategoryProvider.GetEntityList().OrderBy(e => e.Name).ToList();
+                if (this.SelectedProduct.ProductType != null) {
+                    this.SelectedProductType = this.ProductTypes.FirstOrDefault(x => x.Name == this.SelectedProduct.ProductType.Name);
+                }
+
+
+            //Load Reservations
+                var reservations = this._dataManager.ReservationProvider.GetEntityList(e => e.ProductName == this.SelectedProduct.Name);
+                ObservableCollection<ProductReservation> temp = new ObservableCollection<ProductReservation>();
+                temp.AddRange(reservations);
+                this.Reservations = temp;
+
+                this.Warehouses = new ObservableCollection<Warehouse>(this._dataManager.WarehouseProvider.GetEntityList().OrderBy(e => e.Name).ToList());
+            if (this.SelectedProduct.Warehouse != null) {
+                this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
+            }
+
         }
 
         private bool CanExecute() {
@@ -624,7 +693,8 @@ namespace Inventory.ProductsManagment.ViewModels {
                 this.outGoingInProgress = isOngoing;
                 this.isEditProduct = isEdit;
                 this.Visibility = (isNew || isEdit) ? Visibility.Visible : Visibility.Collapsed;
-                this.LoadDataAsync();
+                //this.LoadDataAsync();
+                this.Load();
             }
         }
     }
