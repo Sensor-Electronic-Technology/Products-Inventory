@@ -70,21 +70,11 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         private async Task DiscardAsyncHandler() {
             await Task.Run(() => {
-                if(this.SelectedReservation != null) {
-                    var original = this._dataManager.ReservationProvider.GetEntity(e => e.Id == this.SelectedReservation.Id);
-                    if(original != null) {
-                        this.Visibility = Visibility.Collapsed;
-                        this.Dispatcher.BeginInvoke(() => {
-                            this.MessageBoxService.ShowMessage("Changes Discarded", "", MessageButton.OK, MessageIcon.Information);
-                        });
-                    } else {
-                        this.Visibility = Visibility.Collapsed;
-                        this.Dispatcher.BeginInvoke(() => {
-                            this.MessageBoxService.ShowMessage("Error Reloading, Please Select Reservation Again to View Detials ", "", MessageButton.OK, MessageIcon.Error);
-                        });
-                    }
-                    this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
-                }
+                this.Visibility = Visibility.Collapsed;
+                this.Dispatcher.BeginInvoke(() => {
+                    this.MessageBoxService.ShowMessage("Changes Discarded", "", MessageButton.OK, MessageIcon.Information);
+                });
+                this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
             });
         }
 

@@ -268,8 +268,93 @@
                         </DockPanel>
                     </dxlc:DockLayoutControl>
                 </dx:DXTabItem>
-                <dx:DXTabItem Header="Monthly Report" Visibility="Hidden">
+                <dx:DXTabItem Header="List Of Lots" IsSelected="True">
+                    <DockPanel>
+                        <dxlc:LayoutGroup Orientation="Vertical" DockPanel.Dock="Top">
+                            <dx:SimpleButton Content="Load Data" Command="{Binding LoadLotsCommand}"/>
+                            <dxb:BarContainerControl >
+                            <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                                                AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
+                                                BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+                                <dxb:BarButtonItem x:Name="_lotExportExcel" 
+                                                   Command="{Binding ExportLotsCommand}"
+                                                   CommandParameter="Xlsx"                                                   
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export Excel" 
+                                                   Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
 
+                                <dxb:BarButtonItem x:Name="_lotExportPDF" 
+                                                   Command="{Binding ExportLotsCommand}"
+                                                   CommandParameter="Pdf"                                                                                                     
+                                                   Content="Export PDF" 
+                                                   Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
+                                                   BarItemDisplayMode="ContentAndGlyph"/>
+
+                                <dxb:BarButtonItem x:Name="_lotExportCSV" 
+                                                   Command="{Binding ExportLotsCommand}"
+                                                   CommandParameter="Csv"
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Export CSV" 
+                                                   Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
+                            </dxb:ToolBarControl>
+                        </dxb:BarContainerControl>
+                        </dxlc:LayoutGroup>
+                        <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
+                                         ItemsSource="{Binding Lots, IsAsync=True, Mode=TwoWay}"
+                                         SelectedItem="{Binding SelectedLot,Mode=TwoWay,IsAsync=True}">
+                            <dxmvvm:Interaction.Behaviors>
+                                <Services:GridExportService x:Name="LotExportService"/>
+                            </dxmvvm:Interaction.Behaviors>
+                            <dxg:GridControl.View>
+                                <dxg:TableView Style="{StaticResource TableViewStyleWithMasterGroup}"                                      
+                                               SearchPanelNullText="Search By Lot Number" 
+                                               AllowGrouping="True" 
+                                               ShowGroupPanel="True" 
+                                               SearchColumns="LotNumber">
+                                    <dxg:TableView.RowCellMenuCustomizations>
+                                        <dxb:BarButtonItem Content="View Details"
+                                                           Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                           Command="{Binding Path=View.DataContext.ViewLotDetailsCommand}"/>
+                                        <dxb:BarButtonItem Content="Edit Lot" 
+                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                           Command="{Binding Path=View.DataContext.EditLotCommand}"/>
+                                    </dxg:TableView.RowCellMenuCustomizations>
+                                    <dxg:TableView.FormatConditions>
+                                        <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
+                                            <dx:Format Background="Red"/>
+                                        </dxg:FormatCondition>
+                                        <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Quarantined" Value1="True">
+                                            <dx:Format Background="Salmon"/>
+                                        </dxg:FormatCondition>
+                                    </dxg:TableView.FormatConditions>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridControl.DetailDescriptor>
+                                <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances}">
+                                    <dxg:GridControl Style="{StaticResource GridControlStyle}">
+                                        <dxg:GridColumn FieldName="Name" Header="Rank"/>
+                                        <dxg:GridColumn FieldName="Quantity"/>
+                                        <dxg:GridColumn FieldName="Wavelength"/>
+                                        <dxg:GridColumn FieldName="Power"/>
+                                        <dxg:GridColumn FieldName="Voltage"/>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroup}"/>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </dxg:DataControlDetailDescriptor>
+                            </dxg:GridControl.DetailDescriptor>
+                            <dxg:GridColumn FieldName="Recieved"/>
+                            <dxg:GridColumn FieldName="Product.Name" Header="Product" GroupIndex="0"/>
+                            <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowSearchPanel="true"/>
+                            <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
+                            <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>
+                            <dxg:GridColumn FieldName="ManufacturedDate" Header="Manufactured Date"/>
+                            <dxg:GridColumn FieldName="Quarantined" />
+                            <dxg:GridColumn FieldName="Obsolete" />
+                        </dxg:GridControl>
+                    </DockPanel>
+                </dx:DXTabItem>                
+                <dx:DXTabItem Header="Monthly Report" Visibility="Hidden">
                     <dxlc:LayoutGroup Orientation="Horizontal">
                         <dxlc:GroupBox Header="User Settings" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top" Orientation="Vertical">
@@ -300,6 +385,7 @@
                         </DockPanel>
                     </dxlc:LayoutGroup>
                 </dx:DXTabItem>
+                
 
             </dx:DXTabControl>
         </dxdo:LayoutPanel>        

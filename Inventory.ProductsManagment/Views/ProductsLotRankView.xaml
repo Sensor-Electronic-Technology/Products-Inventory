@@ -338,7 +338,7 @@
                                         </dxg:GridControl>
                                     </dxg:DataControlDetailDescriptor>
                                 </dxg:GridControl.DetailDescriptor>
-                                <dxg:GridColumn FieldName="Recived"/>
+                                <dxg:GridColumn FieldName="Recieved"/>
                                 <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowSearchPanel="true"/>
                                 <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
                                 <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>

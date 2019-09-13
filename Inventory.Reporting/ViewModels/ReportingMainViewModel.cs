@@ -27,6 +27,7 @@ namespace Inventory.Reporting.ViewModels {
         private ProductDataManager _dataManager;
         public IExportService ExportServiceTotalInventory { get => ServiceContainer.GetService<IExportService>("TotalInventoryExportService"); }
         public IExportService ExportServiceTransactions { get => ServiceContainer.GetService<IExportService>("ItemizedTransactionsExportService"); }
+        public IExportService LotExportService { get => ServiceContainer.GetService<IExportService>("LotExportService"); }
         public IDispatcherService Dispatcher { get => ServiceContainer.GetService<IDispatcherService>("ReportsDispatcherService"); }
 
         private DateTime _startDate;
@@ -42,6 +43,7 @@ namespace Inventory.Reporting.ViewModels {
         private double _startingCost = 0.00;
         private double _endingCost = 0.00;
 
+        private ObservableCollection<Lot> _lots = new ObservableCollection<Lot>();
         private ObservableCollection<ReportDataRow> _summaryData = new ObservableCollection<ReportDataRow>();
         private ObservableCollection<TotalReportDataRow> _totals = new ObservableCollection<TotalReportDataRow>();
         private ObservableCollection<ProductTransaction> _transactions = new ObservableCollection<ProductTransaction>();
@@ -49,8 +51,10 @@ namespace Inventory.Reporting.ViewModels {
         public AsyncCommand GatherData { get; private set; }
         public AsyncCommand GatherTotalData { get; private set; }
         public AsyncCommand GatherTransactions { get; private set; }
+        public AsyncCommand LoadLotsCommand { get; private set; }
         public DelegateCommand<ExportFormat> ExportTotalInventoryCommand { get; private set; }
         public DelegateCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
+        public DelegateCommand<ExportFormat> ExportLotsCommand { get; private set; }
 
         public ReportingMainViewModel(InventoryContext context,ProductDataManager dataManager) {
             this._dataManager = dataManager;
@@ -58,8 +62,10 @@ namespace Inventory.Reporting.ViewModels {
             this.GatherData = new AsyncCommand(this.CollectDataHandler);
             this.GatherTotalData = new AsyncCommand(this.CollectTotalDataHandler);
             this.GatherTransactions = new AsyncCommand(this.CollectItemizedTransactionsHandler);
+            this.LoadLotsCommand = new AsyncCommand(this.LoadLotDataHandler);
             this.ExportTotalInventoryCommand = new DelegateCommand<ExportFormat>(this.ExportTotalSummaryHandler);
             this.ExportTransactionsCommand = new DelegateCommand<ExportFormat>(this.ExportTransactionsHandler);
+            this.ExportLotsCommand = new DelegateCommand<ExportFormat>(this.ExportLotsHandler);
             this.StartDate = DateTime.Now;
             this.StopDate = DateTime.Now;
             this.TransactionStartDate = DateTime.Now;
@@ -100,6 +106,11 @@ namespace Inventory.Reporting.ViewModels {
         public ObservableCollection<ProductTransaction> Transactions {
             get => this._transactions;
             set => SetProperty(ref this._transactions, value);
+        }
+
+        public ObservableCollection<Lot> Lots {
+            get => this._lots;
+            set => SetProperty(ref this._lots, value);
         }
 
         public double Total {
@@ -154,6 +165,14 @@ namespace Inventory.Reporting.ViewModels {
             var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
             using(FileStream file = File.Create(path)) {
                 this.ExportServiceTotalInventory.Export(file, format);
+            }
+            Process.Start(path);
+        }
+
+        private void ExportLotsHandler(ExportFormat format) {
+            var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+            using (FileStream file = File.Create(path)) {
+                this.LotExportService.Export(file, format);
             }
             Process.Start(path);
         }
@@ -257,8 +276,16 @@ namespace Inventory.Reporting.ViewModels {
             }
         }
 
+        private async Task LoadLotDataHandler() {
+            await Task.Run(() => {
+                this.Lots = this._context.Lots.Local;
+            });
+        }
+
         private async void LoadData() {
             await this._context.Transactions.OfType<ProductTransaction>().Include(e=>e.Location).Include(e=>e.Instance.InventoryItem).LoadAsync();
+            await this._context.Lots.Include(e=>e.Product).Include(e => e.Cost).Include(e => e.ProductInstances.Select(x => x.InventoryItem)).LoadAsync();
+
             await this._context.Instances.OfType<ProductInstance>()
                 .Include(e => e.Transactions.Select(x=>x.Location))
                 .Include(e=>e.Transactions.Select(x=>x.Instance.InventoryItem))

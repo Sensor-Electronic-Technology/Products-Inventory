@@ -28,7 +28,9 @@ namespace Inventory.ConsoleTesting {
             //DeleteTransaction(254);
             //DeleteLotFix("Agric Ultra", "18-337");
             //using(InventoryContext context=new InventoryContext()) {
-            TestingDataSummary();
+            //TestingDataSummary();
+            //DeleteProductFix("TUD89H1A");
+            DeleteLotFix("180419SI-01", "Replacement");
         }
 
         private static void TestingMonthlyReport(DateTime start,DateTime stop) {
@@ -175,6 +177,25 @@ namespace Inventory.ConsoleTesting {
                     Console.WriteLine("Failed,transaction was null");
                 }
                 Console.ReadKey();
+            }
+        }
+
+        private static void DeleteProductFix(string p) {
+            using (InventoryContext _context = new InventoryContext()) {
+                _context.InventoryItems.OfType<Product>().Load();
+                _context.Lots.Load();
+                _context.Instances.Load();
+                _context.Rates.Load();
+                _context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions)).Include(e => e.Cost).Load();
+                var product = _context.InventoryItems.FirstOrDefault(e => e.Name == p);
+                if (product != null) {
+                    Console.WriteLine("Should be done!");
+                    Console.ReadKey();
+                } else {
+                    Console.WriteLine("Lot is Null");
+                    Console.ReadKey();
+                }
+
             }
         }
 
