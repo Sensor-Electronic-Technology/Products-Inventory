@@ -28,6 +28,7 @@ namespace Inventory.Reporting.ViewModels {
         public IExportService ExportServiceTotalInventory { get => ServiceContainer.GetService<IExportService>("TotalInventoryExportService"); }
         public IExportService ExportServiceTransactions { get => ServiceContainer.GetService<IExportService>("ItemizedTransactionsExportService"); }
         public IExportService LotExportService { get => ServiceContainer.GetService<IExportService>("LotExportService"); }
+        public IExportService PivotExportService { get => ServiceContainer.GetService<IExportService>("PivotExportService"); }
         public IDispatcherService Dispatcher { get => ServiceContainer.GetService<IDispatcherService>("ReportsDispatcherService"); }
 
         private DateTime _startDate;
@@ -181,11 +182,13 @@ namespace Inventory.Reporting.ViewModels {
             ObservableCollection<ReportDataRow> data = new ObservableCollection<ReportDataRow>();
             double endingQuantity=0, endingCost=0;
             this.IsLoading = true;
+            var start = new DateTime(this.StartDate.Year, this.StartDate.Month, this.StartDate.Day, 0, 0, 0, DateTimeKind.Local);
+            var stop = new DateTime(this.StopDate.Year, this.StopDate.Month, this.StopDate.Day, 23, 59, 59, DateTimeKind.Local);
             var transactions = await this._context.Transactions.OfType<ProductTransaction>()
                 .AsNoTracking()
                 .Include(e => e.Instance.InventoryItem)
                 .Include(e => e.Location)
-                .Where(t => (t.TimeStamp >= this.StartDate && t.TimeStamp <= this.StopDate))
+                .Where(t => (t.TimeStamp >= start && t.TimeStamp <= stop))
                 .ToListAsync();
 
             await Task.Run(() => {
@@ -266,8 +269,10 @@ namespace Inventory.Reporting.ViewModels {
         }
 
         private async Task CollectItemizedTransactionsHandler() {
+            var start = new DateTime(this.TransactionStartDate.Year, this.TransactionStartDate.Month, this.TransactionStartDate.Day, 0, 0, 0, DateTimeKind.Local);
+            var stop = new DateTime(this.TransactionStopDate.Year, this.TransactionStopDate.Month, this.TransactionStopDate.Day, 23, 59, 59, DateTimeKind.Local);
             var list=await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance.InventoryItem)
-                .Include(e => e.Location).Where(e=>e.TimeStamp>=this.TransactionStartDate && e.TimeStamp<=this.TransactionStopDate)
+                .Include(e => e.Location).Where(e=>e.TimeStamp>=start && e.TimeStamp<=stop)
                 .ToListAsync();
 
             lock(this.SyncRoot) {

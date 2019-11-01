@@ -32,7 +32,7 @@
     <SuiteName>InventorySuite</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -82,78 +82,93 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Themes.DXStyle.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.DXStyle.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.MetropolisDark.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.HybridApp.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.HybridApp.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.MetropolisLight.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.LightGray.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2007Black.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.LightGray.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2007Black.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2007Blue.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.MetropolisDark.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2007Blue.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2007Silver.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.MetropolisLight.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2007Silver.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2007Black.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2010Black.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2007Black.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Black.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2007Blue.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Themes.Office2007Silver.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2010Blue.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2007Silver.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Blue.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2010Black.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2010Silver.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Black.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Silver.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2010Blue.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2013.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Blue.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2010Silver.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2013DarkGray.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2010Silver.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013DarkGray.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2013.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2013LightGray.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013LightGray.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2013DarkGray.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013DarkGray.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016Black.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2013LightGray.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016BlackSE.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2013LightGray.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016BlackSE.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016Colorful.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016Black.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016Colorful.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016BlackSE.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016ColorfulSE.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016BlackSE.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016ColorfulSE.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016Colorful.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016DarkGraySE.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016Colorful.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016DarkGraySE.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016ColorfulSE.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016ColorfulSE.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016White.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016DarkGraySE.v18.2, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpf.Themes.Office2016WhiteSE.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\DevExpress 18.2\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016DarkGraySE.v18.2.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2016WhiteSE.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2019Black.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2019Black.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2019Colorful.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2019DarkGray.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2019DarkGray.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2019White.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\DevExpress\v19.1\Components\Bin\Framework\DevExpress.Xpf.Themes.Office2019White.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -241,19 +256,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="Effortless.Net.Encryption">
       <Version>3.2.0</Version>

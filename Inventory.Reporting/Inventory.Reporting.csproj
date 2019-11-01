@@ -87,16 +87,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Mvvm">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PivotGrid">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
   </ItemGroup>

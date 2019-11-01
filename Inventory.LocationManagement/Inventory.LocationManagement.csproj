@@ -95,19 +95,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>7.1.0.431</Version>

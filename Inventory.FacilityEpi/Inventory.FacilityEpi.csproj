@@ -85,10 +85,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>18.2.4</Version>
+      <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.2.0</Version>
