@@ -30,6 +30,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public AsyncCommand SaveCommand { get; private set; }
         public AsyncCommand DiscardCommand { get; private set; }
 
+
         public LotDetailsViewModel(ProductDataManager dataManager,IEventAggregator eventAggregator, IRegionManager regionManager) {
             this._eventAggregator = eventAggregator;
             this._regionManager = regionManager;

@@ -17,6 +17,7 @@ using Inventory.Common.BuisnessLayer;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class ProductsLotRankViewModel : InventoryViewModelNavigationBase {
@@ -26,8 +27,9 @@ namespace Inventory.ProductsManagment.ViewModels {
         private IRegionManager _regionManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductRankLotNotifications"); } }
         public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductRankLotDispatcher"); } }
-        public IExportService CostSummaryExportServive { get => ServiceContainer.GetService<IExportService>("CostSummaryExportService"); }
+        public IDialogService DialogService { get => ServiceContainer.GetService<IDialogService>("RenameLotDialog"); }
 
+        public IExportService CostSummaryExportServive { get => ServiceContainer.GetService<IExportService>("CostSummaryExportService"); }
         public IExportService RankExportService { get => ServiceContainer.GetService<IExportService>("RankExportService"); }
         public IExportService LotExportService { get => ServiceContainer.GetService<IExportService>("LotExportService"); }
         public IExportService TransactionExportService { get => ServiceContainer.GetService<IExportService>("TransactionExportService"); }
@@ -60,11 +62,13 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand CheckOutCommand { get; private set; }
         public PrismCommands.DelegateCommand SaveProductCommand { get; private set; }
         public PrismCommands.DelegateCommand CancelProductCommand { get; private set; }
+        public PrismCommands.DelegateCommand RenameLotCommand { get; set; }
 
         public AsyncCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportLotsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportRanksCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportCostSummaryCommand { get; private set; }
+
 
         public ICommand EditRankCommand { get; private set; }
         public ICommand EditLotCommand { get; private set; }
@@ -110,6 +114,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.DeleteReservationCommand = new PrismCommands.DelegateCommand(this.DeleteReservationHandler, this.CanExecute);
             this.EditReservationCommand = new PrismCommands.DelegateCommand(this.EditReservationHandler, this.CanExecute);
             this.ViewReservationDetailsCommand = new PrismCommands.DelegateCommand(this.ViewReservationDetailsHandler, this.CanExecute);
+            this.RenameLotCommand = new PrismCommands.DelegateCommand(this.RenameLotHandler);
 
             this._eventAggregator.GetEvent<StartOutgoingListEvent>().Subscribe(() => this.outGoingInProgress = true);
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
@@ -400,6 +405,31 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ReloadAsync();
         }
 
+        private void RenameLotHandler() {
+            if (this.SelectedLot != null) {
+                this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
+                var vm = new RenameLotViewModel() { NewLotNumber = this.SelectedLot.LotNumber, NewSupplierPo = this.SelectedLot.SupplierPoNumber };
+                UICommand saveLotChanges = new UICommand() {
+                    Caption = "Save Changes",
+                    IsDefault = true,
+                    Command = new DelegateCommand(() => { }, () => (!string.IsNullOrEmpty(vm.NewLotNumber) && !string.IsNullOrEmpty(vm.NewSupplierPo)))
+                };
+                UICommand cancelCommand = new UICommand() {
+                    Caption = "Cancel",
+                    IsCancel = true,
+                };
+                var result=this.DialogService.ShowDialog(
+                    dialogCommands: new[] { saveLotChanges, cancelCommand },
+                    title: "Rename Lot",
+                    viewModel: vm
+                );
+                if (result == saveLotChanges) {
+                    this.MessageBoxService.ShowMessage("Changes Saved!");
+                }
+                this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
+            }
+        }
+        
         private async Task ExportTransactionsHandler(ExportFormat format) {
             await Task.Run(() => { 
                 this.DispatcherService.BeginInvoke(() => {

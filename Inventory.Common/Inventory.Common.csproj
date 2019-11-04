@@ -34,6 +34,9 @@
     <Reference Include="CoContra.net45, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CoContra.1.0.2\lib\net45\CoContra.net45.dll</HintPath>
     </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.CodeParser.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.CodeParser.19.1.7\lib\net452\DevExpress.CodeParser.v19.1.dll</HintPath>
     </Reference>
@@ -133,25 +136,25 @@
     <Reference Include="EntityFramework.TypedOriginalValues, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.TypedOriginalValues.1.1.1\lib\net461\EntityFramework.TypedOriginalValues.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Prism, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Core.7.1.0.431\lib\net45\Prism.dll</HintPath>
+    <Reference Include="Prism, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.7.2.0.1367\lib\net45\Prism.dll</HintPath>
     </Reference>
-    <Reference Include="Prism.Plugin.Logging.Abstractions, Version=1.3.0.305, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Abstractions.1.3.0.305\lib\net45\Prism.Plugin.Logging.Abstractions.dll</HintPath>
+    <Reference Include="Prism.Plugin.Logging.Abstractions, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Plugin.Logging.Abstractions.7.2.0.616\lib\net45\Prism.Plugin.Logging.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Prism.Plugin.Logging.Common, Version=1.3.0.305, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Common.1.3.0.305\lib\net45\Prism.Plugin.Logging.Common.dll</HintPath>
+    <Reference Include="Prism.Plugin.Logging.Common, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Plugin.Logging.Common.7.2.0.616\lib\net45\Prism.Plugin.Logging.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Prism.Plugin.Logging.Syslog, Version=1.3.0.305, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Syslog.1.3.0.305\lib\netstandard2.0\Prism.Plugin.Logging.Syslog.dll</HintPath>
+    <Reference Include="Prism.Plugin.Logging.Syslog, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Plugin.Logging.Syslog.7.2.0.616\lib\netstandard2.0\Prism.Plugin.Logging.Syslog.dll</HintPath>
     </Reference>
-    <Reference Include="Prism.Wpf, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.7.1.0.431\lib\net45\Prism.Wpf.dll</HintPath>
+    <Reference Include="Prism.Wpf, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Wpf.7.2.0.1367\lib\net45\Prism.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="QRCoder, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\QRCoder.1.3.5\lib\net40\QRCoder.dll</HintPath>
@@ -170,8 +173,11 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.7.1.0.431\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Prism.Wpf.7.2.0.1367\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -244,10 +250,8 @@
     <Compile Include="DataLayer\Services\IEntityTriggers.cs" />
     <Compile Include="BuisnessLayer\IFileService.cs" />
     <Compile Include="BuisnessLayer\ILogInService.cs" />
-    <Compile Include="BuisnessLayer\ISyslogConfig.cs" />
     <Compile Include="DataLayer\Services\IUserService.cs" />
     <Compile Include="BuisnessLayer\LogInService.cs" />
-    <Compile Include="BuisnessLayer\SyslogConfig.cs" />
     <Compile Include="BuisnessLayer\UserService.cs" />
     <Compile Include="ApplicationLayer\AppViews.cs" />
     <Compile Include="ApplicationLayer\Constants.cs" />

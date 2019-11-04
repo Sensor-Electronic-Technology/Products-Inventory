@@ -73,6 +73,7 @@
     <Compile Include="ViewModels\ProductsLotRankViewModel.cs" />
     <Compile Include="ViewModels\ProductsMainViewModel.cs" />
     <Compile Include="ViewModels\RankDetailsViewModel.cs" />
+    <Compile Include="ViewModels\RenameLotViewModel.cs" />
     <Compile Include="Views\IncomingInstructionsView.xaml.cs">
       <DependentUpon>IncomingInstructionsView.xaml</DependentUpon>
     </Compile>
@@ -173,9 +174,9 @@
       <Version>19.1.7</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
-      <Version>7.1.0.431</Version>
+      <Version>7.2.0.1367</Version>
     </PackageReference>
-    <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Inventory.Common\Inventory.Common.csproj">

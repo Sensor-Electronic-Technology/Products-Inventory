@@ -22,10 +22,28 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Inventory.Common;component/ApplicationLayer/Resources/CommonControlResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="dialogTemplate">
+                <dxlc:LayoutControl Orientation="Vertical" VerticalAlignment="Top" MinWidth="300">
+                    <dxlc:LayoutItem Label="New Lot Number:">
+                        <dxe:TextEdit Text="{Binding NewLotNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="New Supplier Po">
+                        <dxe:TextEdit Text="{Binding NewSupplierPo, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutControl>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <dxmvvm:Interaction.Behaviors>
         <dx:DXMessageBoxService x:Name="ProductRankLotNotifications"/>
+        <dx:DialogService x:Name="RenameLotDialog" ViewTemplate="{StaticResource dialogTemplate}">
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="Window">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                    <Setter Property="WindowStyle" Value="ToolWindow" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
         <dxmvvm:DispatcherService x:Name="ProductRankLotDispatcher"/>
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
@@ -269,7 +287,7 @@
                         </dxlc:LayoutControl>
 
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}">
+                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" IsSelected="True">
                         <DockPanel>
                             <dxb:BarContainerControl DockPanel.Dock="Top">
                                 <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
@@ -308,11 +326,14 @@
                                                SearchPanelNullText="Search By Po Number" SearchColumns="SupplierPoNumber">
                                         <dxg:TableView.RowCellMenuCustomizations>
                                             <dxb:BarButtonItem Content="View Details"
-                                                           Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
-                                                           Command="{Binding Path=View.DataContext.ViewLotDetailsCommand}"/>
+                                                               Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.ViewLotDetailsCommand}"/>
                                             <dxb:BarButtonItem Content="Edit Lot" 
-                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
-                                                           Command="{Binding Path=View.DataContext.EditLotCommand}"/>
+                                                               Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                               Command="{Binding Path=View.DataContext.EditLotCommand}"/>
+                                            <dxb:BarButtonItem Content="Rename Lot" 
+                                                               Glyph="{dx:DXImage Image=EditName_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.RenameLotCommand}"/>
                                         </dxg:TableView.RowCellMenuCustomizations>
                                         <dxg:TableView.FormatConditions>
                                             <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">

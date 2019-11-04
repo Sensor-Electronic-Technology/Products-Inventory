@@ -52,10 +52,8 @@ namespace Inventory.Reporting.ViewModels {
         public AsyncCommand GatherData { get; private set; }
         public AsyncCommand GatherTotalData { get; private set; }
         public AsyncCommand GatherTransactions { get; private set; }
-        public AsyncCommand LoadLotsCommand { get; private set; }
         public DelegateCommand<ExportFormat> ExportTotalInventoryCommand { get; private set; }
         public DelegateCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
-        public DelegateCommand<ExportFormat> ExportLotsCommand { get; private set; }
 
         public ReportingMainViewModel(InventoryContext context,ProductDataManager dataManager) {
             this._dataManager = dataManager;
@@ -63,10 +61,8 @@ namespace Inventory.Reporting.ViewModels {
             this.GatherData = new AsyncCommand(this.CollectDataHandler);
             this.GatherTotalData = new AsyncCommand(this.CollectTotalDataHandler);
             this.GatherTransactions = new AsyncCommand(this.CollectItemizedTransactionsHandler);
-            this.LoadLotsCommand = new AsyncCommand(this.LoadLotDataHandler);
             this.ExportTotalInventoryCommand = new DelegateCommand<ExportFormat>(this.ExportTotalSummaryHandler);
             this.ExportTransactionsCommand = new DelegateCommand<ExportFormat>(this.ExportTransactionsHandler);
-            this.ExportLotsCommand = new DelegateCommand<ExportFormat>(this.ExportLotsHandler);
             this.StartDate = DateTime.Now;
             this.StopDate = DateTime.Now;
             this.TransactionStartDate = DateTime.Now;
