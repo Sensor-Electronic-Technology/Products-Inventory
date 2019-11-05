@@ -127,6 +127,10 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<User> AddAsync(User entity) => throw new NotImplementedException();
+        public Task<User> DeleteAsync(User entity) => throw new NotImplementedException();
+        public Task<User> UpdateAsync(User entity) => throw new NotImplementedException();
     }
 
 

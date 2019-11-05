@@ -27,7 +27,9 @@ namespace Inventory.ProductsManagment.ViewModels {
         private IRegionManager _regionManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductRankLotNotifications"); } }
         public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductRankLotDispatcher"); } }
-        public IDialogService DialogService { get => ServiceContainer.GetService<IDialogService>("RenameLotDialog"); }
+        public IDialogService RenameLotDialog { get => ServiceContainer.GetService<IDialogService>("RenameLotDialog"); }
+        public IDialogService ReturnPartialDialog { get => ServiceContainer.GetService<IDialogService>("ReturnPartialDialog"); }
+        
 
         public IExportService CostSummaryExportServive { get => ServiceContainer.GetService<IExportService>("CostSummaryExportService"); }
         public IExportService RankExportService { get => ServiceContainer.GetService<IExportService>("RankExportService"); }
@@ -42,6 +44,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductType _selectedProductType = new ProductType();
         private Warehouse _selectedWarehouse = new Warehouse();
         private ProductReservation _selectedReservation = new ProductReservation();
+        private ProductTransaction _selectedTransaction = new ProductTransaction();
         private List<Lot> _lots = new List<Lot>();
         private List<ProductInstance> _ranks = new List<ProductInstance>();
         private List<ProductInstance> _outGoingRanks = new List<ProductInstance>();
@@ -50,6 +53,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ObservableCollection<Warehouse> _warehouses = new ObservableCollection<Warehouse>();
         private ObservableCollection<ProductCostRow> _productCostSummary = new ObservableCollection<ProductCostRow>();
         private ObservableCollection<ProductReservation> _reservations = new ObservableCollection<ProductReservation>();
+
 
         private int _selectedTabIndex = 0;
         private bool outGoingInProgress = false;
@@ -63,12 +67,15 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand SaveProductCommand { get; private set; }
         public PrismCommands.DelegateCommand CancelProductCommand { get; private set; }
         public PrismCommands.DelegateCommand RenameLotCommand { get; set; }
+        public PrismCommands.DelegateCommand ViewRankCommand { get; set; }
 
         public AsyncCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportLotsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportRanksCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportCostSummaryCommand { get; private set; }
 
+        public AsyncCommand UndoTransactionCommand { get; set; }
+        public PrismCommands.DelegateCommand ReturnPartialCommand { get; set; }
 
         public ICommand EditRankCommand { get; private set; }
         public ICommand EditLotCommand { get; private set; }
@@ -87,10 +94,6 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand<object> DownloadFileCommand { get; private set; }
         public PrismCommands.DelegateCommand<object> OpenFileCommand { get; private set; }
 
-        //Exports
-
-
-
         public ProductsLotRankViewModel(ProductDataManager dataManager,IEventAggregator eventAggregator,IRegionManager regionManager) {
             this._dataManager = dataManager;
             this._eventAggregator = eventAggregator;
@@ -107,6 +110,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ExportLotsCommand = new AsyncCommand<ExportFormat>(this.ExportLotsHandler);
             this.ExportRanksCommand = new AsyncCommand<ExportFormat>(this.ExportRanksHandler);
             this.ExportTransactionsCommand = new AsyncCommand<ExportFormat>(this.ExportTransactionsHandler);
+            this.UndoTransactionCommand = new AsyncCommand(this.UndoTransactionHandler);
 
             this.EditLotCommand = new PrismCommands.DelegateCommand(this.EditLotHandler, this.CanExecute);
             this.EditRankCommand = new PrismCommands.DelegateCommand(this.EditRankHandler, this.CanExecute);
@@ -115,6 +119,8 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.EditReservationCommand = new PrismCommands.DelegateCommand(this.EditReservationHandler, this.CanExecute);
             this.ViewReservationDetailsCommand = new PrismCommands.DelegateCommand(this.ViewReservationDetailsHandler, this.CanExecute);
             this.RenameLotCommand = new PrismCommands.DelegateCommand(this.RenameLotHandler);
+            this.ReturnPartialCommand = new PrismCommands.DelegateCommand(this.ReturnPartialHandler);
+            this.ViewRankCommand = new PrismCommands.DelegateCommand(this.ViewRankHandler);
 
             this._eventAggregator.GetEvent<StartOutgoingListEvent>().Subscribe(() => this.outGoingInProgress = true);
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
@@ -144,6 +150,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public Product SelectedProduct {
             get => this._selectedProduct;
             set => SetProperty(ref this._selectedProduct, value, "SelectedProduct");
+        }
+
+        public ProductTransaction SelectedTransaction {
+            get => this._selectedTransaction;
+            set => SetProperty(ref this._selectedTransaction, value, "SelectedTransaction");
         }
 
         public ProductType SelectedProductType {
@@ -418,18 +429,81 @@ namespace Inventory.ProductsManagment.ViewModels {
                     Caption = "Cancel",
                     IsCancel = true,
                 };
-                var result=this.DialogService.ShowDialog(
+                var result=this.RenameLotDialog.ShowDialog(
                     dialogCommands: new[] { saveLotChanges, cancelCommand },
                     title: "Rename Lot",
                     viewModel: vm
                 );
                 if (result == saveLotChanges) {
-                    this.MessageBoxService.ShowMessage("Changes Saved!");
+                    if(this._selectedLot.LotNumber!=vm.NewLotNumber ^ this._selectedLot.SupplierPoNumber!= vm.NewSupplierPo) {
+                        var responce=this._dataManager.RenameLot(this._selectedLot, vm.NewLotNumber, vm.NewSupplierPo);
+                        this.MessageBoxService.ShowMessage(responce.Message);
+                    } else {
+                        this.MessageBoxService.ShowMessage("Error: LotNumber and SupplierPo are the same. ");
+                    }
+
                 }
                 this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
             }
         }
         
+        private async Task UndoTransactionHandler() {
+            if (this.SelectedTransaction != null) {
+                this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
+                var result = await this._dataManager.DeleteTransactionAsync(this._selectedTransaction);
+                if (result.Success) {
+                    DispatcherService.BeginInvoke(() => {
+                        this.MessageBoxService.ShowMessage(result.Message, "Info", MessageButton.OK, MessageIcon.Information);
+                    });
+                } else {
+                    DispatcherService.BeginInvoke(() => {
+                        this.MessageBoxService.ShowMessage(result.Message,"Error", MessageButton.OK, MessageIcon.Error);
+                    });
+                }
+                this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
+            }
+        }
+
+        private void ReturnPartialHandler() {
+            if (this._selectedRank != null) {
+                this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
+
+                ReturnPartialViewModel vm = new ReturnPartialViewModel();
+                vm.SelectedRank = this.SelectedRank;
+                UICommand saveChanges = new UICommand() {
+                    Caption = "Save Changes",
+                    IsDefault = true,
+                    Command = new DelegateCommand(() => { }, () => (vm.NewQuantity!=0))
+                };
+                UICommand cancelCommand = new UICommand() {
+                    Caption = "Cancel",
+                    IsCancel = true,
+                };
+                var result = this.ReturnPartialDialog.ShowDialog(
+                    dialogCommands: new[] { saveChanges, cancelCommand },
+                    title: "Return Quantity To Inventory",
+                    viewModel: vm
+                );
+                if (result == saveChanges) {
+                    var responce = this._dataManager.ReturnQuantityToInventory(this._selectedRank, vm.NewQuantity, vm.BuyerPo, vm.RMA);
+                    if (responce.Success) {
+                        this.MessageBoxService.ShowMessage(responce.Message, "Info", MessageButton.OK, MessageIcon.Information);
+                    } else {
+                        this.MessageBoxService.ShowMessage(responce.Message, "Error", MessageButton.OK, MessageIcon.Error);
+                    }
+                }
+                this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
+
+            }
+        }
+
+        private void ViewRankHandler() {
+            if (this.SelectedTransaction != null) {
+                this.SelectedRank = this.Ranks.FirstOrDefault(e => e.Id == this._selectedTransaction.InstanceId);
+                this.SelectedTabIndex = 1;
+            }
+        }
+
         private async Task ExportTransactionsHandler(ExportFormat format) {
             await Task.Run(() => { 
                 this.DispatcherService.BeginInvoke(() => {

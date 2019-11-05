@@ -76,41 +76,57 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<ProductType> AddAsync(ProductType entity) => throw new NotImplementedException();
+        public Task<ProductType> DeleteAsync(ProductType entity) => throw new NotImplementedException();
+        public Task<ProductType> UpdateAsync(ProductType entity) => throw new NotImplementedException();
     }
 
     public class OrganizationOperations : IEntityDataOperations<Organization> {
         public Organization Add(Organization entity) => throw new NotImplementedException();
+        public Task<Organization> AddAsync(Organization entity) => throw new NotImplementedException();
         public Organization Delete(Organization entity) => throw new NotImplementedException();
+        public Task<Organization> DeleteAsync(Organization entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<Organization, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<Organization, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<Organization, InventoryContext> entry) => throw new NotImplementedException();
         public Organization Update(Organization entity) => throw new NotImplementedException();
+        public Task<Organization> UpdateAsync(Organization entity) => throw new NotImplementedException();
     }
 
     public class ConditionOperations : IEntityDataOperations<Condition> {
         public Condition Add(Condition entity) => throw new NotImplementedException();
+        public Task<Condition> AddAsync(Condition entity) => throw new NotImplementedException();
         public Condition Delete(Condition entity) => throw new NotImplementedException();
+        public Task<Condition> DeleteAsync(Condition entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<Condition, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<Condition, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<Condition, InventoryContext> entry) => throw new NotImplementedException();
         public Condition Update(Condition entity) => throw new NotImplementedException();
+        public Task<Condition> UpdateAsync(Condition entity) => throw new NotImplementedException();
     }
 
     public class UsageOperations : IEntityDataOperations<Usage> {
         public Usage Add(Usage entity) => throw new NotImplementedException();
+        public Task<Usage> AddAsync(Usage entity) => throw new NotImplementedException();
         public Usage Delete(Usage entity) => throw new NotImplementedException();
+        public Task<Usage> DeleteAsync(Usage entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<Usage, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<Usage, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<Usage, InventoryContext> entry) => throw new NotImplementedException();
         public Usage Update(Usage entity) => throw new NotImplementedException();
+        public Task<Usage> UpdateAsync(Usage entity) => throw new NotImplementedException();
     }
 
     public class PartTypeOperations : IEntityDataOperations<PartType> {
         public PartType Add(PartType entity) => throw new NotImplementedException();
+        public Task<PartType> AddAsync(PartType entity) => throw new NotImplementedException();
         public PartType Delete(PartType entity) => throw new NotImplementedException();
+        public Task<PartType> DeleteAsync(PartType entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<PartType, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<PartType, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<PartType, InventoryContext> entry) => throw new NotImplementedException();
         public PartType Update(PartType entity) => throw new NotImplementedException();
+        public Task<PartType> UpdateAsync(PartType entity) => throw new NotImplementedException();
     }
 }

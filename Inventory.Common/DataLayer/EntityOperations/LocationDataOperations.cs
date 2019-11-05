@@ -7,6 +7,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Data.Entity.Infrastructure;
+using System.Threading.Tasks;
 
 namespace Inventory.Common.DataLayer.EntityOperations {
 
@@ -100,6 +101,10 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<Location> AddAsync(Location entity) => throw new NotImplementedException();
+        public Task<Location> DeleteAsync(Location entity) => throw new NotImplementedException();
+        public Task<Location> UpdateAsync(Location entity) => throw new NotImplementedException();
     }
 
 
@@ -177,6 +182,10 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<Warehouse> AddAsync(Warehouse entity) => throw new NotImplementedException();
+        public Task<Warehouse> DeleteAsync(Warehouse entity) => throw new NotImplementedException();
+        public Task<Warehouse> UpdateAsync(Warehouse entity) => throw new NotImplementedException();
     }
 
     public class ConsumerOperations : IEntityDataOperations<Consumer> {
@@ -256,5 +265,9 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<Consumer> AddAsync(Consumer entity) => throw new NotImplementedException();
+        public Task<Consumer> DeleteAsync(Consumer entity) => throw new NotImplementedException();
+        public Task<Consumer> UpdateAsync(Consumer entity) => throw new NotImplementedException();
     }
 }

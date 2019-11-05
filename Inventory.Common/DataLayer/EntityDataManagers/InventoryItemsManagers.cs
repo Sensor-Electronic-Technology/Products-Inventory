@@ -388,6 +388,294 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             }
         }
 
+        public InventoryActionResponce RenameLot(Lot entity, string newLotNum, string newPo) {
+            if (this._userService.Validate(UserAction.Edit)) {
+                var lot = this._lotOperations.Delete(entity);
+                if (lot != null) {
+                    var lotentity = this._context.Lots.FirstOrDefault(x => x.SupplierPoNumber == lot.SupplierPoNumber && x.LotNumber == lot.LotNumber);
+                    var productEntity = this._context.InventoryItems.OfType<Product>().FirstOrDefault(x => x.Name == lot.ProductName);
+
+                    var defaultDistributor = this._context.Distributors.FirstOrDefault(x => x.Name == "SVC");
+                    var warehouse = this._context.Locations.FirstOrDefault(x => x.Name == "Products");
+                    if (lotentity == null && defaultDistributor != null && productEntity != null) {
+                        var newLot = this._context.Lots.Create();
+                        newLot.LotNumber = newLotNum;
+                        newLot.SupplierPoNumber = newPo;
+                        newLot.Recieved = lot.Recieved;
+                        newLot.Product = productEntity;
+                        this._context.Lots.Add(newLot);
+
+                        var newCost = this._context.Rates.Create<Cost>();
+                        newCost.Amount = lot.Cost.Amount;
+                        newCost.Distributor = defaultDistributor;
+                        newCost.Lot = newLot;
+                        newCost.TimeStamp = DateTime.Now;
+                        this._context.Rates.Add(newCost);
+
+                        lot.ProductInstances.ToList().ForEach(item => {
+                            var newRank = this._context.Instances.Create<ProductInstance>();
+                            newRank.Name = item.Name;
+                            newRank.Power = item.Power;
+                            newRank.Wavelength = item.Wavelength;
+                            newRank.Voltage = item.Voltage;
+                            newRank.Quantity = item.Quantity;
+                            newRank.LotNumber = newLot.LotNumber;
+                            newRank.SupplierPoNumber = newLot.SupplierPoNumber;
+                            newRank.InventoryItem = productEntity;
+                            newRank.Lot = newLot;
+                            newLot.ProductInstances.Add(newRank);
+                            this._context.Instances.Add(newRank);
+
+                            item.Transactions.OfType<ProductTransaction>().ToList().ForEach(transaction => {
+                                var newTransaction = this._context.Transactions.Create<ProductTransaction>();
+                                newTransaction.Instance = newRank;
+                                newTransaction.LocationId = transaction.LocationId;
+                                newTransaction.TimeStamp = transaction.TimeStamp;
+                                newTransaction.SessionId = transaction.SessionId;
+                                newTransaction.Quantity = transaction.Quantity;
+                                newTransaction.UnitCost = transaction.UnitCost;
+                                newTransaction.TotalCost = transaction.TotalCost;
+                                newTransaction.InventoryAction = transaction.InventoryAction;
+                                newTransaction.IsReturning = transaction.IsReturning;
+                                newTransaction.RMA_Number = transaction.RMA_Number;
+                                newTransaction.ProductName = transaction.ProductName;
+                                newRank.Transactions.Add(newTransaction);
+                                this._context.Transactions.Add(newTransaction);
+                            });
+                        });
+                        lot.ProductInstances.Clear();
+                        lot.Cost = null;
+                        lot.Product = null;
+                        try {
+                            this._context.SaveChanges();
+                            return new InventoryActionResponce(true, "Lot Renamed");
+                        } catch {
+                            this.UndoChanges();
+                            return new InventoryActionResponce(false, "Error Renaming Lot: Exception while saving");
+                        }
+                    } else {
+                        this.UndoChanges();
+                        return new InventoryActionResponce(false, "Error:Lot not found"); ;
+                    }
+                } else {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error: Could Not Delete Lot");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: You do not have permissions to perform this action");
+            }
+        }
+
+        public async Task<InventoryActionResponce> RenameLotAsync(Lot entity, string newLotNum, string newPo) {
+            if (this._userService.Validate(UserAction.Edit)) {
+                var lot = await this._lotOperations.DeleteAsync(entity);
+                if (lot != null) {
+                    var lotentity = await this._context.Lots.FirstOrDefaultAsync(x => x.SupplierPoNumber == lot.SupplierPoNumber && x.LotNumber == lot.LotNumber);
+                    var productEntity = await this._context.InventoryItems.OfType<Product>().FirstOrDefaultAsync(x => x.Name == lot.ProductName);
+
+                    var defaultDistributor = await this._context.Distributors.FirstOrDefaultAsync(x => x.Name == "SVC");
+                    var warehouse = await this._context.Locations.FirstOrDefaultAsync(x => x.Name == "Products");
+                    if (lotentity == null && defaultDistributor != null && productEntity != null) {
+                        var newLot = this._context.Lots.Create();
+                        newLot.LotNumber = newLotNum;
+                        newLot.SupplierPoNumber = newPo;
+                        newLot.Recieved = lot.Recieved;
+                        newLot.Product = productEntity;
+                        this._context.Lots.Add(newLot);
+
+                        var newCost = this._context.Rates.Create<Cost>();
+                        newCost.Amount = lot.Cost.Amount;
+                        newCost.Distributor = defaultDistributor;
+                        newCost.Lot = newLot;
+                        newCost.TimeStamp = DateTime.Now;
+                        this._context.Rates.Add(newCost);
+                        lot.ProductInstances.ToList().ForEach(item => {
+                            var newRank = this._context.Instances.Create<ProductInstance>();
+                            newRank.Name = item.Name;
+                            newRank.Power = item.Power;
+                            newRank.Wavelength = item.Wavelength;
+                            newRank.Voltage = item.Voltage;
+                            newRank.Quantity = item.Quantity;
+                            newRank.LotNumber = newLot.LotNumber;
+                            newRank.SupplierPoNumber = newLot.SupplierPoNumber;
+                            newRank.InventoryItem = productEntity;
+                            newRank.Lot = newLot;
+                            newLot.ProductInstances.Add(newRank);
+                            this._context.Instances.Add(newRank);
+
+                            item.Transactions.OfType<ProductTransaction>().ToList().ForEach(transaction => {
+                                var newTransaction = this._context.Transactions.Create<ProductTransaction>();
+                                newTransaction.Instance = newRank;
+                                newTransaction.Location = transaction.Location;
+                                newTransaction.TimeStamp = transaction.TimeStamp;
+                                newTransaction.SessionId = transaction.SessionId;
+                                newTransaction.Quantity = transaction.Quantity;
+                                newTransaction.UnitCost = transaction.UnitCost;
+                                newTransaction.TotalCost = transaction.TotalCost;
+                                newTransaction.InventoryAction = transaction.InventoryAction;
+                                newTransaction.IsReturning = transaction.IsReturning;
+                                newTransaction.RMA_Number = transaction.RMA_Number;
+                                newTransaction.ProductName = transaction.ProductName;
+                                newRank.Transactions.Add(newTransaction);
+                                this._context.Transactions.Add(newTransaction);
+                            });
+                        });
+                        lot.ProductInstances.Clear();
+                        lot.Cost = null;
+                        lot.Product = null;
+                        try {
+                            await this._context.SaveChangesAsync();
+                            return new InventoryActionResponce(true, "Lot Renamed");
+                        } catch {
+                            this.UndoChanges();
+                            return new InventoryActionResponce(false, "Error Renaming Lot: Exception while saving");
+                        }
+                    } else {
+                        this.UndoChanges();
+                        return new InventoryActionResponce(false, "Error:Lot not found"); ;
+                    }
+                } else {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error: Could Not Delete Lot");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: You do not have permissions to perform this action");
+            }
+
+
+        }
+
+        public InventoryActionResponce DeleteTransaction(ProductTransaction transaction) {
+            if (this._userService.Validate(UserAction.Remove)) {
+                var tran = this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance).FirstOrDefault(e => e.Id == transaction.Id);
+                if (tran != null) {
+                    var rank = this._context.Instances.OfType<ProductInstance>().Include(e => e.InventoryItem).FirstOrDefault(e => e.Id == tran.InstanceId);
+                    if (rank != null) {
+                        var product = this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).FirstOrDefault(x => x.Id == rank.InventoryItemId);
+                        if (product != null) {
+                            //assumes was outgoing -= if incoming
+                            if (transaction.InventoryAction == InventoryAction.INCOMING) {
+                                rank.Quantity -= tran.Quantity;
+                            } else if (transaction.InventoryAction == InventoryAction.OUTGOING) {
+                                rank.Quantity += tran.Quantity;
+                            }
+                            rank.Transactions.Remove(tran);
+                            this._context.Entry<Instance>(rank).State = EntityState.Modified;
+                            this._context.Transactions.Remove(tran);
+                            this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e => e.Lots).ToList().ForEach(p => {
+                                p.Total = p.Instances.Sum(q => q.Quantity);
+                            });
+                            try {
+                                this._context.SaveChanges();
+                                return new InventoryActionResponce(true, "Success:  Transaction deleted");
+                            } catch {
+                                this.UndoChanges();
+                                return new InventoryActionResponce(false, "Error: Could not delete Transaction");
+                            }
+                        } else {
+                            return new InventoryActionResponce(false, "Error: Product not found");
+                        }
+                    } else {
+                        return new InventoryActionResponce(false, "Error: Rank not Found");
+                    }
+                } else {
+                    return new InventoryActionResponce(false, "Error: Transaction not Found");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: You do not have permissions to perform this action");
+            }
+        }
+
+        public async Task<InventoryActionResponce> DeleteTransactionAsync(ProductTransaction transaction) {
+            if (this._userService.Validate(UserAction.Remove)) {
+                var tran = await this._context.Transactions.OfType<ProductTransaction>().Include(e => e.Instance).FirstOrDefaultAsync(e => e.Id == transaction.Id);
+                if (tran != null) {
+                    var rank = await this._context.Instances.OfType<ProductInstance>().Include(e => e.InventoryItem).FirstOrDefaultAsync(e => e.Id == tran.InstanceId);
+                    if (rank != null) {
+                        var product = await this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).FirstOrDefaultAsync(x => x.Id == rank.InventoryItemId);
+                        if (product != null) {
+                            //assumes was outgoing -= if incoming
+                            if (transaction.InventoryAction == InventoryAction.INCOMING) {
+                                rank.Quantity -= tran.Quantity;
+                            } else if (transaction.InventoryAction == InventoryAction.OUTGOING) {
+                                rank.Quantity += tran.Quantity;
+                            }
+                            rank.Transactions.Remove(tran);
+                            this._context.Entry<Instance>(rank).State = EntityState.Modified;
+                            this._context.Transactions.Remove(tran);
+                            this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e => e.Lots).ToList().ForEach(p => {
+                                p.Total = p.Instances.Sum(q => q.Quantity);
+                            });
+                            try {
+                                await this._context.SaveChangesAsync();
+                                return new InventoryActionResponce(true, "Success:  Transaction deleted");
+                            } catch {
+                                this.UndoChanges();
+                                return new InventoryActionResponce(false, "Error: Could not delete Transaction");
+                            }
+                        } else {
+                            return new InventoryActionResponce(false, "Error: Product not found");
+                        }
+                    } else {
+                        return new InventoryActionResponce(false, "Error: Rank not Found");
+                    }
+                } else {
+                    return new InventoryActionResponce(false, "Error: Transaction not Found");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: You do not have permissions to perform this action");
+            }
+        }
+
+        public InventoryActionResponce ReturnQuantityToInventory(ProductInstance entity, int quantity, string buyerPo = null, string rma = null) {
+            var rank = this._context.Instances
+                .OfType<ProductInstance>()
+                .Include(e => e.Lot)
+                .Include(e => e.Transactions)
+                .Include(e => e.InventoryItem)
+                .FirstOrDefault(e=>e.Id==entity.Id);
+            var warehouse = this._context.Locations.AsNoTracking().FirstOrDefault(x => x.Name == "Products");
+            if (rank != null && warehouse!=null) {
+                if (quantity > 0) {
+                    ProductTransaction transaction = new ProductTransaction();
+                    transaction.TimeStamp = DateTime.Now;
+                    transaction.UnitCost = (rank.Lot.Cost != null) ? rank.Lot.Cost.Amount : 0;
+                    transaction.Quantity = quantity;
+                    transaction.TotalCost = transaction.Quantity * transaction.UnitCost;
+                    transaction.Location = warehouse;
+                    transaction.InventoryAction = InventoryAction.RETURNING;
+                    transaction.IsReturning = true;
+                    transaction.RMA_Number = string.IsNullOrEmpty(rma) ? "" : rma;
+                    transaction.BuyerPoNumber = (!string.IsNullOrEmpty(buyerPo)) ? buyerPo : "";
+                    transaction.SessionId = this._userService.CurrentSession.Id;
+                    transaction.ProductName = rank.InventoryItem.Name;
+                    this._context.Transactions.Add(transaction);
+                    rank.Transactions.Add(transaction);
+                    rank.Quantity += quantity;
+                    this._context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                    this._context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e => e.Lots).ToList().ForEach(p => {
+                        p.Total = p.Instances.Sum(q => q.Quantity);
+                    });
+                    try {
+                        this._context.SaveChanges();
+                        return new InventoryActionResponce(true, "Success: Quantity Returned To Inventory");
+                    } catch {
+                        this.UndoChanges();
+                        return new InventoryActionResponce(false, "Error: Exception while saving, all changes reverted");
+                    }
+                } else {
+                    return new InventoryActionResponce(false, "Error: Quantity must be > 0");
+                }
+            } else {
+                if (rank == null) {
+                    return new InventoryActionResponce(false, "Error: Rank Not Found");
+                } else {
+                    return new InventoryActionResponce(false, "Error: Default Warehouse Not Found");
+                }
+
+            }
+        }
+        
         public override void UndoChanges() {
             this._context.UndoDbEntries<Product>();
             this._context.UndoDbEntries<Lot>();

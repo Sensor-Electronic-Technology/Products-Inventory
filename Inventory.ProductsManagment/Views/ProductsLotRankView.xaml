@@ -14,7 +14,8 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
              xmlns:commonservice="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
-             xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"  
+             xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True" 
+             xmlns:View="clr-namespace:Inventory.ProductsManagment.Views"
              xmlns:ViewModels="clr-namespace:Inventory.ProductsManagment.ViewModels"        
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -44,6 +45,19 @@
                 </Style>
             </dx:DialogService.DialogStyle>
         </dx:DialogService>
+        <dx:DialogService x:Name="ReturnPartialDialog" DialogWindowStartupLocation="CenterOwner">
+            <dx:DialogService.ViewTemplate>
+                <DataTemplate>
+                    <View:ReturnPartialView />
+                </DataTemplate>
+            </dx:DialogService.ViewTemplate>
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="dx:ThemedWindow">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                    <Setter Property="WindowStyle" Value="ToolWindow" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
         <dxmvvm:DispatcherService x:Name="ProductRankLotDispatcher"/>
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
@@ -60,8 +74,8 @@
                                      Glyph="{dx:DXImage Image=Outbox_16x16.png}"
                                      ToolTip="Check out products" Height="50"/>
                 </dxlc:LayoutGroup>
-                <dx:DXTabControl dxlc:DockLayoutControl.Dock="Client">
-                    <dx:DXTabItem Header="Summary" Glyph="{dx:DXImage Image=ErrorBarsStandardDeviation_16x16.png}" IsSelected="True">
+                <dx:DXTabControl dxlc:DockLayoutControl.Dock="Client" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
+                    <dx:DXTabItem Header="Summary" Glyph="{dx:DXImage Image=ErrorBarsStandardDeviation_16x16.png}" IsSelected="True" TabIndex="0">
                         <dxlc:LayoutControl>
                             <dxlc:LayoutGroup Orientation="Vertical">
                                 <dxlc:LayoutGroup>
@@ -191,7 +205,7 @@
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutControl>
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Ranks" Glyph="{dx:DXImage Image=RedYellowGreen_16x16.png}">
+                    <dx:DXTabItem Header="Ranks" Glyph="{dx:DXImage Image=RedYellowGreen_16x16.png}" TabIndex="1">
                         <dxlc:LayoutControl>
                             <dxlc:LayoutGroup>
                                 <DockPanel>
@@ -226,8 +240,9 @@
                                                  SelectedItem="{Binding SelectedRank,Mode=TwoWay,IsAsync=True}"
                                                  AllowUpdateTwoWayBoundPropertiesOnSynchronization="True"
                                                  FontSize="11"
-                                                     ClipboardCopyMode="ExcludeHeader"
-                                                     CopyingToClipboard="_listOfRanks_CopyingToClipboard">
+                                                 ClipboardCopyMode="ExcludeHeader"
+                                                 AutoExpandAllGroups="True"
+                                                 CopyingToClipboard="_listOfRanks_CopyingToClipboard">
                                         <dxmvvm:Interaction.Behaviors>
                                             <commonservice:GridExportService x:Name="RankExportService"/>
                                         </dxmvvm:Interaction.Behaviors>
@@ -242,7 +257,7 @@
                                                    Style="{StaticResource TableViewStyleNoMaster}"
                                                    SearchPanelNullText="Search By Rank" 
                                                    AllowGrouping="True" ShowGroupPanel="True" 
-                                                   SearchColumns="Name">
+                                                   SearchColumns="Name" >
                                                 <dxg:TableView.RowCellMenuCustomizations>
                                                     <dxb:BarButtonItem Content="View Details" 
                                                                    Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
@@ -254,10 +269,13 @@
                                                     <dxb:BarButtonItem Content="Reserve Stock" 
                                                                    Glyph="{dx:DXImage Image=BOOrder_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.ReserveStockCommand}"/>
-
                                                     <dxb:BarButtonItem Content="Add To Outgoing" 
                                                                    Glyph="{dx:DXImage Image=Right_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.AddToOutgoingCommand}"/>
+
+                                                    <dxb:BarButtonItem Content="Return Partial Quantity" 
+                                                                   Glyph="{dx:DXImage Image=Left_16x16.png}"
+                                                                   Command="{Binding Path=View.DataContext.ReturnPartialCommand}"/>
 
                                                 </dxg:TableView.RowCellMenuCustomizations>
                                                 <dxg:TableView.FormatConditions>
@@ -287,7 +305,7 @@
                         </dxlc:LayoutControl>
 
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" IsSelected="True">
+                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" TabIndex="2">
                         <DockPanel>
                             <dxb:BarContainerControl DockPanel.Dock="Top">
                                 <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
@@ -369,12 +387,12 @@
                             </dxg:GridControl>
                         </DockPanel>
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}">
+                    <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}" TabIndex="3">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
                             Coming In next Release
                         </TextBlock>
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Transactions" Glyph="{dx:DXImage Image=AgendaView_16x16.png}">
+                    <dx:DXTabItem Header="Transactions" Glyph="{dx:DXImage Image=AgendaView_16x16.png}" TabIndex="4">
                         <DockPanel>
                             <dxb:BarContainerControl DockPanel.Dock="Top">
                                 <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
@@ -403,7 +421,8 @@
                                 </dxb:ToolBarControl>
                             </dxb:BarContainerControl>
                             <dxg:GridControl x:Name="_transactions" Style="{StaticResource GridControlStyle}"
-                                             ItemsSource="{Binding Transactions,IsAsync=True,Mode=TwoWay}">
+                                             ItemsSource="{Binding Transactions,IsAsync=True,Mode=TwoWay}"
+                                             SelectedItem="{Binding SelectedTransaction,Mode=TwoWay,IsAsync=True}">
                                 <dxmvvm:Interaction.Behaviors>
                                     <commonservice:GridExportService x:Name="TransactionExportService"/>
                                 </dxmvvm:Interaction.Behaviors>
@@ -412,14 +431,15 @@
                                                    SearchColumns="Rank" SearchPanelNullText="Search by Rank"
                                                    FontSize="11">
                                         <dxg:TableView.RowCellMenuCustomizations>
-                                            <dxb:BarButtonItem Content="View Details"
-                                                               Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
-                                                               Command="{Binding Path=View.DataContext.ViewTransactionDetails}"
-                                                               IsEnabled="False"/>
-                                            <dxb:BarButtonItem Content="Edit Transaction" 
-                                                               Glyph="{dx:DXImage Image=Action_Edit.png}"
-                                                               Command="{Binding Path=View.DataContext.EditTransactionCommand}"
-                                                               IsEnabled="False"/>
+                                            <dxb:BarButtonItem Content="Undo Transaction"
+                                                               Glyph="{dx:DXImage Image=Undo_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.UndoTransactionCommand}"
+                                                               IsEnabled="True"/>
+                                            <dxb:BarItemSeparator Content="None"/>
+                                            <dxb:BarButtonItem Content="View Rank In Table"
+                                                               Glyph="{dx:DXImage Image=Undo_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.ViewRankCommand}"
+                                                               IsEnabled="True"/>
                                         </dxg:TableView.RowCellMenuCustomizations>
                                     </dxg:TableView>
                                 </dxg:GridControl.View>
@@ -450,7 +470,7 @@
                             </dxg:GridControl>
                         </DockPanel>
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Product Reservations" Glyph="{dx:DXImage Image=BOOrder_16x16.png}">
+                    <dx:DXTabItem Header="Product Reservations" Glyph="{dx:DXImage Image=BOOrder_16x16.png}" TabIndex="5">
                         
                         <dxg:GridControl x:Name="_reservations" Style="{StaticResource GridControlStyle}"
                                          ItemsSource="{Binding Reservations,IsAsync=True,Mode=TwoWay}"

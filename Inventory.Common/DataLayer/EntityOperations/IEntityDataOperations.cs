@@ -13,6 +13,10 @@ namespace Inventory.Common.DataLayer.EntityOperations {
         TEntity Delete(TEntity entity);
         TEntity Update(TEntity entity);
 
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> DeleteAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
+
         void OnEntityInsert(IInsertingEntry<TEntity, InventoryContext> entry);
         void OnEntityUpdate(IUpdatingEntry<TEntity, InventoryContext> entry);
         void OnEntityDelete(IDeletingEntry<TEntity, InventoryContext> entry);

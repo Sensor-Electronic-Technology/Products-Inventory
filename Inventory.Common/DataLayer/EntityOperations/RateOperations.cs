@@ -50,5 +50,8 @@ namespace Inventory.Common.DataLayer.EntityOperations {
         public void OnEntityUpdate(IUpdatingEntry<Cost, InventoryContext> entry) => throw new NotImplementedException();
         public Tother RemoveFromEntity<Tother>(Tother other) where Tother : class => throw new NotImplementedException();
         public Tother AddToEntity<Tother>(Tother other) where Tother : class => throw new NotImplementedException();
+        public Task<Cost> AddAsync(Cost entity) => throw new NotImplementedException();
+        public Task<Cost> DeleteAsync(Cost entity) => throw new NotImplementedException();
+        public Task<Cost> UpdateAsync(Cost entity) => throw new NotImplementedException();
     }
 }

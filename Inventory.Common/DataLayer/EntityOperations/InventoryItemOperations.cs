@@ -153,14 +153,21 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<Product> AddAsync(Product entity) => throw new NotImplementedException();
+        public Task<Product> DeleteAsync(Product entity) => throw new NotImplementedException();
+        public Task<Product> UpdateAsync(Product entity) => throw new NotImplementedException();
     }
 
     public class PartDataOperations : IEntityDataOperations<Part> {
         public Part Add(Part entity) => throw new NotImplementedException();
+        public Task<Part> AddAsync(Part entity) => throw new NotImplementedException();
         public Part Delete(Part entity) => throw new NotImplementedException();
+        public Task<Part> DeleteAsync(Part entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<Part, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<Part, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<Part, InventoryContext> entry) => throw new NotImplementedException();
         public Part Update(Part entity) => throw new NotImplementedException();
+        public Task<Part> UpdateAsync(Part entity) => throw new NotImplementedException();
     }
 }

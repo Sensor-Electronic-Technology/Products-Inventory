@@ -22,7 +22,7 @@ namespace Inventory.Common.BuisnessLayer {
             this.CurrentSession = currentSession;
             this.UserPermission = userPermission;
             this.SoftwareVersion = softwareVersion;
-            //this.Initialize();
+            this.Initialize();
         }
 
         public UserService()
@@ -47,7 +47,7 @@ namespace Inventory.Common.BuisnessLayer {
                 this.AvailableUserActions.Add(UserAction.CheckOut);
                 this.AvailableUserActions.Add(UserAction.UserManagement);
 
-            } else if(this.UserPermission.Name == "InventoryUserLimitedAccount") {
+            } else if(this.UserPermission.Name == "InventoryUserAccount") {
                 this.AvailableUserActions.Add(UserAction.CheckIn);
                 this.AvailableUserActions.Add(UserAction.CheckOut);
 
@@ -61,6 +61,9 @@ namespace Inventory.Common.BuisnessLayer {
         }
 
         public bool Validate(UserAction action) {
+            if (this.AvailableUserActions == null)
+                this.Initialize();
+
             return this.AvailableUserActions.Contains(action);
         }
 

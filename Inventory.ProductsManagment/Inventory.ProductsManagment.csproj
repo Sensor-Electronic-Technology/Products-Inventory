@@ -74,6 +74,7 @@
     <Compile Include="ViewModels\ProductsMainViewModel.cs" />
     <Compile Include="ViewModels\RankDetailsViewModel.cs" />
     <Compile Include="ViewModels\RenameLotViewModel.cs" />
+    <Compile Include="ViewModels\ReturnPartialViewModel.cs" />
     <Compile Include="Views\IncomingInstructionsView.xaml.cs">
       <DependentUpon>IncomingInstructionsView.xaml</DependentUpon>
     </Compile>
@@ -103,6 +104,9 @@
     </Compile>
     <Compile Include="Views\RankDetailsView.xaml.cs">
       <DependentUpon>RankDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReturnPartialView.xaml.cs">
+      <DependentUpon>ReturnPartialView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -153,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RankDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReturnPartialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

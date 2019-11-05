@@ -14,13 +14,16 @@ namespace Inventory.Common.DataLayer.EntityOperations {
 
     public class PartInstanceOperations : IEntityDataOperations<PartInstance> {
         public PartInstance Add(PartInstance entity) => throw new NotImplementedException();
+        public Task<PartInstance> AddAsync(PartInstance entity) => throw new NotImplementedException();
         public Tother AddToEntity<Tother>(Tother other) where Tother : class => throw new NotImplementedException();
         public PartInstance Delete(PartInstance entity) => throw new NotImplementedException();
+        public Task<PartInstance> DeleteAsync(PartInstance entity) => throw new NotImplementedException();
         public void OnEntityDelete(IDeletingEntry<PartInstance, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityInsert(IInsertingEntry<PartInstance, InventoryContext> entry) => throw new NotImplementedException();
         public void OnEntityUpdate(IUpdatingEntry<PartInstance, InventoryContext> entry) => throw new NotImplementedException();
         public Tother RemoveFromEntity<Tother>(Tother other) where Tother : class => throw new NotImplementedException();
         public PartInstance Update(PartInstance entity) => throw new NotImplementedException();
+        public Task<PartInstance> UpdateAsync(PartInstance entity) => throw new NotImplementedException();
     }
 
     public class ProductInstanceOperations : IEntityDataOperations<ProductInstance> {
@@ -82,5 +85,9 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<ProductInstance> AddAsync(ProductInstance entity) => throw new NotImplementedException();
+        public Task<ProductInstance> DeleteAsync(ProductInstance entity) => throw new NotImplementedException();
+        public Task<ProductInstance> UpdateAsync(ProductInstance entity) => throw new NotImplementedException();
     }
 }

@@ -74,7 +74,94 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             }
         }
 
-        public Lot Delete(Lot entity) => throw new NotImplementedException();
+        public Lot Delete(Lot entity) {
+            this._context.Lots
+                .Include(e => e.ProductInstances.Select(x => x.Transactions.Select(i => i.Session)))
+                .Include(e => e.Cost)
+                .Include(e => e.Product)
+                .Load();
+                var lot = this._context.Lots
+                .AsNoTracking()
+                .Include(e => e.ProductInstances.Select(i => i.Transactions))
+                .Include(e => e.Cost).Include(e => e.Product)
+                .FirstOrDefault(x => x.LotNumber == entity.LotNumber && x.SupplierPoNumber == entity.SupplierPoNumber);
+            if (lot != null) {
+                var lotEntity = this._context.Lots
+                    .Include(e => e.ProductInstances.Select(i => i.Transactions))
+                    .Include(e => e.Cost)
+                    .Include(e => e.Product)
+                    .FirstOrDefault(x => x.LotNumber == entity.LotNumber && x.SupplierPoNumber == entity.SupplierPoNumber);
+                if (lotEntity != null) {
+                    lotEntity.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            this._context.Transactions.Remove(t);
+                        });
+                        this._context.Instances.Remove(rank);
+                    });
+                    lotEntity.ProductInstances.Clear();
+                    this._context.Rates.Remove(lotEntity.Cost);
+                    lotEntity.Cost = null;
+                    lotEntity.Product = null;
+                    lot.ProductName = lot.Product.Name;
+                    this._context.Lots.Remove(lotEntity);
+                    try {
+                        this._context.SaveChanges();
+                        return lot;
+                    } catch {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        public async Task<Lot> DeleteAsync(Lot entity) {
+            await this._context.Lots.
+                Include(e => e.ProductInstances.Select(x => x.Transactions.Select(i => i.Session)))
+                .Include(e => e.Cost)
+                .Include(e => e.Product)
+                .LoadAsync();
+            var lot = await this._context.Lots
+                .AsNoTracking()
+                .Include(e => e.ProductInstances.Select(i => i.Transactions))
+                .Include(e => e.Cost).Include(e => e.Product)
+                .FirstOrDefaultAsync(x => x.LotNumber == entity.LotNumber && x.SupplierPoNumber == entity.SupplierPoNumber);
+            if (lot != null) {
+                var lotEntity = await this._context.Lots
+                    .Include(e => e.ProductInstances.Select(i => i.Transactions))
+                    .Include(e => e.Cost).Include(e => e.Product)
+                    .FirstOrDefaultAsync(x => x.LotNumber == entity.LotNumber && x.SupplierPoNumber == entity.SupplierPoNumber);
+                if (lotEntity != null) {
+                    lotEntity.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            this._context.Transactions.Remove(t);
+                        });
+                        this._context.Instances.Remove(rank);
+                    });
+                    lotEntity.ProductInstances.Clear();
+                    this._context.Rates.Remove(lotEntity.Cost);
+                    lotEntity.Cost = null;
+                    lotEntity.Product = null;
+                    lot.ProductName = lot.Product.Name;
+                    this._context.Lots.Remove(lotEntity);
+                    try {
+                        await this._context.SaveChangesAsync();
+                        return lot;
+                    } catch {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+
 
         public void OnEntityDelete(IDeletingEntry<Lot, InventoryContext> entry) {
             Log log = new Log(this._userService.CurrentUser.UserName, entry.Entity.GetType().ToString(),
@@ -96,5 +183,7 @@ namespace Inventory.Common.DataLayer.EntityOperations {
                 InventoryOperations.UPDATE.GetDescription(), DateTime.UtcNow);
         }
 
+        public Task<Lot> AddAsync(Lot entity) => throw new NotImplementedException();
+        public Task<Lot> UpdateAsync(Lot entity) => throw new NotImplementedException();
     }
 }

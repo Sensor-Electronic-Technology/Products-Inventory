@@ -135,5 +135,9 @@ namespace Inventory.Common.DataLayer.EntityOperations {
             log.SessionId = this._userService.CurrentSession.Id;
             entry.Context.Logs.Add(log);
         }
+
+        public Task<ProductReservation> AddAsync(ProductReservation entity) => throw new NotImplementedException();
+        public Task<ProductReservation> DeleteAsync(ProductReservation entity) => throw new NotImplementedException();
+        public Task<ProductReservation> UpdateAsync(ProductReservation entity) => throw new NotImplementedException();
     }
 }
