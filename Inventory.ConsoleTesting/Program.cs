@@ -36,8 +36,47 @@ namespace Inventory.ConsoleTesting {
             //FixTransaction(934, 500);
             //FixTransaction(913, 500);
             //DeleteLot("AE-BEMN-321", "AE-PO-PQWE-43231");
-            
-            RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
+
+            //RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
+            var context = new InventoryContext();
+            IUserService userService = new UserService();
+            DomainManager domainManager = new DomainManager();
+            UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
+            LogInService logInService = new LogInService(domainManager, userServiceProvider);
+            var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
+            userService = responce.Service;
+
+
+            var tran = context.Transactions.Create<ProductTransaction>();
+            //tran.Lot = lot;
+            context.Instances.OfType<ProductInstance>()
+                .Include(e => e.InventoryItem)
+                .Include(e => e.Lot).Load();
+            var rank = context.Instances.OfType<ProductInstance>()
+                .Include(e => e.InventoryItem)
+                .Include(e=>e.Lot)
+                .FirstOrDefault(x => x.Name == "390nm~400nm" && x.InventoryItem.Name == "UV1000-39" && (x.LotNumber== "19K02VN1FL" && x.SupplierPoNumber== "036207"));
+            if (rank != null) {
+                rank.Quantity = 0;
+                context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                context.SaveChanges();
+                //tran.TimeStamp = new DateTime(2019, 10, 10, 12, 0, 0);
+                //tran.InstanceId = rank.Id;
+                //tran.ProductName = rank.InventoryItem.Name;
+                //tran.Quantity = 125000;
+                //tran.BuyerPoNumber = "po00003167";
+                //tran.RMA_Number = "";
+                //tran.Location = context.Locations.OfType<Consumer>().FirstOrDefault(e=>e.Name=="Customer");
+                //tran.InventoryAction = InventoryAction.INCOMING;
+                //tran.IsReturning = false;
+                //tran.Session = userService.CurrentSession;
+                //context.Transactions.Add(tran);
+                //context.SaveChanges();
+                Console.WriteLine("Should be updated");
+            } else {
+                Console.WriteLine("Error somewhere");
+                Console.ReadKey();
+            }
         }
 
         private static void FixManyTransactions() {

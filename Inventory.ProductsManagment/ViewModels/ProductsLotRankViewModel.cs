@@ -45,6 +45,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private Warehouse _selectedWarehouse = new Warehouse();
         private ProductReservation _selectedReservation = new ProductReservation();
         private ProductTransaction _selectedTransaction = new ProductTransaction();
+        private ProductInstance _selectedRankLot = new ProductInstance();
         private List<Lot> _lots = new List<Lot>();
         private List<ProductInstance> _ranks = new List<ProductInstance>();
         private List<ProductInstance> _outGoingRanks = new List<ProductInstance>();
@@ -68,6 +69,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand CancelProductCommand { get; private set; }
         public PrismCommands.DelegateCommand RenameLotCommand { get; set; }
         public PrismCommands.DelegateCommand ViewRankCommand { get; set; }
+        public PrismCommands.DelegateCommand ViewRankInTableFromLotsCommand { get; set; }
 
         public AsyncCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportLotsCommand { get; private set; }
@@ -121,6 +123,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.RenameLotCommand = new PrismCommands.DelegateCommand(this.RenameLotHandler);
             this.ReturnPartialCommand = new PrismCommands.DelegateCommand(this.ReturnPartialHandler);
             this.ViewRankCommand = new PrismCommands.DelegateCommand(this.ViewRankHandler);
+            this.ViewRankInTableFromLotsCommand = new PrismCommands.DelegateCommand(this.ViewRankInTableFromLotsHandler);
 
             this._eventAggregator.GetEvent<StartOutgoingListEvent>().Subscribe(() => this.outGoingInProgress = true);
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
@@ -140,6 +143,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public ProductReservation SelectedReservation {
             get => this._selectedReservation;
             set => SetProperty(ref this._selectedReservation, value);
+        }
+
+        public ProductInstance SelectedRankLot {
+            get => this._selectedRankLot;
+            set => SetProperty(ref this._selectedRankLot, value, "SelectedRankLot");
         }
 
         public Lot SelectedLot {
@@ -500,6 +508,13 @@ namespace Inventory.ProductsManagment.ViewModels {
         private void ViewRankHandler() {
             if (this.SelectedTransaction != null) {
                 this.SelectedRank = this.Ranks.FirstOrDefault(e => e.Id == this._selectedTransaction.InstanceId);
+                this.SelectedTabIndex = 1;
+            }
+        }
+
+        private void ViewRankInTableFromLotsHandler() {
+            if (this._selectedRankLot != null) {
+                this.SelectedRank = this.Ranks.FirstOrDefault(e => e.Id == this._selectedRankLot.Id);
                 this.SelectedTabIndex = 1;
             }
         }

@@ -365,14 +365,21 @@
                                 </dxg:GridControl.View>
                                 <dxg:GridControl.DetailDescriptor>
                                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances}">
-                                        <dxg:GridControl Style="{StaticResource GridControlStyle}">
+                                        <dxg:GridControl Style="{StaticResource GridControlStyle}"
+                                                         SelectedItem="{Binding SelectedRankLot,Mode=TwoWay,IsAsync=True}">
                                             <dxg:GridColumn FieldName="Name" Header="Rank"/>
                                             <dxg:GridColumn FieldName="Quantity"/>
                                             <dxg:GridColumn FieldName="Wavelength"/>
                                             <dxg:GridColumn FieldName="Power"/>
                                             <dxg:GridColumn FieldName="Voltage"/>
                                             <dxg:GridControl.View>
-                                                <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroup}"/>
+                                                <dxg:TableView x:Name="detail" Style="{StaticResource TableViewStyleNoMasterNoGroup}">
+                                                    <dxg:TableView.RowCellMenuCustomizations>
+                                                        <dxb:BarButtonItem Content="View Rank in Table"
+                                                               Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.ViewRankInTableFromLotsCommand}"/>
+                                                    </dxg:TableView.RowCellMenuCustomizations>
+                                                </dxg:TableView>
                                             </dxg:GridControl.View>
                                         </dxg:GridControl>
                                     </dxg:DataControlDetailDescriptor>
