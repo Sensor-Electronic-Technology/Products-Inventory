@@ -38,6 +38,59 @@ namespace Inventory.ConsoleTesting {
             //DeleteLot("AE-BEMN-321", "AE-PO-PQWE-43231");
 
             //RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
+            TestingSnapshot();
+        }
+
+
+        private static void TestingSnapshot() {
+            using(InventoryContext context=new InventoryContext()) {
+                context.InventoryItems.OfType<Product>()
+                    .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions)))
+                    .Include(e => e.Lots.Select(i => i.Cost)).Load();
+                var products = context.InventoryItems.OfType<Product>()
+                    .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions)))
+                    .Include(e => e.Lots.Select(i => i.Cost));
+                ConsoleTable table = new ConsoleTable(new string[] { "Product", "Start Qty","Start Cost", "Outgoing Qty","Outgoing Cost", "Incoming Qty","Incoming Cost", "End Qty","End Cost"});
+                StringBuilder builder = new StringBuilder();
+                foreach (var product in products) {
+
+                    var incoming = product.Instances.Sum(e => e.Transactions.Where(a => a.InventoryAction == InventoryAction.INCOMING).Sum(i => i.Quantity));
+                    var incomingCost = product.Instances.Sum(e => e.Transactions.OfType<ProductTransaction>().Where(a => a.InventoryAction == InventoryAction.INCOMING).Sum(i =>i.TotalCost));
+                    var outgoing = product.Instances.Sum(e => e.Transactions.Where(a => a.InventoryAction == InventoryAction.OUTGOING).Sum(i => i.Quantity));
+                    var outgoingCost = product.Instances.Sum(e => e.Transactions.OfType<ProductTransaction>().Where(a => a.InventoryAction == InventoryAction.OUTGOING).Sum(i => i.TotalCost));
+                    var current = product.Instances.Sum(e => e.Quantity);
+                    var currentCost = product.Instances.OfType<ProductInstance>().Sum(e => {
+                        if (e.Lot.Cost != null) {
+                            return e.Quantity*e.Lot.Cost.Amount;
+                        } else {
+                            return 0;
+                        }
+                    });
+                    List<object> temp = new List<object>();
+                    var starting=product.Total+(incoming + (0-outgoing));
+                    var startingCost = +(incomingCost + (0 - outgoingCost));
+                    builder.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", product.Name, starting, startingCost, outgoing, outgoingCost, incoming, incomingCost, product.Total,currentCost).AppendLine();
+                    temp.Add(product.Name);
+                    temp.Add(starting);
+                    temp.Add(startingCost);
+                    temp.Add(outgoing);
+                    temp.Add(outgoingCost);
+                    temp.Add(incoming);
+                    temp.Add(incomingCost);
+                    temp.Add(current);
+                    temp.Add(currentCost);
+                    table.AddRow(temp.ToArray());
+                }
+                System.IO.File.WriteAllText(@"C:\WriteText.txt", builder.ToString());
+                Console.WriteLine(table.ToString());
+                Console.WriteLine("Done");
+                Console.ReadKey();
+
+                
+            }
+        }
+
+        private static void FixTransactionNewist() {
             var context = new InventoryContext();
             IUserService userService = new UserService();
             DomainManager domainManager = new DomainManager();
@@ -54,8 +107,8 @@ namespace Inventory.ConsoleTesting {
                 .Include(e => e.Lot).Load();
             var rank = context.Instances.OfType<ProductInstance>()
                 .Include(e => e.InventoryItem)
-                .Include(e=>e.Lot)
-                .FirstOrDefault(x => x.Name == "390nm~400nm" && x.InventoryItem.Name == "UV1000-39" && (x.LotNumber== "19K02VN1FL" && x.SupplierPoNumber== "036207"));
+                .Include(e => e.Lot)
+                .FirstOrDefault(x => x.Name == "390nm~400nm" && x.InventoryItem.Name == "UV1000-39" && (x.LotNumber == "19K02VN1FL" && x.SupplierPoNumber == "036207"));
             if (rank != null) {
                 rank.Quantity = 0;
                 context.Entry<ProductInstance>(rank).State = EntityState.Modified;

@@ -82,4 +82,12 @@ namespace Inventory.Common.BuisnessLayer {
         public double TotalConsumed { get; set; }
         public double QtyEnding { get; set; }
     }
+
+    public class ProductCostSnapshot {
+        public string ProductName { get; set; }
+        public double QtyStart { get; set; }
+        public double CostStart { get; set; }
+        public double QtyEnd { get; set; }
+        public double CostEnd { get; set; }
+    }
 }
