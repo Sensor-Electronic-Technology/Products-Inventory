@@ -40,6 +40,9 @@
         public static string CategoryTableRegion { get => "CategoryPackageTypeRegion"; }
         public static string CategoryDetailsRegion { get => "PackageTypeDetailsRegion"; }
 
+        //Reports
+        public static string ReportsMainRegion { get => "ReportsMainRegion"; }
+
 
 
     //Manufacturer
@@ -47,26 +50,26 @@
     //public static string ManufacturerMainRegion { get { return "ManufacturerMainRegion"; } }
     //public static string ManufacturerDetailsRegion { get { return "ManufacturerDetailsRegion"; } }
 
-    //Orders
-    //public static string OrdersEntityRegion { get { return "OrdersEntityRegion"; } }
-    //public static string OrdersMainRegion { get { return "OrdersMainRegion"; } }
-    //public static string OrdersDetailsRegion { get { return "OrdersDetailsRegion"; } }
+        //Orders
+        //public static string OrdersEntityRegion { get { return "OrdersEntityRegion"; } }
+        //public static string OrdersMainRegion { get { return "OrdersMainRegion"; } }
+        //public static string OrdersDetailsRegion { get { return "OrdersDetailsRegion"; } }
 
-    //Prices
-    //public static string PriceEntityRegion { get { return "PriceEntityRegion"; } }
-    //public static string PriceMainRegion { get { return "PriceMainRegion"; } }
-    //public static string PriceDetailsRegion { get { return "PriceDetailsRegion"; } }
+        //Prices
+        //public static string PriceEntityRegion { get { return "PriceEntityRegion"; } }
+        //public static string PriceMainRegion { get { return "PriceMainRegion"; } }
+        //public static string PriceDetailsRegion { get { return "PriceDetailsRegion"; } }
 
-    //Alerts
-    //public static string AlertsEntityRegion { get { return "AlertsEntityRegion"; } }
+        //Alerts
+        //public static string AlertsEntityRegion { get { return "AlertsEntityRegion"; } }
 
-    //User
-    //public static string UserEntityRegion { get { return "UserEntityRegion"; } }
-    //public static string UserMainRegion { get { return "UserMainRegion"; } }
+        //User
+        //public static string UserEntityRegion { get { return "UserEntityRegion"; } }
+        //public static string UserMainRegion { get { return "UserMainRegion"; } }
 
-    //User Admin
-    //public static string UserManagmentRegion { get { return "UserManagmentRegion"; } }
-    public static string UserManagmentRegion { get { return "UserManagmentRegion"; } }
+        //User Admin
+        //public static string UserManagmentRegion { get { return "UserManagmentRegion"; } }
+        public static string UserManagmentRegion { get { return "UserManagmentRegion"; } }
         public static string ConfigureNewUserRegion { get { return "ConfigureNewUserRegion"; } }
         public static string ManageExistingUsersRegion { get { return "ManageExistingUsersRegion"; } }
         public static string ExistingUserDetailsRegion { get { return "ExistingUserDetailsRegion"; } }

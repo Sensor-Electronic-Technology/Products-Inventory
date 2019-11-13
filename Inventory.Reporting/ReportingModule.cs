@@ -14,7 +14,10 @@ namespace Inventory.Reporting
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<ReportingMainView>(AppViews.ReportingMainView);
+            containerRegistry.RegisterForNavigation<ReportsMainView>(AppViews.ReportsMainView);
+            containerRegistry.RegisterForNavigation<ReportsSnapshotView>(AppViews.ReportsSnapshotView);
+            containerRegistry.RegisterForNavigation<ReportsTransactionSummaryView>(AppViews.ReportsTransactionSummaryView);
+            containerRegistry.RegisterForNavigation<ReportsCurrentInventoryView>(AppViews.ReportsCurrentInventoryView);
         }
     }
 }

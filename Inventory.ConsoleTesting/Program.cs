@@ -52,12 +52,34 @@ namespace Inventory.ConsoleTesting {
                     .Include(e => e.Lots.Select(i => i.Cost));
                 ConsoleTable table = new ConsoleTable(new string[] { "Product", "Start Qty","Start Cost", "Outgoing Qty","Outgoing Cost", "Incoming Qty","Incoming Cost", "End Qty","End Cost"});
                 StringBuilder builder = new StringBuilder();
+                
                 foreach (var product in products) {
+                    var dStart = new DateTime(2019, 10, 1);
+                    var dStop = new DateTime(2019,10,30);
+                    var now = DateTime.Now;
+                    var incomingTransactions = from instance in product.Instances
+                                       from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                       where (transaction.TimeStamp >= dStart && transaction.InventoryAction== InventoryAction.INCOMING)
+                                       select transaction;
 
-                    var incoming = product.Instances.Sum(e => e.Transactions.Where(a => a.InventoryAction == InventoryAction.INCOMING).Sum(i => i.Quantity));
-                    var incomingCost = product.Instances.Sum(e => e.Transactions.OfType<ProductTransaction>().Where(a => a.InventoryAction == InventoryAction.INCOMING).Sum(i =>i.TotalCost));
-                    var outgoing = product.Instances.Sum(e => e.Transactions.Where(a => a.InventoryAction == InventoryAction.OUTGOING).Sum(i => i.Quantity));
-                    var outgoingCost = product.Instances.Sum(e => e.Transactions.OfType<ProductTransaction>().Where(a => a.InventoryAction == InventoryAction.OUTGOING).Sum(i => i.TotalCost));
+                    var outgoingTransactions= from instance in product.Instances
+                                              from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                              where (transaction.TimeStamp >= dStart && transaction.InventoryAction == InventoryAction.OUTGOING)
+                                              select transaction;
+
+                    var incomingQtyTotal = incomingTransactions.Sum(e => e.Quantity);
+                    var incomingCostTotal= incomingTransactions.Sum(e => e.Quantity*e.UnitCost);
+
+                    var outgoingQtyTotal = outgoingTransactions.Sum(e => e.Quantity);
+                    var outgingCostTotal = outgoingTransactions.Sum(e => e.Quantity * e.UnitCost);
+
+                    var incomingQtyRange = incomingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity);
+                    var incomingCostRange = incomingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity * e.UnitCost);
+
+                    var outgoingQtyRange = outgoingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity);
+                    var outgoingCostRange = outgoingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity * e.UnitCost);
+
+
                     var current = product.Instances.Sum(e => e.Quantity);
                     var currentCost = product.Instances.OfType<ProductInstance>().Sum(e => {
                         if (e.Lot.Cost != null) {
@@ -67,19 +89,21 @@ namespace Inventory.ConsoleTesting {
                         }
                     });
                     List<object> temp = new List<object>();
-                    var starting=product.Total+(incoming + (0-outgoing));
-                    var startingCost = +(incomingCost + (0 - outgoingCost));
-                    builder.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", product.Name, starting, startingCost, outgoing, outgoingCost, incoming, incomingCost, product.Total,currentCost).AppendLine();
-                    temp.Add(product.Name);
-                    temp.Add(starting);
-                    temp.Add(startingCost);
-                    temp.Add(outgoing);
-                    temp.Add(outgoingCost);
-                    temp.Add(incoming);
-                    temp.Add(incomingCost);
-                    temp.Add(current);
-                    temp.Add(currentCost);
-                    table.AddRow(temp.ToArray());
+                    var starting = (current - incomingQtyTotal) + outgoingQtyTotal;
+                    var startingCost = (currentCost - incomingCostTotal) + outgingCostTotal;
+                    var ending = (starting + incomingQtyRange) - outgoingQtyRange;
+                    var endingCost = (startingCost + incomingCostRange) - outgoingCostRange;
+                    builder.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", product.Name, starting, startingCost, outgoingQtyRange, outgoingCostRange, incomingQtyRange, incomingCostRange, ending,endingCost).AppendLine();
+                    //temp.Add(product.Name);
+                    //temp.Add(starting);
+                    //temp.Add(startingCost);
+                    //temp.Add(outgoing);
+                    //temp.Add(outgoingCost);
+                    //temp.Add(incoming);
+                    //temp.Add(incomingCost);
+                    //temp.Add(current);
+                    //temp.Add(currentCost);
+                    //table.AddRow(temp.ToArray());
                 }
                 System.IO.File.WriteAllText(@"C:\WriteText.txt", builder.ToString());
                 Console.WriteLine(table.ToString());

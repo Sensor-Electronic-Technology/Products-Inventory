@@ -11,15 +11,45 @@
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
              xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
              xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"    
-             mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1900">
-
+             mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="1900">
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXMessageBoxService x:Name="ReportsMainNotice"/>
+    </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
         <dxdo:LayoutPanel ShowCloseButton="False" ShowPinButton="False" ShowCollapseButton="False" ShowControlBox="False">
             <dxlc:DockLayoutControl>
-                
+                <dxb:BarContainerControl dxlc:DockLayoutControl.Dock="Top" BorderBrush="Black">
+                    <dxb:ToolBarControl Caption="Categories" ShowDragWidget="False" 
+                                        AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
+                                        BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal" RotateWhenVertical="True"
+                                        ShowBackground="True" AllowCollapse="False" IsCollapsed="False" UseWholeRow="True">
+                        <dxb:BarButtonItem x:Name="_snapShot" Content="Inventory Snapshot"                                               
+                                                   Command="{Binding LoadReportsViewCommand}"
+                                                   CommandParameter="{x:Static common:AppViews.ReportsSnapshotView}"
+                                                   Glyph="{dx:DXImage Image=Calendar_16x16.png}"
+                                                   LargeGlyph="{dx:DXImage Image=Calendar_32x32.png}"/>
+
+                        <dxb:BarButtonItem x:Name="_transactions" Content="Transactions"                                             
+                                                   Command="{Binding LoadReportsViewCommand}" 
+                                                   CommandParameter="{x:Static common:AppViews.ReportsTransactionSummaryView}"
+                                                   Glyph="{dx:DXImage Image=BottomUp_16x16.png}" 
+                                                   LargeGlyph="{dx:DXImage Image=BottomUp_32x32.png}"
+                                                   IsEnabled="True"/>
+
+                        <dxb:BarButtonItem x:Name="_currentInventory" Content="Current Inventory"                                             
+                                                   Command="{Binding LoadReportsViewCommand}" 
+                                                   CommandParameter="{x:Static common:AppViews.ReportsCurrentInventoryView}"
+                                                   Glyph="{dx:DXImage Image=BOProduct_16x16.png}" 
+                                                   LargeGlyph="{dx:DXImage Image=BOProduct_32x32.png}"
+                                                   IsEnabled="True"/>
+                    </dxb:ToolBarControl>
+                </dxb:BarContainerControl>
+                <dxlc:LayoutControl dxlc:DockLayoutControl.Dock="Client">
+                    <ContentControl prism:RegionManager.RegionName="{x:Static common:Regions.ReportsMainRegion}"/>
+                </dxlc:LayoutControl>
             </dxlc:DockLayoutControl>
         </dxdo:LayoutPanel>
     </dx:LoadingDecorator>

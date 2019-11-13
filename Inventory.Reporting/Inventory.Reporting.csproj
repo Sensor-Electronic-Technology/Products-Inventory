@@ -65,12 +65,24 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\ReportingMainViewModel.cs" />
+    <Compile Include="ViewModels\ReportsCurrentInventoryViewModel.cs" />
     <Compile Include="ViewModels\ReportsMainViewModel.cs" />
+    <Compile Include="ViewModels\ReportsSnapshotViewModel.cs" />
+    <Compile Include="ViewModels\ReportsTransactionSummaryViewModel.cs" />
     <Compile Include="Views\ReportingMainView.xaml.cs">
       <DependentUpon>ReportingMainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReportsCurrentInventoryView.xaml.cs">
+      <DependentUpon>ReportsCurrentInventoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportsMainView.xaml.cs">
       <DependentUpon>ReportsMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsSnapshotView.xaml.cs">
+      <DependentUpon>ReportsSnapshotView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsTransactionSummaryView.xaml.cs">
+      <DependentUpon>ReportsTransactionSummaryView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -88,7 +100,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReportsCurrentInventoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportsMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsSnapshotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsTransactionSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

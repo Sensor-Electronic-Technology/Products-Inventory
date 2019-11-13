@@ -50,6 +50,10 @@
 
         //Report Module
         public static string ReportingMainView { get => "ReportingMainView"; }
+        public static string ReportsMainView { get => "ReportsMainView"; }
+        public static string ReportsSnapshotView { get => "ReportsSnapshotView"; }
+        public static string ReportsTransactionSummaryView { get => "ReportsTransactionSummaryView"; }
+        public static string ReportsCurrentInventoryView { get => "ReportsCurrentInventoryView"; }
 
     }
 }

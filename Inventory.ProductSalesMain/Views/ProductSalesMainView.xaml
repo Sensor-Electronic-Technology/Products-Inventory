@@ -52,7 +52,7 @@
 
                             <dxb:BarButtonItem x:Name="reportsView" Content="Reports(In Development)"                                             
                                                Command="{Binding LoadModuleCommand}" 
-                                               CommandParameter="{x:Static common:AppViews.ReportingMainView}"
+                                               CommandParameter="{x:Static common:AppViews.ReportsMainView}"
                                                IsEnabled="True"
                                                Glyph="{dx:DXImage Image=Report_16x16.png}" 
                                                LargeGlyph="{dx:DXImage Image=Report_32x32.png}"/>

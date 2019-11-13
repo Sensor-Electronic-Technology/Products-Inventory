@@ -87,7 +87,13 @@ namespace Inventory.Common.BuisnessLayer {
         public string ProductName { get; set; }
         public double QtyStart { get; set; }
         public double CostStart { get; set; }
+        public double QtyIncoming { get; set; }
+        public double CostIncoming { get; set; }
+        public double QtyOutgoing { get; set; }
+        public double CostOutgoing { get; set; }
         public double QtyEnd { get; set; }
         public double CostEnd { get; set; }
+        public double QtyCurrent { get; set; }
+        public double CostCurrent { get; set; }
     }
 }
