@@ -33,6 +33,8 @@ namespace Inventory.Common.EntityLayer.Model {
             : base("name=InventoryContext") {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
+            //Configuration.ProxyCreationEnabled = true;
+            //Configuration.LazyLoadingEnabled = true;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {

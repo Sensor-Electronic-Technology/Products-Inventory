@@ -38,9 +38,40 @@ namespace Inventory.ConsoleTesting {
             //DeleteLot("AE-BEMN-321", "AE-PO-PQWE-43231");
 
             //RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
-            TestingSnapshot();
+            //TestingSnapshot();
+            MovePartItems("CUN0GF1A", "CUNOGF1A");
+            //MoveLot("18623P0090", "DI102120", "18623P0090", "DI102120", "CUNOGF1A");
         }
 
+        private static void MovePartItems(string oldPart,string newpart) {
+            using(var context=new InventoryContext()) {
+                context.Lots.AsNoTracking().Include(e => e.Product.Instances).Load();
+                var lot = context.Lots.AsNoTracking().Include(e => e.Product.Instances).FirstOrDefault(e=>e.Product.Name==oldPart);
+                if (lot != null) {
+                    var entity= context.Lots.Include(e => e.Product.Instances).Include(e=>e.ProductInstances).FirstOrDefault(e => e.LotNumber==lot.LotNumber && e.SupplierPoNumber==lot.SupplierPoNumber);
+                    var product = context.InventoryItems.OfType<Product>().Include(e=>e.Lots.Select(i=>i.ProductInstances)).Include(e=>e.Instances).FirstOrDefault(e=>e.Name== newpart);
+                    entity.Product = product;
+                    entity.ProductId = product.Id;
+                    entity.ProductName = product.Name;
+                    product.Lots.Add(lot);
+ //                   context.Entry<Lot>(entity).State=EntityState.Modified;
+
+                    foreach(var instance in lot.ProductInstances) {
+                        var rank = entity.ProductInstances.FirstOrDefault(e => e.Id == instance.Id);
+                        rank.InventoryItem = product;
+                        rank.InventoryItemId = product.Id;
+                        product.Instances.Add(rank);
+ //                       context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                    }
+
+                    context.SaveChanges();
+                    Console.WriteLine("Should be done");
+                } else {
+                    Console.WriteLine("Lot Is Null");
+                }
+                Console.ReadKey();
+            }
+        }
 
         private static void TestingSnapshot() {
             using(InventoryContext context=new InventoryContext()) {
@@ -441,7 +472,7 @@ namespace Inventory.ConsoleTesting {
                     _context.SaveChanges();
                     Console.WriteLine("Lot Deleted, Press Any Key To Remake");
                     Console.ReadKey();
-                    Checkin(_context,lot,newLotNum,newPo);
+                    Checkin(_context,lot,newLotNum,newPo,"");
                     Console.ReadKey();
                 } else {
                     Console.WriteLine("Lot is Null");
@@ -451,11 +482,47 @@ namespace Inventory.ConsoleTesting {
             }
         }
 
-        public static void Checkin(InventoryContext context,Lot lot,string newLotNum,string newPo) {
+        private static void MoveLot(string lotNum, string po, string newLotNum, string newPo,string newPart) {
+            using (InventoryContext _context = new InventoryContext()) {
+                _context.Lots.Load();
+                _context.Instances.Load();
+                _context.Rates.Load();
+                _context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions.Select(i => i.Session))).Include(e => e.Cost).Include(e => e.Product).Load();
+                var lot = _context.Lots.AsNoTracking().Include(e => e.ProductInstances.Select(i => i.Transactions))
+                        .Include(e => e.Cost).Include(e => e.Product).FirstOrDefault(x => x.LotNumber == lotNum && x.SupplierPoNumber == po);
+                if (lot != null) {
+                    var lotEntity = _context.Lots.Include(e => e.ProductInstances.Select(i => i.Transactions))
+                        .Include(e => e.Cost).FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
+                    lotEntity.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            _context.Transactions.Remove(t);
+                        });
+                        _context.Instances.Remove(rank);
+                    });
+                    lotEntity.ProductInstances.Clear();
+                    _context.Rates.Remove(lotEntity.Cost);
+                    lotEntity.Cost = null;
+                    lotEntity.Product = null;
+                    lot.ProductName = lot.Product.Name;
+                    _context.Lots.Remove(lotEntity);
+                    //_context.SaveChanges();
+                    //Console.WriteLine("Lot Deleted, Press Any Key To Remake");
+                    //Console.ReadKey();
+                    Checkin(_context, lot, newLotNum, newPo,newPart);
+                    Console.ReadKey();
+                } else {
+                    Console.WriteLine("Lot is Null");
+                    Console.ReadKey();
+                }
+
+            }
+        }
+
+        public static void Checkin(InventoryContext context,Lot lot,string newLotNum,string newPo,string newProduct) {
             StringBuilder builder = new StringBuilder();
 
                 var lotentity = context.Lots.FirstOrDefault(x => x.SupplierPoNumber == lot.SupplierPoNumber && x.LotNumber == lot.LotNumber);
-                var productEntity = context.InventoryItems.OfType<Product>().FirstOrDefault(x => x.Name == lot.ProductName);
+                var productEntity = context.InventoryItems.OfType<Product>().FirstOrDefault(x => x.Name == newProduct);
 
                 var defaultDistributor = context.Distributors.FirstOrDefault(x => x.Name == "SVC");
                 var warehouse = context.Locations.FirstOrDefault(x => x.Name == "Products");
@@ -484,6 +551,7 @@ namespace Inventory.ConsoleTesting {
                         newRank.LotNumber = newLot.LotNumber;
                         newRank.SupplierPoNumber = newLot.SupplierPoNumber;
                         newRank.InventoryItem = productEntity;
+                        newRank.InventoryItemId = productEntity.Id;
                         newRank.Lot = newLot;
                         newLot.ProductInstances.Add(newRank);
                         context.Instances.Add(newRank);
@@ -500,15 +568,15 @@ namespace Inventory.ConsoleTesting {
                             newTransaction.InventoryAction = transaction.InventoryAction;
                             newTransaction.IsReturning = transaction.IsReturning;
                             newTransaction.RMA_Number = transaction.RMA_Number;
-                            newTransaction.ProductName = transaction.ProductName;
+                            newTransaction.ProductName = productEntity.Name;
                             newRank.Transactions.Add(newTransaction);
                             context.Transactions.Add(newTransaction);
                         });
                     });
-                lot.ProductInstances.Clear();
-                lot.Cost = null;
-                lot.Product = null;
-                context.SaveChanges();
+                    lot.ProductInstances.Clear();
+                    lot.Cost = null;
+                    lot.Product = null;
+                    context.SaveChanges();
                     Console.WriteLine("Should be done!");
                 } else {
                     Console.WriteLine("Error");

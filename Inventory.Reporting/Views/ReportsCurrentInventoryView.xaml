@@ -16,5 +16,6 @@
              xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"    
              xmlns:ViewModels="clr-namespace:Inventory.Reporting.ViewModels"
              mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="900">
+    
 
 </UserControl>

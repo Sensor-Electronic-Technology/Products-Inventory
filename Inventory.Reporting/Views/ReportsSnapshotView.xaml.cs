@@ -18,7 +18,7 @@ namespace Inventory.Reporting.Views {
     /// </summary>
     public partial class ReportsSnapshotView : UserControl {
         private bool _isactive;
-        public string PanelCaption { get { return "Reports"; } }
+        public string PanelCaption { get { return "Snapshot"; } }
 
         public bool IsActive {
             get => this._isactive;
