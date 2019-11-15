@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Inventory.Common.EntityLayer.Model.Entities;
 using Inventory.Common.ApplicationLayer;
 using DevExpress.Mvvm;
-using Prism.Regions;
-using Prism.Events;
-using PrismCommands = Prism.Commands;
 using System.Threading.Tasks;
-using Inventory.Common.DataLayer.EntityDataManagers;
-using System.Windows.Input;
-using System.Windows;
 using Inventory.Common.ApplicationLayer.Services;
 using Inventory.Common.EntityLayer.Model;
 using System.Collections.ObjectModel;

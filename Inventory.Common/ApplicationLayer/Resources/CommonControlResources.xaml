@@ -11,13 +11,14 @@
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common">
-    
-    <Style x:Key="GridControlStyle" TargetType="dxg:GridControl">
-        <Setter Property="AutoGenerateColumns" Value="None"/>
-        <Setter Property="SelectionMode" Value="Row"/>
-        <Setter Property="dx:DXSerializer.Enabled" Value="False"/>
-        <Setter Property="AllowUpdateTwoWayBoundPropertiesOnSynchronization" Value="True"/>
-        <Setter Property="AllowLiveDataShaping" Value="True"/>
+
+    <Style x:Key="GridControlStyle"
+           TargetType="dxg:GridControl">
+        <Setter Property="AutoGenerateColumns" Value="None" />
+        <Setter Property="SelectionMode" Value="Row" />
+        <Setter Property="dx:DXSerializer.Enabled" Value="False" />
+        <Setter Property="AllowUpdateTwoWayBoundPropertiesOnSynchronization" Value="True" />
+        <Setter Property="AllowLiveDataShaping" Value="True" />
     </Style>
 
     <Style x:Key="TableViewStyleEdit" TargetType="dxg:TableView">
@@ -29,12 +30,14 @@
         <Setter Property="EditorShowMode" Value="Default"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
         <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
-        <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="BestFitMode" Value="VisibleRows"/>
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
         <Setter Property="ShowFilterPanelMode" Value="Never"/>
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
-        <Setter Property="AutoWidth" Value="True"/>
+
     </Style>
 
     <Style x:Key="TableViewStyleNoMaster" TargetType="dxg:TableView">
@@ -44,11 +47,12 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
-        <Setter Property="AllowBestFit" Value="True"/>
-        <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
-        <Setter Property="AutoWidth" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
+        <Setter Property="ShowFilterPanelMode" Value="ShowAlways" />
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoSearch" TargetType="dxg:TableView">
@@ -58,25 +62,29 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Smart"/>
-        <Setter Property="AllowBestFit" Value="True"/>
-        <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
-        <Setter Property="AutoWidth" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
+        <Setter Property="ShowFilterPanelMode"
+                Value="ShowAlways" />
     </Style>
 
     <Style x:Key="TableViewStyleNoMaster_NavCell" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Always"/>
         <Setter Property="NavigationStyle" Value="Cell"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
-        <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
         <Setter Property="ShowFilterPanelMode" Value="ShowAlways"/>
-        <Setter Property="AutoWidth" Value="True"/>
+
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoGroup" TargetType="dxg:TableView">
@@ -86,28 +94,30 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
-        <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
-        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleNoMasterNoGroupNoSearch" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Never"/>
         <Setter Property="NavigationStyle" Value="Row"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Default"/>
-        <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
         <Setter Property="ShowTotalSummary" Value="True"/>
-        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleWithMasterNoGroup" TargetType="dxg:TableView">
@@ -117,12 +127,13 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Smart"/>
-        <Setter Property="AllowBestFit" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
-        <Setter Property="AutoWidth" Value="True"/>
     </Style>
 
     <Style x:Key="TableViewStyleWithMasterGroup" TargetType="dxg:TableView">
@@ -132,10 +143,11 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="AllowEditing" Value="False"/>
         <Setter Property="HeaderHorizontalAlignment" Value="Center"/>
-        <Setter Property="BestFitArea" Value="All"/>
-        <Setter Property="BestFitMode" Value="Smart"/>
-        <Setter Property="AllowBestFit" Value="True"/>
-        <Setter Property="AutoWidth" Value="True"/>
+        <Setter Property="BestFitArea" Value="All" />
+        <Setter Property="BestFitMode" Value="VisibleRows" />
+        <Setter Property="AllowBestFit" Value="True" />
+        <Setter Property="PrintAutoWidth" Value="True" />
+        <Setter Property="AutoWidth" Value="True" />
     </Style>
 
     <Style x:Key="LayoutItemStyle" TargetType="{x:Type dxlc:LayoutItem}">
@@ -146,7 +158,7 @@
     <!--<Style x:Key="messenger" TargetType="{x:Type dx:ThemedMessageBoxWindow}">
         <Setter Property="Use"
     </Style>-->
-    
+
     <!--<Style x:Key="LayoutItemStyleAlignment" TargetType="{x:Type dxlc:LayoutItem}">
         <Setter Property="LabelPosition" Value="Top"/>
         <Setter Property="LabelHorizontalAlignment" Value="Center"/>
@@ -187,12 +199,14 @@
         <Setter Property="DisplayMode"  Value="Normal"/>
         <Setter Property="TitleBackground" Value="BlanchedAlmond"/>
     </Style>
-    
+
     <!--<Style x:Name="SizerStyle" TargetType="{x:Type dxlc:ElementSizer}">
         <Setter Property="Background" Value="LightBlue"/>
         <Setter Property="BorderBrush"  Value="Black"/>
         <Setter Property="Width" Value="10"/>
-        --><!--<Setter Property="VerticalScrollBarStyle"  Value=""/>--><!--
+        -->
+    <!--<Setter Property="VerticalScrollBarStyle"  Value=""/>-->
+    <!--
     </Style>-->
 
     <Style x:Name="TabStyle" TargetType="{x:Type dx:DXTabItem}">
@@ -202,6 +216,6 @@
     <Style x:Name="TextEditSTD" TargetType="{x:Type dxe:TextEdit}">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
-    
-    
+
+
 </ResourceDictionary>

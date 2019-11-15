@@ -13,8 +13,137 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
              xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:Services="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:ViewModels="clr-namespace:Inventory.Reporting.ViewModels"
              mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="900">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Inventory.Common;component/ApplicationLayer/Resources/CommonControlResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:DispatcherService x:Name="ReportTransactionDispatcher" />
+    </dxmvvm:Interaction.Behaviors>
+    <dx:LoadingDecorator>
+        <dxdo:LayoutPanel>
+            <dxlc:DockLayoutControl>
+                <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top">
+                    <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}"
+                                     Label="Start Date">
+                        <dxe:DateEdit EditValue="{Binding Start,Mode=TwoWay}"
+                                      HorizontalContentAlignment="Center" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Style="{StaticResource LayoutItemStyle}"
+                                     Label="Stop Date">
+                        <dxe:DateEdit EditValue="{Binding Stop,Mode=TwoWay}"
+                                      HorizontalContentAlignment="Center">
+                        </dxe:DateEdit>
+                    </dxlc:LayoutItem>
+                    <dx:SimpleButton Content="Get Summary"
+                                     Command="{Binding CollectTransactionsCommand,IsAsync=True}"
+                                     Glyph="{dx:DXImage Image=Summary_32x32.png}" />
+                </dxlc:LayoutGroup>
+                <DockPanel dxlc:DockLayoutControl.Dock="Client">
+                    <dxb:BarContainerControl DockPanel.Dock="Top">
+                        <dxb:ToolBarControl ShowDragWidget="False"
+                                            ShowBackground="False"
+                                            AllowCustomizationMenu="False"
+                                            AllowQuickCustomization="False"
+                                            AllowHide="False"
+                                            BarItemDisplayMode="ContentAndGlyph"
+                                            Orientation="Horizontal">
+                            <dxb:BarButtonItem x:Name="_transactionsExportExcel"
+                                               Command="{Binding ExportTransactionsCommand,IsAsync=True}"
+                                               CommandParameter="Xlsx"
+                                               BarItemDisplayMode="ContentAndGlyph"
+                                               Content="Export Excel"
+                                               Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}" />
+                            <dxb:BarButtonItem x:Name="_transactionsExportPDF"
+                                               Command="{Binding ExportTransactionsCommand,IsAsync=True}"
+                                               CommandParameter="Pdf"
+                                               Content="Export PDF"
+                                               Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
+                                               BarItemDisplayMode="ContentAndGlyph" />
+                            <dxb:BarButtonItem x:Name="_transactionsExportCSV"
+                                               Command="{Binding ExportTransactionsCommand,IsAsync=True}"
+                                               CommandParameter="Csv"
+                                               BarItemDisplayMode="ContentAndGlyph"
+                                               Content="Export CSV"
+                                               Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}" />
+                        </dxb:ToolBarControl>
+                    </dxb:BarContainerControl>
+                    <dxg:GridControl x:Name="_reportTransactions"
+                                     Style="{StaticResource GridControlStyle}"
+                                     ItemsSource="{Binding Transactions,IsAsync=True,Mode=TwoWay}"
+                                     ShowLoadingPanel="{Binding IsLoading,IsAsync=True,Mode=TwoWay}"
+                                     DockPanel.Dock="Bottom">
+                        <dxmvvm:Interaction.Behaviors>
+                            <Services:GridExportService x:Name="ItemizedTransactionsExportService" />
+                        </dxmvvm:Interaction.Behaviors>
+                        <dxg:GridControl.View>
+                            <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
+                                           SearchPanelNullText="Search By Part Number"
+                                           SearchColumns="Instance.InventoryItem.Name" />
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Id"
+                                            Visible="False" />
+                            <dxg:GridColumn FieldName="TimeStamp"
+                                            UnboundType="DateTime" />
+                            <dxg:GridColumn FieldName="Instance.InventoryItem.Name"
+                                            Header="Product" />
+                            <dxg:GridColumn FieldName="Instance.Name"
+                                            Header="Rank" />
+                            <dxg:GridColumn FieldName="InventoryAction"
+                                            Header="Action"
+                                            AllowGrouping="True"
+                                            GroupIndex="0" />
+                            <dxg:GridColumn FieldName="Quantity">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric"
+                                                          MaskUseAsDisplayFormat="True"
+                                                          Mask="d" />
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="UnitCost"
+                                            Header="Unit Cost">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric"
+                                                          MaskUseAsDisplayFormat="True"
+                                                          Mask="c"
+                                                          AllowNullInput="True" />
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="TotalCost"
+                                            Header="Total Cost">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="c" />
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Location.Name" Header="Location" />
+                            <dxg:GridColumn FieldName="Instance.LotNumber" Header="Lot Number" />
+                            <dxg:GridColumn FieldName="Instance.SupplierPoNumber" Header="Supplier Po" />
+                            <dxg:GridColumn FieldName="BuyerPoNumber" Header="Buyer Po" />
+                            <dxg:GridColumn FieldName="RMA_Number" Header="RMA" />
+                            <dxg:GridColumn FieldName="Session.UserName" Header="Username" />
+                        </dxg:GridControl.Columns>
+                        <dxg:GridControl.GroupSummary>
+                            <dxg:GridSummaryItem FieldName="Quantity"
+                                                 DisplayFormat="[Total Quantity: {0:n}]"
+                                                 ShowInColumn="True"
+                                                 SummaryType="Sum" />
+                            <dxg:GridSummaryItem FieldName="TotalCost"
+                                                 DisplayFormat="[Total Cost: {0:c3}]"
+                                                 ShowInColumn=""
+                                                 SummaryType="Sum" />
+                        </dxg:GridControl.GroupSummary>
+                    </dxg:GridControl>
+                </DockPanel>
+            </dxlc:DockLayoutControl>
+        </dxdo:LayoutPanel>
+    </dx:LoadingDecorator>
 </UserControl>

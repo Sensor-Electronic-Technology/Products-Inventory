@@ -64,14 +64,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\ReportingMainViewModel.cs" />
     <Compile Include="ViewModels\ReportsCurrentInventoryViewModel.cs" />
     <Compile Include="ViewModels\ReportsMainViewModel.cs" />
     <Compile Include="ViewModels\ReportsSnapshotViewModel.cs" />
     <Compile Include="ViewModels\ReportsTransactionSummaryViewModel.cs" />
-    <Compile Include="Views\ReportingMainView.xaml.cs">
-      <DependentUpon>ReportingMainView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ReportsCurrentInventoryView.xaml.cs">
       <DependentUpon>ReportsCurrentInventoryView.xaml</DependentUpon>
     </Compile>
@@ -96,10 +92,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ReportingMainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ReportsCurrentInventoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

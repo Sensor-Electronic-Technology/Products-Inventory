@@ -20,6 +20,7 @@
              d:DesignWidth="1900">
     <dxmvvm:Interaction.Behaviors>
         <dx:DXMessageBoxService x:Name="ReportsMainNotice" />
+        <dxmvvm:DispatcherService x:Name="MainDispatcherService"/>
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
         <dxdo:LayoutPanel ShowCloseButton="False"
@@ -43,14 +44,14 @@
                                         UseWholeRow="True">
                         <dxb:BarButtonItem x:Name="_snapShot"
                                            Content="Inventory Snapshot"
-                                           Command="{Binding LoadReportsViewCommand}"
+                                           Command="{Binding LoadReportsViewCommand,IsAsync=True}"
                                            CommandParameter="{x:Static common:AppViews.ReportsSnapshotView}"
                                            Glyph="{dx:DXImage Image=Calendar_16x16.png}"
                                            LargeGlyph="{dx:DXImage Image=Calendar_32x32.png}" />
 
                         <dxb:BarButtonItem x:Name="_transactions"
                                            Content="Transactions"
-                                           Command="{Binding LoadReportsViewCommand}"
+                                           Command="{Binding LoadReportsViewCommand,IsAsync=True}"
                                            CommandParameter="{x:Static common:AppViews.ReportsTransactionSummaryView}"
                                            Glyph="{dx:DXImage Image=BottomUp_16x16.png}"
                                            LargeGlyph="{dx:DXImage Image=BottomUp_32x32.png}"
@@ -58,7 +59,7 @@
 
                         <dxb:BarButtonItem x:Name="_currentInventory"
                                            Content="Current Inventory"
-                                           Command="{Binding LoadReportsViewCommand}"
+                                           Command="{Binding LoadReportsViewCommand,IsAsync=True}"
                                            CommandParameter="{x:Static common:AppViews.ReportsCurrentInventoryView}"
                                            Glyph="{dx:DXImage Image=BOProduct_16x16.png}"
                                            LargeGlyph="{dx:DXImage Image=BOProduct_32x32.png}"
