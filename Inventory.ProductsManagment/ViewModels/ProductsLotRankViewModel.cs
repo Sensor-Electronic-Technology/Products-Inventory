@@ -25,6 +25,8 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductDataManager _dataManager;
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
+        private bool _canAdmin=false;
+        private bool _canBasic = false;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductRankLotNotifications"); } }
         public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductRankLotDispatcher"); } }
         public IDialogService RenameLotDialog { get => ServiceContainer.GetService<IDialogService>("RenameLotDialog"); }
@@ -104,7 +106,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ViewRankDetailsCommand = new PrismCommands.DelegateCommand(this.ViewRankDetailHandler,this.CanExecute);
             this.ViewLotDetailsCommand = new PrismCommands.DelegateCommand(this.ViewLotDetailHandler,this.CanExecute);
             this.AddToOutgoingCommand = new PrismCommands.DelegateCommand(this.AddToOutgoingHandler,this.CanExecuteOutgoing);
-            this.CheckOutCommand = new PrismCommands.DelegateCommand(this.CheckOutHandler,this.CanExecute);
+            this.CheckOutCommand = new PrismCommands.DelegateCommand(this.CheckOutHandler,this.CanExecuteBasic);
             this.SaveProductCommand = new PrismCommands.DelegateCommand(this.SaveProductChangesHandle, this.CanExecuteNewProduct);
             this.CancelProductCommand = new PrismCommands.DelegateCommand(this.DiscardChangesHandler);
 
@@ -112,16 +114,16 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ExportLotsCommand = new AsyncCommand<ExportFormat>(this.ExportLotsHandler);
             this.ExportRanksCommand = new AsyncCommand<ExportFormat>(this.ExportRanksHandler);
             this.ExportTransactionsCommand = new AsyncCommand<ExportFormat>(this.ExportTransactionsHandler);
-            this.UndoTransactionCommand = new AsyncCommand(this.UndoTransactionHandler);
+            this.UndoTransactionCommand = new AsyncCommand(this.UndoTransactionHandler, this.CanExecuteAdmin);
 
-            this.EditLotCommand = new PrismCommands.DelegateCommand(this.EditLotHandler, this.CanExecute);
-            this.EditRankCommand = new PrismCommands.DelegateCommand(this.EditRankHandler, this.CanExecute);
-            this.ReserveStockCommand = new PrismCommands.DelegateCommand(this.ReserveStockHandler, this.CanExecute);
-            this.DeleteReservationCommand = new PrismCommands.DelegateCommand(this.DeleteReservationHandler, this.CanExecute);
-            this.EditReservationCommand = new PrismCommands.DelegateCommand(this.EditReservationHandler, this.CanExecute);
+            this.EditLotCommand = new PrismCommands.DelegateCommand(this.EditLotHandler, this.CanExecuteBasic);
+            this.EditRankCommand = new PrismCommands.DelegateCommand(this.EditRankHandler, this.CanExecuteBasic);
+            this.ReserveStockCommand = new PrismCommands.DelegateCommand(this.ReserveStockHandler, this.CanExecuteBasic);
+            this.DeleteReservationCommand = new PrismCommands.DelegateCommand(this.DeleteReservationHandler, this.CanExecuteBasic);
+            this.EditReservationCommand = new PrismCommands.DelegateCommand(this.EditReservationHandler, this.CanExecuteBasic);
             this.ViewReservationDetailsCommand = new PrismCommands.DelegateCommand(this.ViewReservationDetailsHandler, this.CanExecute);
-            this.RenameLotCommand = new PrismCommands.DelegateCommand(this.RenameLotHandler);
-            this.ReturnPartialCommand = new PrismCommands.DelegateCommand(this.ReturnPartialHandler);
+            this.RenameLotCommand = new PrismCommands.DelegateCommand(this.RenameLotHandler,this.CanExecuteAdmin);
+            this.ReturnPartialCommand = new PrismCommands.DelegateCommand(this.ReturnPartialHandler, this.CanExecuteAdmin);
             this.ViewRankCommand = new PrismCommands.DelegateCommand(this.ViewRankHandler);
             this.ViewRankInTableFromLotsCommand = new PrismCommands.DelegateCommand(this.ViewRankInTableFromLotsHandler);
 
@@ -129,6 +131,9 @@ namespace Inventory.ProductsManagment.ViewModels {
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
             this._eventAggregator.GetEvent<CancelOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
             this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Subscribe(this.LotRankEditingDoneHandler);
+
+            this._canAdmin = this._dataManager.ValidateUser(UserAction.Remove);
+            this._canBasic = this._dataManager.ValidateUser(UserAction.CheckIn);
         }
 
         public override bool KeepAlive {
@@ -457,6 +462,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         
         private async Task UndoTransactionHandler() {
             if (this.SelectedTransaction != null) {
+                
                 this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
                 var result = await this._dataManager.DeleteTransactionAsync(this._selectedTransaction);
                 if (result.Success) {
@@ -513,8 +519,8 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private void ViewRankInTableFromLotsHandler() {
-            if (this._selectedRankLot != null) {
-                this.SelectedRank = this.Ranks.FirstOrDefault(e => e.Id == this._selectedRankLot.Id);
+            if (this._selectedLot != null) {
+                this.SelectedRank = this.Ranks.FirstOrDefault(e => e.LotNumber==this._selectedLot.LotNumber && e.SupplierPoNumber==this._selectedLot.SupplierPoNumber);
                 this.SelectedTabIndex = 1;
             }
         }
@@ -780,8 +786,16 @@ namespace Inventory.ProductsManagment.ViewModels {
             return !this.outGoingInProgress && !this.isNewProduct && !this.editInProgress && !this.isEditProduct;
         }
 
+        private bool CanExecuteBasic() {
+            return !this.outGoingInProgress && !this.isNewProduct && !this.editInProgress && !this.isEditProduct && this._canBasic;
+        }
+
+        private bool CanExecuteAdmin() {
+            return !this.outGoingInProgress && !this.isNewProduct && !this.editInProgress && !this.isEditProduct && this._canAdmin;
+        }
+
         private bool CanExecuteOutgoing() {
-            return !this.isNewProduct && !this.editInProgress && !this.isEditProduct;
+            return !this.isNewProduct && !this.editInProgress && !this.isEditProduct  && this._canBasic;
         }
 
         private bool CanExecuteNewProduct() {

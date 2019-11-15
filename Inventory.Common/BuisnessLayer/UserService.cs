@@ -52,7 +52,6 @@ namespace Inventory.Common.BuisnessLayer {
                 this.AvailableUserActions.Add(UserAction.CheckOut);
 
             } else if(this.UserPermission.Name == "InventoryUserFullAccount") {
-                this.AvailableUserActions.Add(UserAction.Add);
                 this.AvailableUserActions.Add(UserAction.Edit);
                 this.AvailableUserActions.Add(UserAction.Remove);
                 this.AvailableUserActions.Add(UserAction.CheckIn);

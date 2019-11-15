@@ -60,7 +60,7 @@
                                           IsThreeState="False" CheckedStateContent="True" 
                                           UncheckedStateContent="False" ContentPlacement="Both"/>
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Obsolete?" Style="{StaticResource LayoutItemStyle}">
+                    <dxlc:LayoutItem Label="Outdated?" Style="{StaticResource LayoutItemStyle}">
                         <dxe:ToggleSwitch IsChecked="{Binding SelectedLot.Obsolete}" HorizontalAlignment="Center" 
                                           IsThreeState="False" CheckedStateContent="True" 
                                           UncheckedStateContent="False" ContentPlacement="Both"/>

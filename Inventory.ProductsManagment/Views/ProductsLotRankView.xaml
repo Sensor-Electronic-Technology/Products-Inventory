@@ -126,10 +126,10 @@
                                                       IsReadOnly="False" 
                                                       HorizontalContentAlignment="Left"/>
                                     </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem Label="Is Obsolete?" LabelPosition="Top" LabelHorizontalAlignment="Center">
+                                    <dxlc:LayoutItem Label="Is Outdated?" LabelPosition="Top" LabelHorizontalAlignment="Center">
                                         <dxe:ToggleSwitch IsChecked="{Binding SelectedProduct.Obsolete}" HorizontalAlignment="Center" 
-                                                          IsThreeState="False" CheckedStateContent="Is Obsolete" 
-                                                          UncheckedStateContent="Not Obsolete" ContentPlacement="Both"/>
+                                                          IsThreeState="False" CheckedStateContent="Is Outdated" 
+                                                          UncheckedStateContent="Not Outdated" ContentPlacement="Both"/>
                                     </dxlc:LayoutItem>
                                 </dxlc:LayoutGroup>
 
@@ -269,6 +269,7 @@
                                                     <dxb:BarButtonItem Content="Reserve Stock" 
                                                                    Glyph="{dx:DXImage Image=BOOrder_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.ReserveStockCommand}"/>
+                                                    
                                                     <dxb:BarButtonItem Content="Add To Outgoing" 
                                                                    Glyph="{dx:DXImage Image=Right_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.AddToOutgoingCommand}"/>
@@ -297,7 +298,7 @@
                                         <dxg:GridColumn FieldName="Power" AllowGrouping="True"/>
                                         <dxg:GridColumn FieldName="Voltage" AllowGrouping="True"/>
                                         <dxg:GridColumn FieldName="IsReserved" Header="Reserved"/>
-                                        <dxg:GridColumn FieldName="Obsolete"/>
+                                        <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
                                         <dxg:GridColumn FieldName="Lot.Quarantined" Header="Quarantined"/>
                                     </dxg:GridControl>
                                 </DockPanel>
@@ -305,7 +306,7 @@
                         </dxlc:LayoutControl>
 
                     </dx:DXTabItem>
-                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" TabIndex="2">
+                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" TabIndex="2" IsSelected="True">
                         <DockPanel>
                             <dxb:BarContainerControl DockPanel.Dock="Top">
                                 <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
@@ -331,6 +332,10 @@
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export CSV" 
                                                    Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
+                                    <dxb:BarItemSeparator/>
+                                    <dxb:BarButtonItem Content="View Rank in Table"
+                                                       Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                       Command="{Binding Path=View.DataContext.ViewRankInTableFromLotsCommand}"/>
                                 </dxb:ToolBarControl>
                             </dxb:BarContainerControl>
                             <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
@@ -352,6 +357,10 @@
                                             <dxb:BarButtonItem Content="Rename Lot" 
                                                                Glyph="{dx:DXImage Image=EditName_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.RenameLotCommand}"/>
+                                            <dxb:BarItemSeparator />
+                                            <dxb:BarButtonItem Content="View in Ranks Table"
+                                                               Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                               Command="{Binding Path=View.DataContext.ViewRankInTableFromLotsCommand}"/>
                                         </dxg:TableView.RowCellMenuCustomizations>
                                         <dxg:TableView.FormatConditions>
                                             <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
@@ -374,11 +383,7 @@
                                             <dxg:GridColumn FieldName="Voltage"/>
                                             <dxg:GridControl.View>
                                                 <dxg:TableView x:Name="detail" Style="{StaticResource TableViewStyleNoMasterNoGroup}">
-                                                    <dxg:TableView.RowCellMenuCustomizations>
-                                                        <dxb:BarButtonItem Content="View Rank in Table"
-                                                               Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
-                                                               Command="{Binding Path=View.DataContext.ViewRankInTableFromLotsCommand}"/>
-                                                    </dxg:TableView.RowCellMenuCustomizations>
+
                                                 </dxg:TableView>
                                             </dxg:GridControl.View>
                                         </dxg:GridControl>
@@ -390,7 +395,7 @@
                                 <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>
                                 <dxg:GridColumn FieldName="ManufacturedDate" Header="Manufactured Date"/>
                                 <dxg:GridColumn FieldName="Quarantined" />
-                                <dxg:GridColumn FieldName="Obsolete" />
+                                <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
                             </dxg:GridControl>
                         </DockPanel>
                     </dx:DXTabItem>

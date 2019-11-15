@@ -170,6 +170,10 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             this._context.SaveChanges();
         }
 
+        public bool ValidateUser(UserAction action) {
+            return this._userService.Validate(action);
+        }
+        
         public InventoryActionResponce CheckIn(IList<Lot> items,IList<string> rmas) {
             StringBuilder failedBuilder = new StringBuilder();
             StringBuilder successBuilder = new StringBuilder();
