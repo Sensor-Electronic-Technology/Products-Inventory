@@ -217,5 +217,12 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
 
+    <Style TargetType="{x:Type dxg:GridColumn}">
+        <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="{x:Type dxg:GridControlBand}">
+        <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
+    </Style>
 
 </ResourceDictionary>

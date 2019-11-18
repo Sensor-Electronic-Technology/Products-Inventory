@@ -87,7 +87,7 @@ namespace Inventory.Reporting.ViewModels {
                     var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
                     using (FileStream file = File.Create(path)) {
                         this.ExportServiceItemizedTransactions.Export(file, format, new DevExpress.XtraPrinting.XlsxExportOptionsEx() {
-                            ExportType = DevExpress.Export.ExportType.WYSIWYG
+                            //ExportType = DevExpress.Export.ExportType.WYSIWYG
                         });
                     }
                     Process.Start(path);

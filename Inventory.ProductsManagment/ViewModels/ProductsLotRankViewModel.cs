@@ -462,19 +462,21 @@ namespace Inventory.ProductsManagment.ViewModels {
         
         private async Task UndoTransactionHandler() {
             if (this.SelectedTransaction != null) {
-                
-                this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
-                var result = await this._dataManager.DeleteTransactionAsync(this._selectedTransaction);
-                if (result.Success) {
-                    DispatcherService.BeginInvoke(() => {
-                        this.MessageBoxService.ShowMessage(result.Message, "Info", MessageButton.OK, MessageIcon.Information);
-                    });
-                } else {
-                    DispatcherService.BeginInvoke(() => {
-                        this.MessageBoxService.ShowMessage(result.Message,"Error", MessageButton.OK, MessageIcon.Error);
-                    });
+                var responce=this.MessageBoxService.ShowMessage("WARNING: This cannot easily be undone. Continue? ", "Warning", MessageButton.YesNo, MessageIcon.Asterisk);
+                if (responce == MessageResult.Yes) {
+                    this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Publish();
+                    var result = await this._dataManager.DeleteTransactionAsync(this._selectedTransaction);
+                    if (result.Success) {
+                        DispatcherService.BeginInvoke(() => {
+                            this.MessageBoxService.ShowMessage(result.Message, "Info", MessageButton.OK, MessageIcon.Information);
+                        });
+                    } else {
+                        DispatcherService.BeginInvoke(() => {
+                            this.MessageBoxService.ShowMessage(result.Message, "Error", MessageButton.OK, MessageIcon.Error);
+                        });
+                    }
+                    this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
                 }
-                this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Publish();
             }
         }
 

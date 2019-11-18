@@ -30,7 +30,7 @@ namespace Inventory.ConsoleTesting {
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
             //DeleteProductNew("TUD89B1B");
-            // DeleteLotFix("16827P0028-7890072", "34907");
+            DeleteLot("191111DS-01", "036229");
 
             //FixTransaction(923, 500);
             //FixTransaction(934, 500);
@@ -39,8 +39,51 @@ namespace Inventory.ConsoleTesting {
 
             //RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
             //TestingSnapshot();
-            MovePartItems("CUN0GF1A", "CUNOGF1A");
+            //MovePartItems("CUN0GF1A", "CUNOGF1A");
             //MoveLot("18623P0090", "DI102120", "18623P0090", "DI102120", "CUNOGF1A");
+            //var context = new InventoryContext();
+            //IUserService userService = new UserService();
+            //DomainManager domainManager = new DomainManager();
+            //UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
+            //LogInService logInService = new LogInService(domainManager, userServiceProvider);
+            //var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
+            //userService = responce.Service;
+            //string lotN = "19H11VN23M";
+            //string po = "036176";
+            //var lotentity = context.Lots.Include(e=>e.Cost).Include(e=>e.ProductInstances.Select(i=>i.Transactions)).FirstOrDefault(x => x.SupplierPoNumber == po && x.LotNumber == lotN);
+            //var productEntity = context.InventoryItems.OfType<Product>().FirstOrDefault(x => x.Name == "UV1000-39");
+
+            //var defaultDistributor = context.Distributors.FirstOrDefault(x => x.Name == "SVC");
+            //var warehouse = context.Locations.FirstOrDefault(x => x.Name == "Products");
+            //if (lotentity != null && defaultDistributor != null && productEntity != null) {
+            //    var rank = lotentity.ProductInstances.FirstOrDefault(e => e.Name == "390nm~400nm");
+            //    if (rank != null) {
+            //        rank.Quantity = 0;
+            //        ProductTransaction transaction = new ProductTransaction();
+            //        transaction.InstanceId = rank.Id;
+            //        transaction.Quantity = 250000;
+            //        transaction.UnitCost = lotentity.Cost.Amount;
+            //        transaction.TotalCost = transaction.Quantity * transaction.UnitCost;
+            //        transaction.SessionId = userService.CurrentSession.Id;
+            //        transaction.Location = warehouse;
+            //        transaction.InventoryAction = InventoryAction.INCOMING;
+            //        transaction.TimeStamp = new DateTime(2019, 8, 10);
+            //        transaction.ProductName = productEntity.Name;
+            //        transaction.RMA_Number = "";
+            //        transaction.BuyerPoNumber = "";
+            //        transaction.IsReturning = false;
+            //        rank.Transactions.Add(transaction);
+            //        context.Transactions.Add(transaction);
+            //        context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+            //        context.SaveChanges();
+            //        Console.WriteLine("Should Be Done");
+            //    } else {
+            //        Console.WriteLine("Rank Not Found");
+            //    }
+            //} else {
+            //    Console.WriteLine("Lot,Dist, or Product not found");
+            //}
+            //Console.ReadKey();
         }
 
         private static void MovePartItems(string oldPart,string newpart) {
@@ -433,7 +476,6 @@ namespace Inventory.ConsoleTesting {
                     _context.Rates.Remove(lotEntity.Cost);
                     lotEntity.Cost = null;
                     lotEntity.Product = null;
-                    lot.ProductName = lot.Product.Name;
                     _context.Lots.Remove(lotEntity);
                     _context.SaveChanges();
                     Console.WriteLine("Lot Deleted, Press Any Key To Continue");
@@ -442,7 +484,6 @@ namespace Inventory.ConsoleTesting {
                     Console.WriteLine("Lot is Null");
                     Console.ReadKey();
                 }
-
             }
         }
 

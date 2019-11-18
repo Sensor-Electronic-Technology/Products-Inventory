@@ -83,8 +83,72 @@ namespace Inventory.Common.BuisnessLayer {
         public double QtyEnding { get; set; }
     }
 
+    public interface IProductAction {
+        double Quantity { get; set; }
+        double Cost { get; set; }
+    }
+
+    public class ProductIncoming : IProductAction {
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
+    }
+
+    public class Return : IProductAction {
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
+    }
+
+    public class Customer : IProductAction {
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
+    }
+
+    public class Internal : IProductAction {
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
+    }
+
+    public class QualityScrap : IProductAction {
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
+    }
+
+    public class ProductSnapshot {
+
+        public ProductSnapshot() {
+            this.ProductIncoming = new ProductIncoming();
+            this.Return = new Return();
+            this.QualityScrap = new QualityScrap();
+            this.Internal = new Internal();
+            this.Customer = new Customer();
+        }
+
+        public string ProductName { get; set; }
+
+        public double QtyStart { get; set; }
+        public double CostStart { get; set; }
+
+
+        //Incoming
+        public ProductIncoming ProductIncoming { get; set; }
+        public Return Return { get; set; }
+
+        //Outgoing
+        public QualityScrap QualityScrap { get; set; }
+        public Internal Internal { get; set; }
+        public Customer Customer { get; set; }
+
+        public double QtyEnd { get; set; }
+        public double CostEnd { get; set; }
+
+        public double QtyCurrent { get; set; }
+        public double CostCurrent { get; set; }
+    }
+
+
     public class ProductCostSnapshot {
         public string ProductName { get; set; }
+        
         public double QtyStart { get; set; }
         public double CostStart { get; set; }
         public double QtyIncoming { get; set; }
