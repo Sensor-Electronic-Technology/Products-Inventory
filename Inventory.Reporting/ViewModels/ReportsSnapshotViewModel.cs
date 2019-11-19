@@ -59,121 +59,6 @@ namespace Inventory.Reporting.ViewModels {
             set=>SetProperty(ref this._isLoading,value,"IsLoading");
         }
 
-        private async Task CollectSnapshotHandlerback() {
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
-
-            await this._context.InventoryItems.OfType<Product>()
-                .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions.Select(l=>l.Location))))
-                .Include(e => e.Lots.Select(i => i.Cost)).LoadAsync();
-
-            var products =await this._context.InventoryItems.OfType<Product>()
-                .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions.Select(l => l.Location))))
-                .Include(e => e.Lots.Select(i => i.Cost)).ToListAsync();
-
-            ObservableCollection<ProductCostSnapshot> temp = new ObservableCollection<ProductCostSnapshot>();
-            var dStart = new DateTime(this._start.Year, this._start.Month, this._start.Day, 0, 0, 0, DateTimeKind.Local);
-            var dStop = new DateTime(this._stop.Year, this._stop.Month, this._stop.Day, 23, 59, 59, DateTimeKind.Local);
-            await Task.Run(()=>{ 
-                foreach (var product in products) {
-                    var now = DateTime.Now;
-
-                    var incomingTransactions = from instance in product.Instances
-                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
-                                               where (transaction.TimeStamp >= dStart && transaction.InventoryAction == InventoryAction.INCOMING)
-                                               select transaction;
-
-                    var returningTransactions = from instance in product.Instances
-                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
-                                               where (transaction.TimeStamp >= dStart && transaction.InventoryAction == InventoryAction.RETURNING)
-                                               select transaction;
-
-                    var outgoingTransactions = from instance in product.Instances
-                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
-                                               where (transaction.TimeStamp >= dStart && transaction.InventoryAction == InventoryAction.OUTGOING)
-                                               select transaction;
-
-                    var returningQtyTotal = returningTransactions.Sum(e => e.Quantity);
-                    var returningCostTotal = returningTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var returningQtyRange = returningTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var returningCostRange = returningTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    //Incoming
-
-                    var incomingQtyTotal = incomingTransactions.Sum(e => e.Quantity);
-                    var incomingCostTotal = incomingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    //Incoming In Range
-
-                    var incomingQtyRange = incomingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var incomingCostRange = incomingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    //OutGoing
-
-                    var consumerQty = outgoingTransactions.Where(e => e.Location.Name == "Consumer").Sum(e=>e.Quantity);
-                    var consumerCost = outgoingTransactions.Where(e => e.Location.Name == "Consumer").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var internalQty = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => e.Quantity);
-                    var internalCost = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var qualityScrapQty = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => e.Quantity);
-                    var qualityScrapCost= outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    //Outgoing In Range
-
-                    var consumerQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Consumer" && e.TimeStamp<=dStop).Sum(e => e.Quantity);
-                    var consumerCostRange = outgoingTransactions.Where(e => e.Location.Name == "Consumer" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var internalQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Internal" && e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var internalCostRange = outgoingTransactions.Where(e => e.Location.Name == "Internal" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var qualityScrapQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap" && e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var qualityScrapCostRange = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-
-
-
-                    var outgoingQtyTotal = outgoingTransactions.Sum(e => e.Quantity);
-                    var outgingCostTotal = outgoingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-                    var outgoingQtyRange = outgoingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var outgoingCostRange = outgoingTransactions.Where(e => e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
-
-
-                    var current = product.Instances.Sum(e => e.Quantity);
-                    var currentCost = product.Instances.OfType<ProductInstance>().Sum(e => {
-                        if (e.Lot.Cost != null) {
-                            return e.Quantity * e.Lot.Cost.Amount;
-                        } else {
-                            return 0;
-                        }
-                    });
-                    var starting = (current - incomingQtyTotal) + outgoingQtyTotal;
-                    var startingCost = (currentCost - incomingCostTotal) + outgingCostTotal;
-                    var ending = (starting + incomingQtyRange) - outgoingQtyRange;
-                    var endingCost = (startingCost + incomingCostRange) - outgoingCostRange;
-
-                    ProductCostSnapshot snapShot = new ProductCostSnapshot();
-                    snapShot.ProductName = product.Name;
-                    snapShot.QtyStart = starting;
-                    snapShot.CostStart = startingCost;
-                    snapShot.QtyEnd = ending;
-                    snapShot.CostEnd = endingCost;
-                    snapShot.QtyCurrent = current;
-                    snapShot.CostCurrent = currentCost;
-                    snapShot.QtyIncoming = incomingQtyRange;
-                    snapShot.CostIncoming = incomingCostRange;
-                    snapShot.QtyOutgoing = outgoingCostRange;
-                    snapShot.CostOutgoing = outgoingQtyRange;
-                    temp.Add(snapShot);
-                }
-            });
-
-            //this.ProductSnapshot = temp;
-            //RaisePropertyChanged("ProductSnapshot");
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
-        }
-
         private async Task CollectSnapshotHandler() {
             this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
             var dStart = new DateTime(this._start.Year, this._start.Month, this._start.Day, 0, 0, 0, DateTimeKind.Local);
@@ -308,9 +193,7 @@ namespace Inventory.Reporting.ViewModels {
                 this.DispatcherService.BeginInvoke(() => {
                     var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
                     using (FileStream file = File.Create(path)) {
-                        this.ExportServiceTransactions.Export(file, format, new DevExpress.XtraPrinting.XlsxExportOptionsEx() {
-                            //ExportType = DevExpress.Export.ExportType.WYSIWYG
-                        });
+                        this.ExportServiceTransactions.Export(file, format);
                     }
                     Process.Start(path);
                 });

@@ -23,19 +23,32 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <dx:LoadingDecorator>
-        <dxdo:LayoutPanel ShowCloseButton="False" ShowPinButton="False" ShowCollapseButton="False" ShowControlBox="False">
-            <dxlc:DockLayoutControl>
-                <dxlc:LayoutControl  dxlc:DockLayoutControl.Dock="Left" dxlc:DockLayoutControl.AllowHorizontalSizing="True" UseContentMinSize="True">
-                    <ContentControl  prism:RegionManager.RegionName="{x:Static common:Regions.ProductSelectorRegion}"/>
+        <!--<dxdo:LayoutPanel ShowCloseButton="False" ShowPinButton="False" ShowCollapseButton="False" ShowControlBox="False">
+            <dxdo:LayoutGroup>
+                <dxdo:LayoutPanel/>
+                <dxdo:LayoutPanel/>
+                <dxdo:LayoutPanel/>
+            </dxdo:LayoutGroup>
+            --><!--<dxlc:DockLayoutControl>
+                <dxlc:LayoutControl  dxlc:DockLayoutControl.Dock="Left" 
+                                     dxlc:DockLayoutControl.AllowHorizontalSizing="True" 
+                                     prism:RegionManager.RegionName="{x:Static common:Regions.ProductSelectorRegion}"
+                                     >
+                    --><!--<ContentControl  prism:RegionManager.RegionName="{x:Static common:Regions.ProductSelectorRegion}"/>--><!--
                 </dxlc:LayoutControl>
-                <dxlc:LayoutControl dxlc:DockLayoutControl.Dock="Client" dxlc:DockLayoutControl.AllowHorizontalSizing="True" UseContentMinSize="True">
-                    <ContentControl  prism:RegionManager.RegionName="{x:Static common:Regions.ProductLotRankRegion}"/>
+                <dxlc:LayoutControl dxlc:DockLayoutControl.Dock="Client" dxlc:DockLayoutControl.AllowHorizontalSizing="True" prism:RegionManager.RegionName="{x:Static common:Regions.ProductLotRankRegion}">
+                    --><!--<ContentControl prism:RegionManager.RegionName="{x:Static common:Regions.ProductLotRankRegion}" />--><!--
                 </dxlc:LayoutControl>
-                <dxlc:LayoutControl dxlc:DockLayoutControl.Dock="Right" dxlc:DockLayoutControl.AllowHorizontalSizing="True" UseContentMinSize="True">
-                    <ContentControl  prism:RegionManager.RegionName="{x:Static common:Regions.ProductDetailsRegion}"/>
+                <dxlc:LayoutControl dxlc:DockLayoutControl.Dock="Right" dxlc:DockLayoutControl.AllowHorizontalSizing="True" prism:RegionManager.RegionName="{x:Static common:Regions.ProductDetailsRegion}">
+                    --><!--<ContentControl  prism:RegionManager.RegionName="{x:Static common:Regions.ProductDetailsRegion}"/>--><!--
                 </dxlc:LayoutControl>
-            </dxlc:DockLayoutControl>
-        </dxdo:LayoutPanel>
+            </dxlc:DockLayoutControl>--><!--
+        </dxdo:LayoutPanel>-->
+        <dxdo:LayoutGroup>
+            <dxdo:LayoutPanel prism:RegionManager.RegionName="{x:Static common:Regions.ProductSelectorRegion}"></dxdo:LayoutPanel>
+            <dxdo:LayoutPanel></dxdo:LayoutPanel>
+            <dxdo:LayoutPanel></dxdo:LayoutPanel>
+        </dxdo:LayoutGroup>
     </dx:LoadingDecorator>
 </UserControl>
 

@@ -31,7 +31,10 @@ namespace Inventory.ProductsManagment.ViewModels {
         public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductRankLotDispatcher"); } }
         public IDialogService RenameLotDialog { get => ServiceContainer.GetService<IDialogService>("RenameLotDialog"); }
         public IDialogService ReturnPartialDialog { get => ServiceContainer.GetService<IDialogService>("ReturnPartialDialog"); }
-        
+        public IDialogService FileNameDialog { get { return ServiceContainer.GetService<IDialogService>("FileNameDialog"); } }
+        public IOpenFileDialogService OpenFileDialogService { get { return ServiceContainer.GetService<IOpenFileDialogService>("OpenFileDialog"); } }
+        public ISaveFileDialogService SaveFileDialogService { get { return ServiceContainer.GetService<ISaveFileDialogService>("SaveFileDialog"); } }
+
 
         public IExportService CostSummaryExportServive { get => ServiceContainer.GetService<IExportService>("CostSummaryExportService"); }
         public IExportService RankExportService { get => ServiceContainer.GetService<IExportService>("RankExportService"); }
@@ -56,6 +59,8 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ObservableCollection<Warehouse> _warehouses = new ObservableCollection<Warehouse>();
         private ObservableCollection<ProductCostRow> _productCostSummary = new ObservableCollection<ProductCostRow>();
         private ObservableCollection<ProductReservation> _reservations = new ObservableCollection<ProductReservation>();
+        private ObservableCollection<Attachment> _attachments = new ObservableCollection<Attachment>();
+        private Attachment _selectedAttachment = new Attachment();
 
 
         private int _selectedTabIndex = 0;
@@ -64,6 +69,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private bool isEditProduct = false;
         private bool editInProgress = false;
         private Visibility _visibility;
+        private FileNameViewModel _fileNameViewModel = null;
 
         public PrismCommands.DelegateCommand CheckInCommand { get; private set; }
         public PrismCommands.DelegateCommand CheckOutCommand { get; private set; }
@@ -72,6 +78,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand RenameLotCommand { get; set; }
         public PrismCommands.DelegateCommand ViewRankCommand { get; set; }
         public PrismCommands.DelegateCommand ViewRankInTableFromLotsCommand { get; set; }
+
+        public PrismCommands.DelegateCommand NewAttachmentCommand { get; private set; }
+        public PrismCommands.DelegateCommand DeleteAttachmentCommand { get; private set; }
+        public PrismCommands.DelegateCommand DownloadFileCommand { get; private set; }
+        public PrismCommands.DelegateCommand OpenFileCommand { get; private set; }
 
         public AsyncCommand<ExportFormat> ExportTransactionsCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportLotsCommand { get; private set; }
@@ -91,12 +102,6 @@ namespace Inventory.ProductsManagment.ViewModels {
         public ICommand ViewRankDetailsCommand { get; private set; }
         public ICommand ViewLotDetailsCommand { get; private set; }
         public ICommand AddToOutgoingCommand { get; private set; }
-
-        //Attachment Commands
-        public PrismCommands.DelegateCommand NewAttachmentCommand { get; private set; }
-        public PrismCommands.DelegateCommand<object> DeleteAttachmentCommand { get; private set; }
-        public PrismCommands.DelegateCommand<object> DownloadFileCommand { get; private set; }
-        public PrismCommands.DelegateCommand<object> OpenFileCommand { get; private set; }
 
         public ProductsLotRankViewModel(ProductDataManager dataManager,IEventAggregator eventAggregator,IRegionManager regionManager) {
             this._dataManager = dataManager;
@@ -127,6 +132,11 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.ViewRankCommand = new PrismCommands.DelegateCommand(this.ViewRankHandler);
             this.ViewRankInTableFromLotsCommand = new PrismCommands.DelegateCommand(this.ViewRankInTableFromLotsHandler);
 
+            this.NewAttachmentCommand = new PrismCommands.DelegateCommand(this.NewAttachmentHandler);
+            this.DeleteAttachmentCommand = new PrismCommands.DelegateCommand(this.DeleteAttachmentHandler);
+            this.OpenFileCommand = new PrismCommands.DelegateCommand(this.OpenFileHandler);
+            this.DownloadFileCommand=new PrismCommands.DelegateCommand(this.DownloadFileHandler);
+
             this._eventAggregator.GetEvent<StartOutgoingListEvent>().Subscribe(() => this.outGoingInProgress = true);
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
             this._eventAggregator.GetEvent<CancelOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
@@ -134,15 +144,36 @@ namespace Inventory.ProductsManagment.ViewModels {
 
             this._canAdmin = this._dataManager.ValidateUser(UserAction.Remove);
             this._canBasic = this._dataManager.ValidateUser(UserAction.CheckIn);
+
+            this.Filter = Constants.FileFilters;
+            this.FilterIndex = 12;
+            this.Title = "Save File As";
+            this.DefaultExt = "*.*";
+            this.OverwritePrompt = true;
         }
 
         public override bool KeepAlive {
             get => false;
         }
 
+        public string Filter { get; set; }
+        public int FilterIndex { get; set; }
+        public string Title { get; set; }
+        public bool DialogResult { get; protected set; }
+        public string ResultFileName { get; protected set; }
+        public string FileBody { get; set; }
+        public string DefaultExt { get; set; }
+        public string DefaultFileName { get; set; }
+        public bool OverwritePrompt { get; set; }
+
         public ProductInstance SelectedRank {
             get => this._selectedRank;
             set => SetProperty(ref this._selectedRank, value, "SelectedRank");
+        }
+
+        public Attachment SelectedAttachment { 
+            get => this._selectedAttachment; 
+            set => SetProperty(ref this._selectedAttachment,value, "SelectedAttachment");
         }
 
         public ProductReservation SelectedReservation {
@@ -200,6 +231,11 @@ namespace Inventory.ProductsManagment.ViewModels {
             set => SetProperty(ref this._productTypes, value, "ProductTypes");
         }
 
+        public ObservableCollection<Attachment> Attachments { 
+            get => this._attachments; 
+            set => SetProperty(ref this._attachments,value,"Attachments");
+        }
+
         public ObservableCollection<Warehouse> Warehouses {
             get => this._warehouses;
             set => SetProperty(ref this._warehouses, value,"Warehouses");
@@ -224,6 +260,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             get => this._visibility;
             set => SetProperty(ref this._visibility, value, "Visibility");
         }
+
 
         private void OutgoingListDoneHandler() {
             this.outGoingInProgress = false;
@@ -567,20 +604,142 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         private async Task ExportCostSummaryHandler(ExportFormat format) {
             await Task.Run(() => { 
-            this.DispatcherService.BeginInvoke(() => {
-                var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
-                using(FileStream file = File.Create(path)) {
-                    this.CostSummaryExportServive.Export(file, format);
+                this.DispatcherService.BeginInvoke(() => {
+                    var path = Path.ChangeExtension(Path.GetTempFileName(), format.ToString().ToLower());
+                    using(FileStream file = File.Create(path)) {
+                        this.CostSummaryExportServive.Export(file, format);
+                    }
+                    Process.Start(path);
+                });
+            });
+        }
+
+        private void NewAttachmentHandler() {
+            this.OpenFileDialogService.Filter = Constants.FileFilters;
+            this.OpenFileDialogService.FilterIndex = this.FilterIndex;
+            this.OpenFileDialogService.Title = "Select File To Uplaod";
+            var resp = this.OpenFileDialogService.ShowDialog();
+            if (resp) {
+                var file = this.OpenFileDialogService.File;
+                //this.MessageBoxService.ShowMessage(file.Name);
+                if (File.Exists(file.GetFullName())) {
+                    if (this.ShowAttachmentDialog(file.Name)) {
+                        if (this._fileNameViewModel != null) {
+                            string dest = Path.Combine(Constants.DestinationDirectory, this._fileNameViewModel.FileName + Path.GetExtension(file.GetFullName()));
+                            if (!File.Exists(dest)) {
+                                bool success = true;
+                                try {
+                                    File.Copy(file.GetFullName(), dest);
+                                } catch {
+                                    this.MessageBoxService.ShowMessage("Copy File Error");
+                                    success = false;
+                                }
+                                if (success) {
+                                    Attachment attachment = new Attachment(DateTime.Now, this._fileNameViewModel.FileName, "");
+                                    attachment.Description = this._fileNameViewModel.Description;
+                                    attachment.InventoryItemId = this.SelectedProduct.Id;
+                                    attachment.FileReference = dest;
+                                    var temp = this._dataManager.UploadProductAttachment(attachment);
+                                    if (temp.Success) {
+                                        this.MessageBoxService.ShowMessage(temp.Message, "Success", MessageButton.OK, MessageIcon.Information);
+                                    } else {
+                                        this.MessageBoxService.ShowMessage(temp.Message, "Failed", MessageButton.OK, MessageIcon.Error);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                Process.Start(path);
-            });
-            });
+                this.ReloadAsync();
+            }            
+        }
+
+        private void DeleteAttachmentHandler() {
+            if (this.SelectedAttachment != null) {
+                string message = "You are about to delete attachment:" + this.SelectedAttachment.Name +
+                    Environment.NewLine + "Continue?";
+                var result = this.MessageBoxService.ShowMessage(message, "Delete", MessageButton.YesNo, MessageIcon.Asterisk);
+                if (result == MessageResult.Yes) {
+
+                    if (File.Exists(this.SelectedAttachment.FileReference)) {
+                        var success = true;
+                        try {
+                            File.Delete(this.SelectedAttachment.FileReference);
+                        } catch {
+                            this.MessageBoxService.ShowMessage("Failed to Delete Attachment", "Error",MessageButton.OK,MessageIcon.Error);
+                            success = false;
+                        }
+                        if (success) {
+                            var responce=this._dataManager.DeleteProductAttachment(this.SelectedAttachment);
+                            if (responce.Success) {
+                                this.MessageBoxService.ShowMessage(responce.Message, "Success", MessageButton.OK, MessageIcon.Information);
+                            } else {
+                                this.MessageBoxService.ShowMessage("", "Error", MessageButton.OK, MessageIcon.Error);
+                            }
+                        }
+                    }
+                    this.ReloadAsync();
+                }
+            }
+        }
+
+        private void OpenFileHandler() {
+            if (this.SelectedAttachment != null) {
+                if (File.Exists(this.SelectedAttachment.FileReference)) {
+                    Process.Start(this.SelectedAttachment.FileReference);
+                }
+            }
+        }
+
+        private void DownloadFileHandler() {
+            if (this.SelectedAttachment != null) {
+                if (File.Exists(this.SelectedAttachment.FileReference)) {
+                    string file = this.SelectedAttachment.FileReference;
+                    string ext = Path.GetExtension(file);
+                    this.SaveFileDialogService.DefaultExt = ext;
+                    this.SaveFileDialogService.DefaultFileName = Path.GetFileName(file);
+                    this.SaveFileDialogService.Filter = this.Filter;
+                    this.SaveFileDialogService.FilterIndex = this.FilterIndex;
+                    this.DialogResult = SaveFileDialogService.ShowDialog();
+                    if (this.DialogResult) {
+                        File.Copy(file, this.SaveFileDialogService.File.GetFullName());
+                    }
+                } else {
+                    this.MessageBoxService.ShowMessage("File doesn't exist??");
+                }
+            } else {
+                this.MessageBoxService.ShowMessage("Selection is null??");
+            }
+        }
+
+        private bool ShowAttachmentDialog(string currentFile) {
+            if (this._fileNameViewModel == null) {
+                this._fileNameViewModel = new FileNameViewModel(currentFile);
+            }
+            this._fileNameViewModel.FileName = currentFile;
+            this._fileNameViewModel.Description = "";
+
+            UICommand saveCommand = new UICommand() {
+                Caption = "Save Attachment",
+                IsCancel = false,
+                IsDefault = true,
+            };
+
+            UICommand cancelCommand = new UICommand() {
+                Id = MessageBoxResult.Cancel,
+                Caption = "Cancel",
+                IsCancel = true,
+                IsDefault = false,
+            };
+            UICommand result = FileNameDialog.ShowDialog(
+            dialogCommands: new List<UICommand>() { saveCommand, cancelCommand },
+            title: "New Attachment Dialog",
+            viewModel: this._fileNameViewModel);
+            return result == saveCommand;
         }
 
         private async void ReloadAsync() {
-            //await this._dataManager.LotProvider.LoadDataAsync();
-            //await this._dataManager.RankProvider.LoadDataAsync();
-            //Load Ranks
+
             await Task.Run(() => {
                 this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
             });
@@ -618,129 +777,16 @@ namespace Inventory.ProductsManagment.ViewModels {
                 }
             });
 
-            //Load Reservations
-            await Task.Run(() => {
-                var reservations = this._dataManager.ReservationProvider.GetEntityList(e => e.ProductName == this.SelectedProduct.Name);
-                ObservableCollection<ProductReservation> temp = new ObservableCollection<ProductReservation>();
-                temp.AddRange(reservations);
-                this.Reservations = temp;
-            });
-        }
+            var attachments=(await this._dataManager.AttachmentProvider.GetEntityListAsync()).ToList();
+            ObservableCollection<Attachment> temp = new ObservableCollection<Attachment>();
+            temp.AddRange(attachments);
+            this.Attachments = temp;
 
-        private async Task ReloadAsyncTask() {
-
-            //Load Ranks
-            await Task.Run(() => {
-                this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
-            });
-
-            //load Cost Summary/Lots
-            await Task.Run(() => {
-                this.Lots = this._dataManager.LotProvider.GetEntityList(x => x.ProductId == this.SelectedProduct.Id).ToList();
-                ObservableCollection<ProductCostRow> data = new ObservableCollection<ProductCostRow>();
-                this.Lots.ForEach(lot => {
-                    if(lot.Cost != null) {
-                        if(lot.Cost.Amount > 0) {
-                            lot.ProductInstances.ToList().ForEach(rank => {
-                                if(rank.Quantity > 0) {
-                                    data.Add(new ProductCostRow(rank, lot.Cost.Amount));
-                                }
-                            });
-                        }
-                    }
-                });
-                this.ProductCostSummary = data;
-            });
-
-            //Load Transactions
-            await Task.Run(() => {
-                this.Transactions = (from rank in this.Ranks
-                                     from transaction in rank.Transactions
-                                     select (ProductTransaction)transaction).ToList();
-            });
-
-            //Load ProductTypes
-            await Task.Run(() => {
-                this.ProductTypes = this._dataManager.CategoryProvider.GetEntityList().OrderBy(e => e.Name).ToList();
-                if(this.SelectedProduct.ProductType != null) {
-                    this.SelectedProductType = this.ProductTypes.FirstOrDefault(x => x.Name == this.SelectedProduct.ProductType.Name);
-                }
-            });
-
-            await Task.Run(() => {
-                var temp= this._dataManager.WarehouseProvider.GetEntityList().OrderBy(e => e.Name).ToList();
-                if (this.SelectedProduct.Warehouse != null) {
-                    this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
-                }
-            });
-
-            //Load Reservations
-            await Task.Run(() => {
-                var reservations = this._dataManager.ReservationProvider.GetEntityList(e => e.ProductName == this.SelectedProduct.Name);
-                ObservableCollection<ProductReservation> temp = new ObservableCollection<ProductReservation>();
-                temp.AddRange(reservations);
-                this.Reservations = temp;
-            });
-        }
-
-        private async void LoadDataAsync() {
-            //Load Ranks
-            await Task.Run(() => {
-                this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
-            });
-
-            //load Cost Summary/Lots
-            await Task.Run(() => {
-                this.Lots = this._dataManager.LotProvider.GetEntityList(x => x.ProductId == this.SelectedProduct.Id).ToList();
-                ObservableCollection<ProductCostRow> data = new ObservableCollection<ProductCostRow>();
-                this.Lots.ForEach(lot => {
-                    if(lot.Cost!=null) {
-                        if(lot.Cost.Amount > 0) {
-                            lot.ProductInstances.ToList().ForEach(rank => {
-                                if(rank.Quantity > 0) {
-                                    data.Add(new ProductCostRow(rank, lot.Cost.Amount));
-                                }
-                            });
-                        }
-                    }
-                });
-                this.ProductCostSummary = data;
-            });
-
-            //Load Transactions
-            await Task.Run(() => {
-                this.Transactions = (from rank in this.Ranks
-                                     from transaction in rank.Transactions
-                                     select (ProductTransaction)transaction).ToList();
-            });
-
-            //Load ProductTypes
-            await Task.Run(() => {
-                this.ProductTypes = this._dataManager.CategoryProvider.GetEntityList().OrderBy(e => e.Name).ToList();
-                if(this.SelectedProduct.ProductType != null) {
-                    this.SelectedProductType = this.ProductTypes.FirstOrDefault(x => x.Name == this.SelectedProduct.ProductType.Name);
-                }
-            });
-           
-            //Load Reservations
-            await Task.Run(() => {
-                var reservations = this._dataManager.ReservationProvider.GetEntityList(e => e.ProductName == this.SelectedProduct.Name);
-                ObservableCollection<ProductReservation> temp = new ObservableCollection<ProductReservation>();
-                temp.AddRange(reservations);
-                this.Reservations = temp;
-            }).ContinueWith(b=> {
-                this.Warehouses = new ObservableCollection<Warehouse>(this._dataManager.WarehouseProvider.GetEntityList().OrderBy(e => e.Name).ToList());
-                if (this.SelectedProduct.Warehouse != null) {
-                    this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
-                }
-            });
         }
 
         private void Load() {
             //Load Ranks
             this.Ranks = this._dataManager.RankProvider.GetEntityList(x => x.InventoryItemId == this.SelectedProduct.Id).ToList();
-
-
             //load Cost Summary/Lots
                 this.Lots = this._dataManager.LotProvider.GetEntityList(x => x.ProductId == this.SelectedProduct.Id).ToList();
                 ObservableCollection<ProductCostRow> data = new ObservableCollection<ProductCostRow>();
@@ -756,8 +802,6 @@ namespace Inventory.ProductsManagment.ViewModels {
                     }
                 });
                 this.ProductCostSummary = data;
-
-
             //Load Transactions
                 this.Transactions = (from rank in this.Ranks
                                      from transaction in rank.Transactions
@@ -781,6 +825,11 @@ namespace Inventory.ProductsManagment.ViewModels {
             if (this.SelectedProduct.Warehouse != null) {
                 this.SelectedWareHouse = this.Warehouses.FirstOrDefault(x => x.Name == this.SelectedProduct.Warehouse.Name);
             }
+
+            var attachments = this._dataManager.AttachmentProvider.GetEntityList().ToList();
+            ObservableCollection<Attachment> tempAttach = new ObservableCollection<Attachment>();
+            tempAttach.AddRange(attachments);
+            this.Attachments = tempAttach;
 
         }
 
@@ -828,7 +877,6 @@ namespace Inventory.ProductsManagment.ViewModels {
                 this.outGoingInProgress = isOngoing;
                 this.isEditProduct = isEdit;
                 this.Visibility = (isNew || isEdit) ? Visibility.Visible : Visibility.Collapsed;
-                //this.LoadDataAsync();
                 this.Load();
             }
         }

@@ -28,7 +28,7 @@
         <dxmvvm:DispatcherService x:Name="ProductSelectorDispatcher" />
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
-        <dxlc:GroupBox dxlc:LayoutControl.AllowHorizontalSizing="True">
+        <dxlc:GroupBox >
             <dxlc:GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="Products" HorizontalAlignment="Center" FontSize="16"/>

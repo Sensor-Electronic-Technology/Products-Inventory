@@ -27,7 +27,7 @@
         <dx:DXMessageBoxService x:Name="RankDetailsNotifications"/>
         <dxmvvm:DispatcherService x:Name="RankDispatcher"/>
     </dxmvvm:Interaction.Behaviors>
-    <dxlc:GroupBox dxlc:LayoutControl.AllowHorizontalSizing="True">
+    <dxlc:GroupBox >
         <dxlc:GroupBox.HeaderTemplate>
             <DataTemplate>
                 <TextBlock Text="Rank Details" HorizontalAlignment="Center" FontSize="16"/>

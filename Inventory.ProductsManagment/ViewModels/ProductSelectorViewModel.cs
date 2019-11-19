@@ -214,28 +214,13 @@ namespace Inventory.ProductsManagment.ViewModels {
         private async Task RefreshHandler() {
             await this._dataManager.UpdateProductTotalsAsync();
             await this._dataManager.ProductProvider.LoadDataAsync();
-            await Task.Run(() => {
-                lock(SyncRoot) {
-                    if(this.GridUpdateService != null) {
-                        this.GridUpdateService.BeginUpdate();
-                        this.Products = this._dataManager.ProductProvider.GetEntityList().ToList();
-                        this.GridUpdateService.EndUpdate();
-                    }
-                }
-            });
+            this.Products =(await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
         }
 
         private async void PopulateAsync() {
             await this._dataManager.ProductProvider.LoadDataAsync();
-            await Task.Run(() => {
-                lock(SyncRoot) {
-                    if(this.GridUpdateService != null) {
-                        this.GridUpdateService.BeginUpdate();
-                        this.Products = this._dataManager.ProductProvider.GetEntityList().ToList();
-                        this.GridUpdateService.EndUpdate();
-                    }
-                }
-            });
+            await this._dataManager.UpdateProductTotalsAsync();
+            this.Products = (await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
         }
     }
 }

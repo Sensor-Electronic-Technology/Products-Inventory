@@ -63,6 +63,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\FileNameViewModel.cs" />
     <Compile Include="ViewModels\IncomingInstructionsViewModel.cs" />
     <Compile Include="ViewModels\IncomingProductFormViewModel.cs" />
     <Compile Include="ViewModels\IncomingProductListViewModel.cs" />
@@ -75,6 +76,9 @@
     <Compile Include="ViewModels\RankDetailsViewModel.cs" />
     <Compile Include="ViewModels\RenameLotViewModel.cs" />
     <Compile Include="ViewModels\ReturnPartialViewModel.cs" />
+    <Compile Include="Views\FileNameView.xaml.cs">
+      <DependentUpon>FileNameView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\IncomingInstructionsView.xaml.cs">
       <DependentUpon>IncomingInstructionsView.xaml</DependentUpon>
     </Compile>
@@ -120,6 +124,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\FileNameView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\IncomingInstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

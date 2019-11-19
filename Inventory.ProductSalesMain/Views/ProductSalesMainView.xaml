@@ -92,7 +92,7 @@
                                         GroupBorderStyle="GroupBox" 
                                         AllowFloat="True">
                         <dxdo:TabbedGroup.ItemStyle>
-                            <Style TargetType="{x:Type dxdo:LayoutPanel}">
+                            <Style TargetType="{x:Type dxdo:LayoutGroup}">
                                 <Setter Property="Caption" Value="{Binding Content.PanelCaption, RelativeSource={RelativeSource Self}}"/>
                                 <Setter Property="IsActive" Value="{Binding Content.IsActive,RelativeSource={RelativeSource Self},Mode=TwoWay}"/>
                                 <Setter Property="ClosingBehavior" Value="ImmediatelyRemove"/>

@@ -45,8 +45,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
         private IEntityDataProvider<Consumer> _consumerProvider;
         private IEntityDataProvider<Warehouse> _warehouseProvider;
 
-
-
+        private IEntityDataProvider<Attachment> _attachmentProvider;
 
         private IEntityDataProvider<ProductTransaction> _productTransactionProvider;
 
@@ -70,6 +69,8 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             this._warehouseProvider = new WarehouseProvider(this._context, this._userService);
 
             this._productTransactionProvider = new ProductTransactionProvider(this._context, this._userService);
+
+            this._attachmentProvider = new AttachmentProvider(this._context, this._userService);
         }
 
         public IEntityDataProvider<Product> ProductProvider {
@@ -120,6 +121,11 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             get => this._reservationProvider;
         }
 
+        public IEntityDataProvider<Attachment> AttachmentProvider { 
+            get => this._attachmentProvider; 
+            set => this._attachmentProvider = value; 
+        }
+
         public async Task LoadAsync() {
             await this._productInstanceProvider.LoadDataAsync();
             await this._lotProvider.LoadDataAsync();
@@ -127,6 +133,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             await this._consumerProvider.LoadDataAsync();
             await this._warehouseProvider.LoadDataAsync();
             await this._productTransactionProvider.LoadDataAsync();
+            await this._attachmentProvider.LoadDataAsync();
         }
 
         public void Load() {
@@ -136,6 +143,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             this._consumerProvider.LoadData();
             this._warehouseProvider.LoadData();
             this._productTransactionProvider.LoadData();
+            this._attachmentProvider.LoadData();
         }
 
         public async Task<IList<ReportDataRow>> CollectReportDataAsync(DateTime start,DateTime stop) {
@@ -174,6 +182,62 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             return this._userService.Validate(action);
         }
         
+        public InventoryActionResponce UploadProductAttachment(Attachment attachment) {
+            var product = this._context.InventoryItems.OfType<Product>().Include(e => e.Attachments).FirstOrDefault(e => e.Id ==attachment.InventoryItemId);
+            if (product != null) {
+                product.Attachments.Add(attachment);
+                this._context.Attachments.Add(attachment);
+                this._context.Entry<Product>(product).State = EntityState.Modified;
+                try {
+                    this._context.SaveChanges();
+                    return new InventoryActionResponce(true, "File Saved!");
+                } catch {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error Saving File");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: Product Not Found");
+            }
+
+        }
+
+        public InventoryActionResponce DeleteProductAttachment(Attachment attachment) {
+            var product = this._context.InventoryItems.OfType<Product>().Include(e => e.Attachments).FirstOrDefault(e => e.Id == attachment.InventoryItemId);
+            var attachEntity = product.Attachments.FirstOrDefault(e => e.Id == attachment.Id);
+            if (product != null && attachEntity!=null) {
+                product.Attachments.Remove(attachEntity);
+                this._context.Attachments.Remove(attachEntity);
+                this._context.Entry<Product>(product).State = EntityState.Modified;
+                try {
+                    this._context.SaveChanges();
+                    return new InventoryActionResponce(true, "File Deleted!");
+                } catch {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error: Failed to Delete File");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: Product and/or Attachment Not Found");
+            }
+        }
+
+        public InventoryActionResponce UpdateProductAttachment(Attachment attachment) {
+            var attachEntity = this._context.Attachments.FirstOrDefault(e => e.Id == attachment.Id);
+            if (attachEntity != null) {
+                this._context.Entry<Attachment>(attachEntity).State = EntityState.Modified;
+                try {
+                    this._context.SaveChanges();
+                    return new InventoryActionResponce(true, "Attachment Updated!");
+                } catch {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error:  Update Failed");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: Attachment Not Found");
+            }
+        }
+
+
+
         public InventoryActionResponce CheckIn(IList<Lot> items,IList<string> rmas) {
             StringBuilder failedBuilder = new StringBuilder();
             StringBuilder successBuilder = new StringBuilder();

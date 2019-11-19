@@ -216,6 +216,7 @@
     <Compile Include="DataLayer\EntityDataManagers\ManufacturersDataManager.cs" />
     <Compile Include="DataLayer\EntityDataManagers\IEntityDataManager.cs" />
     <Compile Include="DataLayer\EntityDataManagers\UserManager.cs" />
+    <Compile Include="DataLayer\EntityOperations\AttachmentOperations.cs" />
     <Compile Include="DataLayer\EntityOperations\CategoryOperations.cs" />
     <Compile Include="DataLayer\EntityOperations\DistributorOperations.cs" />
     <Compile Include="DataLayer\EntityOperations\DomainUserDataOperations.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="DataLayer\EntityOperations\ReservationOperations.cs" />
     <Compile Include="DataLayer\EntityOperations\UserEntityOperations.cs" />
     <Compile Include="DataLayer\InventoryTriggers.cs" />
+    <Compile Include="DataLayer\Providers\AttachmentProvider.cs" />
     <Compile Include="DataLayer\Providers\CategoryProviders.cs" />
     <Compile Include="DataLayer\Providers\DistributorProvider.cs" />
     <Compile Include="DataLayer\Providers\IEntityDataProvider.cs" />

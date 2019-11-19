@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Inventory.Common.ApplicationLayer {
     public static class Constants {
-        public static readonly string DestinationDirectory = @"\\172.20.4.20\inventory_attachments";
+        public static readonly string DestinationDirectory = @"\\172.20.4.20\InventoryAttachments";
         public static readonly string FileFilters =
                 "Word Documents|*.doc|Excel Worksheets|*.xls|PowerPoint Presentations|*.ppt|" +
                 "Office Files|*.doc;*.xls;*.ppt|" +
