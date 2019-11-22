@@ -194,11 +194,11 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
 
     </Style>
-    <Style x:Name="GroupStyle" TargetType="{x:Type dxlc:GroupBox}">
+    <!--<Style x:Name="GroupStyle" TargetType="{x:Type dxlc:GroupBox}">
         <Setter Property="Padding" Value="5"/>
         <Setter Property="DisplayMode"  Value="Normal"/>
         <Setter Property="TitleBackground" Value="BlanchedAlmond"/>
-    </Style>
+    </Style>-->
 
     <!--<Style x:Name="SizerStyle" TargetType="{x:Type dxlc:ElementSizer}">
         <Setter Property="Background" Value="LightBlue"/>
@@ -224,5 +224,12 @@
     <Style TargetType="{x:Type dxg:GridControlBand}">
         <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
     </Style>
+
+    <Style TargetType="{x:Type dxlc:ElementSizer}">
+        <Setter Property="Cursor" Value="SizeWE"/>
+        <Setter Property="ShowResizingHandle" Value="True"/>
+        <Setter Property="UseLayoutRounding"  Value="True"/>
+    </Style>
+    
 
 </ResourceDictionary>

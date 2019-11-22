@@ -621,11 +621,13 @@ namespace Inventory.ProductsManagment.ViewModels {
             var resp = this.OpenFileDialogService.ShowDialog();
             if (resp) {
                 var file = this.OpenFileDialogService.File;
+                string ext = Path.GetExtension(file.GetFullName());
+                string tempFileName = file.Name.Substring(0, file.Name.IndexOf("."));
                 //this.MessageBoxService.ShowMessage(file.Name);
                 if (File.Exists(file.GetFullName())) {
-                    if (this.ShowAttachmentDialog(file.Name)) {
+                    if (this.ShowAttachmentDialog(tempFileName)) {
                         if (this._fileNameViewModel != null) {
-                            string dest = Path.Combine(Constants.DestinationDirectory, this._fileNameViewModel.FileName + Path.GetExtension(file.GetFullName()));
+                            string dest = Path.Combine(Constants.DestinationDirectory, this._fileNameViewModel.FileName + ext);
                             if (!File.Exists(dest)) {
                                 bool success = true;
                                 try {
@@ -639,6 +641,7 @@ namespace Inventory.ProductsManagment.ViewModels {
                                     attachment.Description = this._fileNameViewModel.Description;
                                     attachment.InventoryItemId = this.SelectedProduct.Id;
                                     attachment.FileReference = dest;
+                                    attachment.Extension = ext;
                                     var temp = this._dataManager.UploadProductAttachment(attachment);
                                     if (temp.Success) {
                                         this.MessageBoxService.ShowMessage(temp.Message, "Success", MessageButton.OK, MessageIcon.Information);
@@ -646,9 +649,13 @@ namespace Inventory.ProductsManagment.ViewModels {
                                         this.MessageBoxService.ShowMessage(temp.Message, "Failed", MessageButton.OK, MessageIcon.Error);
                                     }
                                 }
+                            } else {
+                                this.MessageBoxService.ShowMessage("File Name already exist, Please try again", "Failed", MessageButton.OK, MessageIcon.Error);
                             }
                         }
                     }
+                } else {
+                    this.MessageBoxService.ShowMessage("Internal Error: File Not Found", "File Not Found", MessageButton.OK, MessageIcon.Error);
                 }
                 this.ReloadAsync();
             }            

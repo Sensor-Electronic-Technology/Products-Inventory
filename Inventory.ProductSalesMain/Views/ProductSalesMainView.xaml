@@ -50,7 +50,7 @@
                                                Glyph="{dx:DXImage Image=BO_Category.png}" 
                                                LargeGlyph="{dx:DXImage Image=BO_Category.png}"/>
 
-                            <dxb:BarButtonItem x:Name="reportsView" Content="Reports(In Development)"                                             
+                            <dxb:BarButtonItem x:Name="reportsView" Content="Reporting"                                             
                                                Command="{Binding LoadModuleCommand}" 
                                                CommandParameter="{x:Static common:AppViews.ReportsMainView}"
                                                IsEnabled="True"
@@ -92,8 +92,8 @@
                                         GroupBorderStyle="GroupBox" 
                                         AllowFloat="True">
                         <dxdo:TabbedGroup.ItemStyle>
-                            <Style TargetType="{x:Type dxdo:LayoutGroup}">
-                                <Setter Property="Caption" Value="{Binding Content.PanelCaption, RelativeSource={RelativeSource Self}}"/>
+                            <Style TargetType="{x:Type dxdo:LayoutPanel}">
+                                <Setter Property="Caption"  Value="{Binding Content.PanelCaption, RelativeSource={RelativeSource Self}}"/>
                                 <Setter Property="IsActive" Value="{Binding Content.IsActive,RelativeSource={RelativeSource Self},Mode=TwoWay}"/>
                                 <Setter Property="ClosingBehavior" Value="ImmediatelyRemove"/>
                             </Style>

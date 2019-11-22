@@ -456,9 +456,6 @@
                                             <dxb:BarButtonItem Content="Download File" 
                                                                Glyph="{dx:DXImage Image=Down_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.DownloadFileCommand}"/>
-                                            <dxb:BarButtonItem Content="Rename File" 
-                                                               Glyph="{dx:DXImage Image=EditName_16x16.png}"
-                                                               Command="{Binding Path=View.DataContext.RenameFileCommand }"/>
                                             <dxb:BarButtonItem Content="Delete File"
                                                                Glyph="{dx:DXImage Image=Close_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.DeleteAttachmentCommand}"/>

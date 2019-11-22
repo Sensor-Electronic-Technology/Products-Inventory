@@ -145,7 +145,6 @@ namespace Inventory.ApplicationMain
             regionAdapterMappings.RegisterMapping(typeof(LayoutPanel), AdapterFactory.Make<RegionAdapterBase<LayoutPanel>>(factory));
             regionAdapterMappings.RegisterMapping(typeof(LayoutGroup), AdapterFactory.Make<RegionAdapterBase<LayoutGroup>>(factory));
             regionAdapterMappings.RegisterMapping(typeof(TabbedGroup), AdapterFactory.Make<RegionAdapterBase<TabbedGroup>>(factory));
-            //regionAdapterMappings.RegisterMapping(typeof(DevExpress.Xpf.LayoutControl.LayoutControl), AdapterFactory.Make<RegionAdapterBase<DevExpress.Xpf.LayoutControl.LayoutControl>>(factory));
         }
 
         private void ThemeManager_ApplicationThemeChanged(DependencyObject sender, ThemeChangedRoutedEventArgs e)

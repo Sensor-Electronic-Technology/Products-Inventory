@@ -204,10 +204,48 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
         public InventoryActionResponce DeleteProductAttachment(Attachment attachment) {
             var product = this._context.InventoryItems.OfType<Product>().Include(e => e.Attachments).FirstOrDefault(e => e.Id == attachment.InventoryItemId);
             var attachEntity = product.Attachments.FirstOrDefault(e => e.Id == attachment.Id);
-            if (product != null && attachEntity!=null) {
+            if (product != null && attachEntity != null) {
                 product.Attachments.Remove(attachEntity);
                 this._context.Attachments.Remove(attachEntity);
                 this._context.Entry<Product>(product).State = EntityState.Modified;
+                try {
+                    this._context.SaveChanges();
+                    return new InventoryActionResponce(true, "File Deleted!");
+                } catch {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error: Failed to Delete File");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: Product and/or Attachment Not Found");
+            }
+        }
+
+        public InventoryActionResponce UploadLotAttachment(Attachment attachment) {
+            var lot = this._context.Lots.Include(e => e.Attachments).FirstOrDefault(e => e.LotNumber==attachment.LotNumber && e.SupplierPoNumber==attachment.SupplierPoNumber);
+            if (lot != null) {
+                lot.Attachments.Add(attachment);
+                this._context.Attachments.Add(attachment);
+                this._context.Entry<Lot>(lot).State = EntityState.Modified;
+                try {
+                    this._context.SaveChanges();
+                    return new InventoryActionResponce(true, "File Saved!");
+                } catch {
+                    this.UndoChanges();
+                    return new InventoryActionResponce(false, "Error Saving File");
+                }
+            } else {
+                return new InventoryActionResponce(false, "Error: Lot Not Found");
+            }
+
+        }
+
+        public InventoryActionResponce DeleteLotAttachment(Attachment attachment) {
+            var lot  = this._context.Lots.Include(e => e.Attachments).FirstOrDefault(e => e.LotNumber == attachment.LotNumber && e.SupplierPoNumber == attachment.SupplierPoNumber);
+            var attachEntity = lot.Attachments.FirstOrDefault(e => e.Id == attachment.Id);
+            if (lot != null && attachEntity != null) {
+                lot.Attachments.Remove(attachEntity);
+                this._context.Attachments.Remove(attachEntity);
+                this._context.Entry<Lot>(lot).State = EntityState.Modified;
                 try {
                     this._context.SaveChanges();
                     return new InventoryActionResponce(true, "File Deleted!");

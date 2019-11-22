@@ -20,19 +20,20 @@ using System.Threading;
 namespace Inventory.ProductsManagment.ViewModels {
     public class ProductSelectorViewModel : InventoryViewModelBase {
         static object SyncRoot = new object();
-
         private ProductDataManager _dataManager;
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
-        public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductSelectorNotifications"); } }
-        public IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductSelectorDispatcher"); } }
-        public IControlUpdateService GridUpdateService { get { return ServiceContainer.GetService<IGridUpdateService>(); } }
+        protected IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("ProductSelectorNotifications"); } }
+        protected IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductSelectorDispatcher"); } }
+
 
         private List<Product> _products = new List<Product>();
         private Product _selectedProduct = new Product();
         private bool outgoingInProgress = false;
         private bool incomingInProgress = false;
         private bool editInProgress = false;
+        private bool _isLoading = false;
+        private bool _isInitialized = false;
 
         public PrismCommands.DelegateCommand NewProductCommand { get; private set; }
         public PrismCommands.DelegateCommand StartIncomingWithDelegate { get; private set; }
@@ -41,6 +42,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand EditProductDelegate { get; private set; }
         public PrismCommands.DelegateCommand DeleteProductCommand { get; private set; }
         public PrismCommands.DelegateCommand OnCopyingToClipboardCommand { get; private set; }
+        public AsyncCommand InitializeCommand { get; private set; }
         public AsyncCommand RefreshDataCommand { get; private set; }
         public PrismCommands.DelegateCommand ClearDetailViewsCommand { get; private set; }
 
@@ -56,6 +58,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.EditProductDelegate = new PrismCommands.DelegateCommand(this.EditProductHandler, this.CanExecute);
             this.RefreshDataCommand = new AsyncCommand(this.RefreshHandler, this.CanExecute);
             this.ClearDetailViewsCommand = new PrismCommands.DelegateCommand(this.ClearDetailViewsHandler, this.CanExecute);
+            this.InitializeCommand = new AsyncCommand(this.PopulateAsync);
 
             this.OnCopyingToClipboardCommand = new PrismCommands.DelegateCommand(this.OnCopyingToClipboardHandler);
 
@@ -71,7 +74,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this._eventAggregator.GetEvent<LotRankReservationEditingStartedEvent>().Subscribe(() => { this.editInProgress = true; });
             this._eventAggregator.GetEvent<LotRankReservationEditingDoneEvent>().Subscribe(this.EditingDoneHandler);
 
-            this.PopulateAsync();
+            //this.Populate();
         }
 
         public List<Product> Products {
@@ -102,6 +105,10 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         public ICommand EditProductCommand {
             get => this.EditProductDelegate;
+        }
+        public bool IsLoading { 
+            get => this._isLoading;
+            set => SetProperty(ref this._isLoading, value, "IsLoading");
         }
 
         private void OnCopyingToClipboardHandler() {
@@ -138,7 +145,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.outgoingInProgress = false;
             this._regionManager.Regions[Regions.ProductDetailsRegion].RemoveAll();
             this._regionManager.Regions[Regions.ProductLotRankRegion].RemoveAll();
-            this.PopulateAsync();
+            this.PopulateOther();
         }
 
         private void ViewProductDetailsHandler() {
@@ -173,7 +180,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.incomingInProgress = false;
             this._regionManager.Regions[Regions.ProductLotRankRegion].RemoveAll();
             this._regionManager.Regions[Regions.ProductDetailsRegion].RemoveAll();
-            this.PopulateAsync();
+            this.PopulateOther();
             this.DispatcherService.BeginInvoke(() => {
                 this.MessageBoxService.ShowMessage("Check in Done", "Success", MessageButton.OK, MessageIcon.Information);
             });
@@ -181,7 +188,7 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         private void EditingDoneHandler() {
             this.editInProgress = false;
-            this.PopulateAsync();
+            this.PopulateOther();
         }
 
         private void SetInIncomingHandler() {
@@ -212,15 +219,38 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private async Task RefreshHandler() {
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
             await this._dataManager.UpdateProductTotalsAsync();
             await this._dataManager.ProductProvider.LoadDataAsync();
             this.Products =(await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
 
-        private async void PopulateAsync() {
+        private async Task PopulateAsync() {
+            if (!this._isInitialized) {
+                this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+                await this._dataManager.ProductProvider.LoadDataAsync();
+                await this._dataManager.UpdateProductTotalsAsync();
+                this.Products = (await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
+                this._isInitialized = true;
+                this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
+            }
+        }
+
+        private async void PopulateOther() {
             await this._dataManager.ProductProvider.LoadDataAsync();
             await this._dataManager.UpdateProductTotalsAsync();
             this.Products = (await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
+        }
+
+        private void Populate() {
+
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+            this._dataManager.ProductProvider.LoadData();
+            this._dataManager.UpdateProductTotals();
+            this.Products = this._dataManager.ProductProvider.GetEntityList().ToList();
+
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
     }
 }

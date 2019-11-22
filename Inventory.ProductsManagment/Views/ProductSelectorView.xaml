@@ -26,6 +26,7 @@
     <dxmvvm:Interaction.Behaviors>
         <dx:DXMessageBoxService x:Name="ProductSelectorNotifications"/>
         <dxmvvm:DispatcherService x:Name="ProductSelectorDispatcher" />
+        <dxmvvm:EventToCommand EventName="Loaded" Command="{Binding InitializeCommand}" />
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
         <dxlc:GroupBox >
@@ -63,6 +64,7 @@
                                  ItemsSource="{Binding Products,IsAsync=True,Mode=TwoWay}" 
                                  SelectedItem="{Binding SelectedProduct}"
                                  Style="{StaticResource GridControlStyle}"
+                                 ShowLoadingPanel="{Binding IsLoading,Mode=TwoWay}"
                                  dxlc:DockLayoutControl.Dock="Client"
                                  ClipboardCopyMode="ExcludeHeader" 
                                  CopyingToClipboard="_listOfProducts_CopyingToClipboard">
