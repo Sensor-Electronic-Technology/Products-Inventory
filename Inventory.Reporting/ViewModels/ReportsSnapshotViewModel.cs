@@ -121,8 +121,8 @@ namespace Inventory.Reporting.ViewModels {
 
                     //Outgoing In Range
 
-                    var consumerQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Consumer" && e.TimeStamp <= dStop).Sum(e => e.Quantity);
-                    var consumerCostRange = outgoingTransactions.Where(e => e.Location.Name == "Consumer" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+                    var consumerQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Customer" && e.TimeStamp <= dStop).Sum(e => e.Quantity);
+                    var consumerCostRange = outgoingTransactions.Where(e => e.Location.Name == "Customer" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
 
                     var internalQtyRange = outgoingTransactions.Where(e => e.Location.Name == "Internal" && e.TimeStamp <= dStop).Sum(e => e.Quantity);
                     var internalCostRange = outgoingTransactions.Where(e => e.Location.Name == "Internal" && e.TimeStamp <= dStop).Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
