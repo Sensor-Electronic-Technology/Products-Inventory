@@ -181,9 +181,9 @@ namespace Inventory.ProductsManagment.ViewModels {
             this._regionManager.Regions[Regions.ProductLotRankRegion].RemoveAll();
             this._regionManager.Regions[Regions.ProductDetailsRegion].RemoveAll();
             this.PopulateOther();
-            this.DispatcherService.BeginInvoke(() => {
-                this.MessageBoxService.ShowMessage("Check in Done", "Success", MessageButton.OK, MessageIcon.Information);
-            });
+            //this.DispatcherService.BeginInvoke(() => {
+            //    this.MessageBoxService.ShowMessage("Check in Done", "Success", MessageButton.OK, MessageIcon.Information);
+            //});
         }
 
         private void EditingDoneHandler() {
@@ -239,7 +239,7 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         private async void PopulateOther() {
             await this._dataManager.ProductProvider.LoadDataAsync();
-            await this._dataManager.UpdateProductTotalsAsync();
+            //await this._dataManager.UpdateProductTotalsAsync();
             this.Products = (await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
         }
 

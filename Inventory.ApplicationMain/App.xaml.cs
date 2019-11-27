@@ -76,7 +76,6 @@ namespace Inventory.ApplicationMain
                     DXSplashScreen.Show<SETSplashScreen>();
                 }
                 loginWindow.Close();
-
             };
             loginWindow.DataContext = loginVM;
             if(DXSplashScreen.IsActive)
