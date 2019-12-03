@@ -19,6 +19,7 @@ namespace Inventory.FacilityEpi.ViewModels {
             this._regionManager = regionManager;
             this.LoadModuleCommand = new Prism.Commands.DelegateCommand<string>(this.LoadModuleHandler);
             this.OnLoadedCommand = new Prism.Commands.DelegateCommand(this.OnLoadedHandler);
+            this.LoadModuleHandler(AppViews.WelcomeView);
         }
 
         public override bool KeepAlive {

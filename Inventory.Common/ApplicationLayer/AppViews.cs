@@ -10,10 +10,10 @@
         public static string FacilityMainView { get { return "FacilityMainView"; } }
 
         //Parts Module
-        public static string PartsDetailsView { get { return "PartsDetailsView"; } }
-        public static string PartsCategoryView { get { return "PartsCategoryView"; } }
-        public static string PartsMainView { get { return "PartsMainView"; } }
-        public static string PartsTableDetailsView { get { return "PartsTableDetailsView"; } }
+        public static string PartsSelectorView { get => "PartsSelectorView"; }
+        public static string PartInstanceDetailsView { get => "PartInstanceDetailsView"; }
+        public static string PartsMainView { get => "PartsMainView"; }
+        public static string PartDetailsView { get => "PartDetailsView"; }
 
         //Products Module
         public static string ProductReservationView { get => "ProductReservationView"; }

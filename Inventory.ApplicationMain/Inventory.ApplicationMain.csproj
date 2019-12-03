@@ -297,6 +297,10 @@
       <Project>{4b1da1db-ed85-44e1-b0e6-2190c3c2a615}</Project>
       <Name>Inventory.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Inventory.DistributorsManagment\Inventory.DistributorsManagment.csproj">
+      <Project>{34509f89-de98-4827-b7f4-3a3b27a867e2}</Project>
+      <Name>Inventory.DistributorsManagment</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Inventory.FacilityEpi\Inventory.FacilityEpi.csproj">
       <Project>{801c49a3-9a97-41b4-abd9-d7fe71d1f271}</Project>
       <Name>Inventory.FacilityEpi</Name>
@@ -304,6 +308,22 @@
     <ProjectReference Include="..\Inventory.LocationManagement\Inventory.LocationManagement.csproj">
       <Project>{2b137729-3494-4270-a655-b9583f1f0840}</Project>
       <Name>Inventory.LocationManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inventory.ManufacturersManagment\Inventory.ManufacturersManagment.csproj">
+      <Project>{8a15e98f-b98a-4cac-85ae-551dcd3c0f95}</Project>
+      <Name>Inventory.ManufacturersManagment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inventory.ParametersManagment\Inventory.ParametersManagment.csproj">
+      <Project>{b4098b31-c1cf-4836-a372-fb3c482a4cf1}</Project>
+      <Name>Inventory.ParametersManagment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inventory.PartsManagment\Inventory.PartsManagment.csproj">
+      <Project>{387e1de8-3d81-4e5b-b54b-f4081930d2db}</Project>
+      <Name>Inventory.PartsManagment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inventory.PriceManagment\Inventory.PriceManagment.csproj">
+      <Project>{1bf6f8e2-7f34-42e8-b9ff-bd2a232bef65}</Project>
+      <Name>Inventory.PriceManagment</Name>
     </ProjectReference>
     <ProjectReference Include="..\Inventory.ProductSalesMain\Inventory.ProductSalesMain.csproj">
       <Project>{118d09a0-5786-4432-913f-390bbff1da1a}</Project>
@@ -316,6 +336,10 @@
     <ProjectReference Include="..\Inventory.Reporting\Inventory.Reporting.csproj">
       <Project>{2c373920-ec37-4ff8-ab71-821e2910633e}</Project>
       <Name>Inventory.Reporting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inventory.UserManagment\Inventory.UserManagment.csproj">
+      <Project>{2e36921b-76df-4871-aacc-b2a228155001}</Project>
+      <Name>Inventory.UserManagment</Name>
     </ProjectReference>
     <ProjectReference Include="..\Inventory.UsersManagment\Inventory.UsersManagment.csproj">
       <Project>{b0eb9b00-9a54-4f95-b642-b635d108bf05}</Project>

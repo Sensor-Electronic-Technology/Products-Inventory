@@ -15,7 +15,12 @@ using Inventory.Common.ApplicationLayer.Services;
 using System.Threading;
 
 namespace Inventory.PartsManagment.ViewModels {
-    public class PartsMainViewModel : InventoryViewModelBase {
+    public class PartDetailsViewModel : InventoryViewModelBase {
+        //protected IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("PartSelectorMessageBox"); } }
+        //protected IDispatcherService DispatcherService { get { return ServiceContainer.GetService<IDispatcherService>("ProductSelectorDispatcher"); } }
+
+        private IEventAggregator _eventAggregator;
+        //private IRegionManager _regionManager;
 
         public override bool KeepAlive {
             get => false;

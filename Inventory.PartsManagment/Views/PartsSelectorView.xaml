@@ -3,7 +3,95 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:common="clr-namespace:Inventory.Common.ApplicationLayer;assembly=Inventory.Common"
+             xmlns:commonservice="clr-namespace:Inventory.Common.ApplicationLayer.Services;assembly=Inventory.Common"
+             xmlns:prism="http://prismlibrary.com/" prism:ViewModelLocator.AutoWireViewModel="True"    
              xmlns:ViewModels="clr-namespace:Inventory.PartsManagment.ViewModels" 
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="450">
+             mc:Ignorable="d" d:DesignWidth="405" d:DesignHeight="470" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Inventory.Common;component/ApplicationLayer/Resources/CommonControlResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXMessageBoxService x:Name="PartSelectorNotifications"/>
+        <dxmvvm:DispatcherService x:Name="PartSelectorDispatcher" />
+        <dxmvvm:EventToCommand EventName="Loaded" Command="{Binding InitializeCommand}" />
+    </dxmvvm:Interaction.Behaviors>
+    <dx:LoadingDecorator>
+        <dxlc:GroupBox >
+            <dxlc:GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Parts" HorizontalAlignment="Center" FontSize="16"/>
+                </DataTemplate>
+            </dxlc:GroupBox.HeaderTemplate>
+            <dxlc:DockLayoutControl>
+                <dxb:BarContainerControl dxlc:DockLayoutControl.Dock="Top">
+                    <dxb:ToolBarControl Caption="Part Actions" ShowDragWidget="False" ShowBackground="False"                                        
+                                        AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
+                                        BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+
+                        <!--<dxb:BarButtonItem x:Name="_newProduct" 
+                                           Command="{Binding NewPartCommand}"
+                                           BarItemDisplayMode="ContentAndGlyph" 
+                                           Content="New Product" 
+                                           Glyph="{dx:DXImage Image=InsertSheetRows_16x16.png}"/>
+
+                        <dxb:BarButtonItem x:Name="_refresh" 
+                                           Command="{Binding RefreshDataCommand}"
+                                           BarItemDisplayMode="ContentAndGlyph" 
+                                           Content="Refresh Product List" 
+                                           Glyph="{dx:DXImage Image=RefreshPivotTable_16x16.png}"/>
+
+                        <dxb:BarButtonItem x:Name="_clearDetails" 
+                                           Command="{Binding ClearDetailViewsCommand}"
+                                           BarItemDisplayMode="ContentAndGlyph" 
+                                           Content="Clear Detail Views" 
+                                           Glyph="{dx:DXImage Image=ClearAll_16x16.png}"/>-->
+                    </dxb:ToolBarControl>
+                </dxb:BarContainerControl>
+                <dxg:GridControl x:Name="_listOfParts"  
+                                 ItemsSource="{Binding Parts,IsAsync=True,Mode=TwoWay}" 
+                                 SelectedItem="{Binding SelectedPart}"
+                                 Style="{StaticResource GridControlStyle}"
+                                 ShowLoadingPanel="{Binding IsLoading,Mode=TwoWay}"
+                                 dxlc:DockLayoutControl.Dock="Client">
+                    <dxmvvm:Interaction.Behaviors>
+                        <commonservice:GridUpdateService/>
+                    </dxmvvm:Interaction.Behaviors>
+                    <dxg:GridControl.View>
+                        <dxg:TableView ShowSearchPanelMode="Always"
+                                       Style="{StaticResource TableViewStyleNoMaster}"
+                                       SearchPanelNullText="Search By Part" 
+                                       AllowGrouping="True" SearchColumns="Name">
+                            <dxg:TableView.RowCellMenuCustomizations>
+                                <dxb:BarButtonItem Content="View Details" 
+                                                   Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                   Command="{Binding Path=View.DataContext.ViewPartDetailsCommand}"/>
+
+                                <dxb:BarButtonItem Content="Edit Details" 
+                                                   Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                   Command="{Binding Path=View.DataContext.EditPartCommand}"/>
+                            </dxg:TableView.RowCellMenuCustomizations>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn FieldName="Name" Header="Part"/>
+                        <dxg:GridColumn FieldName="Organization.Name" Header="Organization" AllowGrouping="True"/>
+                        <dxg:GridColumn FieldName="Usage.Name" Header="Usage" AllowGrouping="True"/>
+                    </dxg:GridControl.Columns>
+                </dxg:GridControl>
+            </dxlc:DockLayoutControl>
+        </dxlc:GroupBox>
+    </dx:LoadingDecorator>
 </UserControl>

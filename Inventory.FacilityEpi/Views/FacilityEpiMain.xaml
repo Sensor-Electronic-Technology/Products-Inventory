@@ -28,39 +28,39 @@
                 <dxr:RibbonDefaultPageCategory>
                     <dxr:RibbonPage x:Name="HomePage" Caption="Home">
                         <dxr:RibbonPageGroup Caption="Main Commands">
-                            <dxb:BarButtonItem x:Name="partsView" Content="Parts View"                                               
+                            <dxb:BarButtonItem x:Name="partsView" Content="Parts Managment"                                               
                                                Command="{Binding LoadModuleCommand}"
                                                CommandParameter="{x:Static common:AppViews.PartsMainView}"
                                                Glyph="{dx:DXImage Image=BOProduct_16x16.png}"
                                                LargeGlyph="{dx:DXImage Image=BOProduct_16x16.png}"/>
 
-                            <dxb:BarButtonItem x:Name="distributorView" Content="Distributors View"                                               
+                            <dxb:BarButtonItem x:Name="distributorView" Content="Distributors Managment"                                               
                                                Command="{Binding LoadModuleCommand}"
                                                CommandParameter="{x:Static common:AppViews.PartsMainView}"
                                                Glyph="{dx:DXImage Image=BOCountry_32x32.png}" 
                                                LargeGlyph="{dx:DXImage Image=BOCountry_32x32.png}" />
 
-                            <dxb:BarButtonItem x:Name="manufacturerView" Content="Manufacturers View"                                              
+                            <dxb:BarButtonItem x:Name="manufacturerView" Content="Manufacturers Managment"                                              
                                                Command="{Binding LoadModuleCommand}"
                                                CommandParameter="{x:Static common:AppViews.PartsMainView}"
                                                IsEnabled="False"
                                                LargeGlyph="{dx:DXImage Image=ManageDatasource_32x32.png}"
                                                Glyph="{dx:DXImage Image=ManageDatasource_16x16.png}"  />
 
-                            <dxb:BarButtonItem x:Name="locationView" Content="Locations View"                                             
+                            <dxb:BarButtonItem x:Name="locationView" Content="Locations Managment"                                             
                                                Command="{Binding LoadModuleCommand}" 
                                                CommandParameter="{x:Static common:AppViews.LocationMainView}"
                                                Glyph="{dx:DXImage Image=Country_32x32.png}" 
                                                LargeGlyph="{dx:DXImage Image=Country_32x32.png}"/>
 
-                            <dxb:BarButtonItem x:Name="priceView" Content="Prices View"                                             
+                            <dxb:BarButtonItem x:Name="priceView" Content="Prices Managment"                                             
                                                Command="{Binding LoadModuleCommand}" 
                                                CommandParameter="{x:Static common:AppViews.PartsMainView}"
                                                IsEnabled="False"
                                                Glyph="{dx:DXImage Image=BOSale_16x16.png}" 
                                                LargeGlyph="{dx:DXImage Image=BOSale_32x32.png}"/>
 
-                            <dxb:BarButtonItem x:Name="usersView" Content="Users View"                                             
+                            <dxb:BarButtonItem x:Name="usersView" Content="Users Managment"                                             
                                                Command="{Binding LoadModuleCommand}"
                                                CommandParameter="{x:Static common:AppViews.UserMainView}"
                                                Glyph="{dx:DXImage Image=BOCustomer_16x16.png}" 

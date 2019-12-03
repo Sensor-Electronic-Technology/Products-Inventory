@@ -2,8 +2,6 @@
 using DryIoc;
 using Prism.Ioc;
 using Prism.DryIoc;
-using Prism.Logging.Syslog;
-using Prism.Logging;
 using Prism.Modularity;
 using Prism.Regions;
 using DevExpress.Xpf.Docking;
@@ -13,25 +11,21 @@ using Inventory.ApplicationMain.ViewModels;
 using Inventory.FacilityEpi;
 using Inventory.UsersManagment;
 using Inventory.LocationManagement;
-using Inventory.Common.ApplicationLayer;
 using Inventory.ProductsManagment;
-using Inventory.Common.DataLayer;
 using Inventory.Common.EntityLayer.Model;
-using Inventory.Common.DataLayer.Services;
 using Inventory.Common.EntityLayer.Model.Entities;
+using Inventory.PartsManagment;
 using Inventory.ProductSalesMain;
 using Inventory.Common.DataLayer.Providers;
 using Inventory.Common.BuisnessLayer;
 using Inventory.CategoriesManagment;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Core;
-using System.Linq;
 using Inventory.Common.DataLayer.EntityDataManagers;
 using DevExpress.Xpf.Grid;
 using Inventory.Reporting;
 
-namespace Inventory.ApplicationMain
-{
+namespace Inventory.ApplicationMain {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -122,6 +116,7 @@ namespace Inventory.ApplicationMain
             switch (this.userService.SoftwareVersion) {
                 case InventorySoftwareType.MANUFACTURING: {
                     moduleCatalog.AddModule<FacilityEpiModule>();
+                    moduleCatalog.AddModule<PartsManagmentModule>();
                     break;
                 }
                 case InventorySoftwareType.PRODUCTS_SALES: {

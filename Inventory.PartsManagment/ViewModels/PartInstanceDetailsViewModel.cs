@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 using Inventory.Common.EntityLayer.Model.Entities;
 using Inventory.Common.BuisnessLayer;
 using Inventory.Common.ApplicationLayer;
@@ -15,10 +18,11 @@ using Inventory.Common.ApplicationLayer.Services;
 using System.Threading;
 
 namespace Inventory.PartsManagment.ViewModels {
-    public class PartsMainViewModel : InventoryViewModelBase {
+    public class PartInstanceDetailsViewModel : InventoryViewModelBase {
 
         public override bool KeepAlive {
             get => false;
         }
+
     }
 }

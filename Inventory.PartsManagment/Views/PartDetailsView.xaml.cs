@@ -14,10 +14,10 @@ using System.Windows.Shapes;
 
 namespace Inventory.PartsManagment.Views {
     /// <summary>
-    /// Interaction logic for PartsInstancesView.xaml
+    /// Interaction logic for PartDetailsView.xaml
     /// </summary>
-    public partial class PartsInstancesView : UserControl {
-        public PartsInstancesView() {
+    public partial class PartDetailsView : UserControl {
+        public PartDetailsView() {
             InitializeComponent();
         }
     }

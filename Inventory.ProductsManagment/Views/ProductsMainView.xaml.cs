@@ -18,7 +18,7 @@ namespace Inventory.ProductsManagment.Views {
     /// </summary>
     public partial class ProductsMainView : UserControl {
         private bool _isactive;
-        public string PanelCaption { get { return "Product Managment"; } }
+        public string PanelCaption { get { return "Parts Managment"; } }
 
         public bool IsActive {
             get => this._isactive;

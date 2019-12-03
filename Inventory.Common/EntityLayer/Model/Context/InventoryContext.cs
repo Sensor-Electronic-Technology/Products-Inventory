@@ -12,6 +12,7 @@ namespace Inventory.Common.EntityLayer.Model {
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Instance> Instances { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Lot> Lots { get; set; }
         public DbSet<Distributor> Distributors { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }

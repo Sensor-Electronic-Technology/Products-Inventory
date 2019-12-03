@@ -14,20 +14,11 @@ using System.Windows.Shapes;
 
 namespace Inventory.PartsManagment.Views {
     /// <summary>
-    /// Interaction logic for PartsMainView.xaml
+    /// Interaction logic for PartInstanceDetailsView.xaml
     /// </summary>
-    public partial class PartsMainView : UserControl {
-        private bool _isactive;
-        public string PanelCaption { get { return "Product Managment"; } }
-
-        public bool IsActive {
-            get => this._isactive;
-            set => this._isactive = value;
-        }
-
-        public PartsMainView() {
+    public partial class PartInstanceDetailsView : UserControl {
+        public PartInstanceDetailsView() {
             InitializeComponent();
-            this.IsActive = true;
         }
     }
 }
