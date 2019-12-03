@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Mvvm.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Core.v19.1, Version=19.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -63,9 +66,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\ViewAViewModel.cs" />
-    <Compile Include="Views\ViewA.xaml.cs">
-      <DependentUpon>ViewA.xaml</DependentUpon>
+    <Compile Include="ViewModels\PartsInstancesViewModel.cs" />
+    <Compile Include="ViewModels\PartsMainViewModel.cs" />
+    <Compile Include="ViewModels\PartsSelectorViewModel.cs" />
+    <Compile Include="Views\PartsInstancesView.xaml.cs">
+      <DependentUpon>PartsInstancesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PartsMainView.xaml.cs">
+      <DependentUpon>PartsMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PartsSelectorView.xaml.cs">
+      <DependentUpon>PartsSelectorView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -77,18 +88,25 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Page Include="Views\ViewA.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Core">
       <Version>7.2.0.1367</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\PartsInstancesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PartsMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PartsSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

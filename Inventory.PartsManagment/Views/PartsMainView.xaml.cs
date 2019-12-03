@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,15 +12,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Inventory.ParametersManagment.Views
-{
+namespace Inventory.PartsManagment.Views {
     /// <summary>
-    /// Interaction logic for ViewA.xaml
+    /// Interaction logic for PartsMainView.xaml
     /// </summary>
-    public partial class ViewA : UserControl
-    {
-        public ViewA()
-        {
+    public partial class PartsMainView : UserControl {
+        public PartsMainView() {
             InitializeComponent();
         }
     }
