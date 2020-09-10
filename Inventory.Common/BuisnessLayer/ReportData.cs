@@ -6,6 +6,38 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Inventory.Common.BuisnessLayer {
+
+    public class CurrentInventoryItem{
+        public string ProductName { get; set; }
+        public int Quanity { get; set; }      
+        public double TotalCost { get; set; }
+        public IEnumerable<Lot> Lots { get; set; }
+
+        public CurrentInventoryItem(Product product) {
+            this.ProductName = product.Name;
+            this.Quanity = product.Total;
+            this.Lots = new List<Lot>(product.Lots);
+
+        }
+
+    }
+
+    public class LotDto {
+        public string LotNumber { get; set; }
+        public int Quantity { get; set; }
+        public double UnitCost { get; set; }
+        public double Cost { get; set; }
+        public int Age { get; set; }
+
+        public LotDto(Lot lot) {
+            this.LotNumber = String.Concat(lot.LotNumber, ",", lot.SupplierPoNumber);
+            this.UnitCost = lot.Cost.Amount;
+            this.Quantity = lot.ProductInstances.Sum(e => e.Quantity);
+            
+            //this.Age=lot.
+        }
+    }
+
     public class ReportDataRow {
         public ProductTransaction Transaction { get; set; }
         public string ProductName { get; set; }
@@ -24,7 +56,6 @@ namespace Inventory.Common.BuisnessLayer {
             this.UnitCost = (transaction.UnitCost != null) ? transaction.UnitCost.Value : 0;
             if (transaction.InventoryAction == InventoryAction.OUTGOING) {
                 this.Transaction.Quantity *= -1;
-
             }
 
             this.Cost = this.UnitCost * this.Transaction.Quantity;

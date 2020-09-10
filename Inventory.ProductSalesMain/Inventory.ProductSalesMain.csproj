@@ -89,13 +89,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>19.1.7</Version>
+      <Version>19.1.9</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>19.1.7</Version>
+      <Version>19.1.9</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>19.1.7</Version>
+      <Version>19.1.9</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.2.0</Version>

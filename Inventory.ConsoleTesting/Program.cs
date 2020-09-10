@@ -29,90 +29,73 @@ namespace Inventory.ConsoleTesting {
             //DeleteLotFix("Agric Ultra", "18-337");
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
-            //DeleteProductNew("TUD89B1B");
-            DeleteLot("191111DS-01", "036229");
-
-            //FixTransaction(923, 500);
-            //FixTransaction(934, 500);
-            //FixTransaction(913, 500);
-            //DeleteLot("AE-BEMN-321", "AE-PO-PQWE-43231");
-
-            //RenameLot("AE-IOP-555-444-333", "AE-IOP-SOP-54685", "Rename-1234567", "Rename-PO-1234567");
-            //TestingSnapshot();
-            //MovePartItems("CUN0GF1A", "CUNOGF1A");
-            //MoveLot("18623P0090", "DI102120", "18623P0090", "DI102120", "CUNOGF1A");
-            //var context = new InventoryContext();
-            //IUserService userService = new UserService();
-            //DomainManager domainManager = new DomainManager();
-            //UserServiceProvider userServiceProvider = new UserServiceProvider(context, domainManager);
-            //LogInService logInService = new LogInService(domainManager, userServiceProvider);
-            //var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
-            //userService = responce.Service;
-            //string lotN = "19H11VN23M";
-            //string po = "036176";
-            //var lotentity = context.Lots.Include(e=>e.Cost).Include(e=>e.ProductInstances.Select(i=>i.Transactions)).FirstOrDefault(x => x.SupplierPoNumber == po && x.LotNumber == lotN);
-            //var productEntity = context.InventoryItems.OfType<Product>().FirstOrDefault(x => x.Name == "UV1000-39");
-
-            //var defaultDistributor = context.Distributors.FirstOrDefault(x => x.Name == "SVC");
-            //var warehouse = context.Locations.FirstOrDefault(x => x.Name == "Products");
-            //if (lotentity != null && defaultDistributor != null && productEntity != null) {
-            //    var rank = lotentity.ProductInstances.FirstOrDefault(e => e.Name == "390nm~400nm");
-            //    if (rank != null) {
-            //        rank.Quantity = 0;
-            //        ProductTransaction transaction = new ProductTransaction();
-            //        transaction.InstanceId = rank.Id;
-            //        transaction.Quantity = 250000;
-            //        transaction.UnitCost = lotentity.Cost.Amount;
-            //        transaction.TotalCost = transaction.Quantity * transaction.UnitCost;
-            //        transaction.SessionId = userService.CurrentSession.Id;
-            //        transaction.Location = warehouse;
-            //        transaction.InventoryAction = InventoryAction.INCOMING;
-            //        transaction.TimeStamp = new DateTime(2019, 8, 10);
-            //        transaction.ProductName = productEntity.Name;
-            //        transaction.RMA_Number = "";
-            //        transaction.BuyerPoNumber = "";
-            //        transaction.IsReturning = false;
-            //        rank.Transactions.Add(transaction);
-            //        context.Transactions.Add(transaction);
-            //        context.Entry<ProductInstance>(rank).State = EntityState.Modified;
-            //        context.SaveChanges();
-            //        Console.WriteLine("Should Be Done");
-            //    } else {
-            //        Console.WriteLine("Rank Not Found");
-            //    }
-            //} else {
-            //    Console.WriteLine("Lot,Dist, or Product not found");
-            //}
-            //Console.ReadKey();
+            DeleteProductNew("TCDM9H2D_1");
+            //DeleteLot("SVC20200804-003_LI2...TBD", "036383");
+            //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
         }
 
         private static void MovePartItems(string oldPart,string newpart) {
+            Console.WriteLine("Working... Please wait");
             using(var context=new InventoryContext()) {
-                context.Lots.AsNoTracking().Include(e => e.Product.Instances).Load();
-                var lot = context.Lots.AsNoTracking().Include(e => e.Product.Instances).FirstOrDefault(e=>e.Product.Name==oldPart);
-                if (lot != null) {
-                    var entity= context.Lots.Include(e => e.Product.Instances).Include(e=>e.ProductInstances).FirstOrDefault(e => e.LotNumber==lot.LotNumber && e.SupplierPoNumber==lot.SupplierPoNumber);
-                    var product = context.InventoryItems.OfType<Product>().Include(e=>e.Lots.Select(i=>i.ProductInstances)).Include(e=>e.Instances).FirstOrDefault(e=>e.Name== newpart);
-                    entity.Product = product;
-                    entity.ProductId = product.Id;
-                    entity.ProductName = product.Name;
-                    product.Lots.Add(lot);
- //                   context.Entry<Lot>(entity).State=EntityState.Modified;
+                context.Lots.Include(e => e.Product.Instances).Include(e => e.ProductInstances).Load();
+                context.InventoryItems.OfType<Product>().Include(e=>e.Lots).Include(e=>e.Instances.Select(t=>t.Transactions)).Load();
+                var oldProduct = context.InventoryItems.FirstOrDefault(e => e.Name == oldPart);
+                if (oldProduct != null) {
+                    var lots = context.Lots.Include(e => e.Product).Include(e => e.ProductInstances).Where(e => e.ProductId == oldProduct.Id);
+                    var product = context.InventoryItems.OfType<Product>().Include(e => e.Instances).Include(e => e.Lots).FirstOrDefault(e => e.Name == newpart);
+                    if (product != null) {
+                        Console.WriteLine("Product Found");
+                        foreach (var lot in lots) {
+                            Console.WriteLine("Mwodifying Lot: {0}", lot.LotNumber);
+                            lot.ProductName = newpart;
+                            lot.ProductId = product.Id;
+                            lot.Product = product;
+                            context.Entry<Lot>(lot).State = EntityState.Modified;
+                            foreach (var instance in lot.ProductInstances) {
+                                instance.InventoryItem = product;
+                                instance.InventoryItemId = product.Id;
+                                context.Entry<ProductInstance>(instance).State = EntityState.Modified;
+                            }
+                            context.Entry<Lot>(lot).State = EntityState.Modified;
+                            //product.Lots.Add(lot);
+                        }
+                        context.SaveChanges();
+                        Console.WriteLine("Should be moved");
 
-                    foreach(var instance in lot.ProductInstances) {
-                        var rank = entity.ProductInstances.FirstOrDefault(e => e.Id == instance.Id);
-                        rank.InventoryItem = product;
-                        rank.InventoryItemId = product.Id;
-                        product.Instances.Add(rank);
- //                       context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+                    } else {
+                        Console.WriteLine("Product was null");
                     }
-
-                    context.SaveChanges();
-                    Console.WriteLine("Should be done");
                 } else {
-                    Console.WriteLine("Lot Is Null");
+                    Console.WriteLine("Could not find old product");
                 }
+
+                Console.WriteLine("Press any key to exit");
                 Console.ReadKey();
+
+
+ //               if (lot != null) {
+ //                   //var entity= context.Lots.Include(e => e.Product.Instances).Include(e=>e.ProductInstances).FirstOrDefault(e => e.LotNumber==lot.LotNumber && e.SupplierPoNumber==lot.SupplierPoNumber);
+ //                   //var product = context.InventoryItems.OfType<Product>().Include(e=>e.Lots.Select(i=>i.ProductInstances)).Include(e=>e.Instances).FirstOrDefault(e=>e.Name== newpart);
+ ////                   entity.Product = product;
+ ////                   entity.ProductId = product.Id;
+ ////                   entity.ProductName = product.Name;
+ ////                   product.Lots.Add(lot);
+ //////                   context.Entry<Lot>(entity).State=EntityState.Modified;
+
+ ////                   foreach(var instance in lot.ProductInstances) {
+ ////                       var rank = entity.ProductInstances.FirstOrDefault(e => e.Id == instance.Id);
+ ////                       rank.InventoryItem = product;
+ ////                       rank.InventoryItemId = product.Id;
+ ////                       product.Instances.Add(rank);
+ //////                       context.Entry<ProductInstance>(rank).State = EntityState.Modified;
+ ////                   }
+
+ //                   context.SaveChanges();
+ //                   Console.WriteLine("Product should be moved");
+ //               } else {
+ //                   Console.WriteLine("Product Is Null");
+ //               }
+ //               Console.ReadKey();
             }
         }
 
