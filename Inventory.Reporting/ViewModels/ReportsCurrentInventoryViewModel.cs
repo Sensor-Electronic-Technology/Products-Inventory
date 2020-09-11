@@ -101,16 +101,13 @@ namespace Inventory.Reporting.ViewModels {
                 .Include(e => e.Lots.Select(x => x.ProductInstances))
                 .Include(e => e.Lots.Select(x => x.Cost))
                 .ToListAsync();
+            //var lots = await this._context.Lots.AsNoTracking().Include(e => e.Product.Instances).Include(e => e.Cost).ToListAsync();
             await Task.Run(() => {
-                foreach (var product in products) {
-                    var inventoryItem = new CurrentInventoryProduct();
-                    double totalCost=0;
-                    int totalQuantity=0;
-                    
+                foreach (var product in products) {              
                     foreach(var lot in product.Lots) {
-                        inventoryItem.LotNumber = String.Concat(lot.LotNumber, ",", lot.SupplierPoNumber);
+                        var inventoryItem = new CurrentInventoryProduct();
+                        inventoryItem.LotNumber = String.Concat("[",lot.LotNumber, "],[", lot.SupplierPoNumber,"]");
                         var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
-                        totalQuantity += quantity;
                         inventoryItem.Quantity = quantity;
                         if (lot.Recieved.HasValue) {
                             inventoryItem.DateIn = lot.Recieved.Value;
@@ -133,11 +130,9 @@ namespace Inventory.Reporting.ViewModels {
                                 inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
                             }
                         }
-                        totalCost += inventoryItem.TotalCost;
+                        inventoryItem.ProductName = product.Name;
+                        summary.Add(inventoryItem);
                     }
-                    inventoryItem.ProductName = product.Name;
-                    inventoryItem.TotalCost = totalCost;
-                    summary.Add(inventoryItem);
                 }
             });
             this.CurrentInventory = summary;

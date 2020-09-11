@@ -239,8 +239,10 @@
                                 <DockPanel>
                                     <dxb:BarContainerControl DockPanel.Dock="Top">
                                         <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
-                                                AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
-                                                BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+                                                            AllowCustomizationMenu="False" AllowQuickCustomization="False" 
+                                                            AllowHide="False" 
+                                                            BarItemDisplayMode="ContentAndGlyph" 
+                                                            Orientation="Horizontal">
                                             <dxb:BarButtonItem x:Name="_rankExportExcel" 
                                                    Command="{Binding ExportRanksCommand}"
                                                    CommandParameter="Xlsx"                                                   
@@ -338,8 +340,11 @@
                         <DockPanel>
                             <dxb:BarContainerControl DockPanel.Dock="Top">
                                 <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
-                                                AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
-                                                BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
+                                                    AllowCustomizationMenu="False" 
+                                                    AllowQuickCustomization="False" 
+                                                    AllowHide="False" 
+                                                    BarItemDisplayMode="ContentAndGlyph" 
+                                                    Orientation="Horizontal">
                                     <dxb:BarButtonItem x:Name="_lotExportExcel" 
                                                    Command="{Binding ExportLotsCommand}"
                                                    CommandParameter="Xlsx"                                                   
@@ -417,7 +422,7 @@
                                         </dxg:GridControl>
                                     </dxg:DataControlDetailDescriptor>
                                 </dxg:GridControl.DetailDescriptor>
-                                <dxg:GridColumn FieldName="Recieved"/>
+                                <dxg:GridColumn FieldName="Recieved" Header="Received"/>
                                 <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowSearchPanel="true"/>
                                 <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
                                 <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>

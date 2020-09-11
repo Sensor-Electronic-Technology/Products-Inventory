@@ -29,8 +29,8 @@ namespace Inventory.ConsoleTesting {
             //DeleteLotFix("Agric Ultra", "18-337");
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
-            DeleteProductNew("TCDM9H2D_1");
-            //DeleteLot("SVC20200804-003_LI2...TBD", "036383");
+            //DeleteProductNew("TCDM9H2D_1");
+            DeleteLot("SVC20200827-003_TBD", "036373");
             //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
         }
 
