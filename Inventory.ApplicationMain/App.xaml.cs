@@ -8,13 +8,11 @@ using DevExpress.Xpf.Docking;
 using DevExpress.Xpf.Prism;
 using Inventory.ApplicationMain.Views;
 using Inventory.ApplicationMain.ViewModels;
-using Inventory.FacilityEpi;
 using Inventory.UsersManagment;
 using Inventory.LocationManagement;
 using Inventory.ProductsManagment;
 using Inventory.Common.EntityLayer.Model;
 using Inventory.Common.EntityLayer.Model.Entities;
-using Inventory.PartsManagment;
 using Inventory.ProductSalesMain;
 using Inventory.Common.DataLayer.Providers;
 using Inventory.Common.BuisnessLayer;
@@ -111,21 +109,30 @@ namespace Inventory.ApplicationMain {
             }
         }
 
-        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
-        {
-            switch (this.userService.SoftwareVersion) {
-                case InventorySoftwareType.MANUFACTURING: {
-                    moduleCatalog.AddModule<FacilityEpiModule>();
-                    moduleCatalog.AddModule<PartsManagmentModule>();
-                    break;
-                }
-                case InventorySoftwareType.PRODUCTS_SALES: {
-                    moduleCatalog.AddModule<ProductSalesMainModule>();
-                    moduleCatalog.AddModule<ProductsManagmentModule>();
-                    moduleCatalog.AddModule<ReportingModule>();
-                    break;
-                }
-            }
+        //protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        //{
+        //    switch (this.userService.SoftwareVersion) {
+        //        case InventorySoftwareType.MANUFACTURING: {
+        //            moduleCatalog.AddModule<FacilityEpiModule>();
+        //            moduleCatalog.AddModule<PartsManagmentModule>();
+        //            break;
+        //        }
+        //        case InventorySoftwareType.PRODUCTS_SALES: {
+        //            moduleCatalog.AddModule<ProductSalesMainModule>();
+        //            moduleCatalog.AddModule<ProductsManagmentModule>();
+        //            moduleCatalog.AddModule<ReportingModule>();
+        //            break;
+        //        }
+        //    }
+        //    moduleCatalog.AddModule<UserManagmentModule>();
+        //    moduleCatalog.AddModule<LocationManagementModule>();
+        //    moduleCatalog.AddModule<CategoriesManagmentModule>();
+        //}
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog) {
+            moduleCatalog.AddModule<ProductSalesMainModule>();
+            moduleCatalog.AddModule<ProductsManagmentModule>();
+            moduleCatalog.AddModule<ReportingModule>();
             moduleCatalog.AddModule<UserManagmentModule>();
             moduleCatalog.AddModule<LocationManagementModule>();
             moduleCatalog.AddModule<CategoriesManagmentModule>();

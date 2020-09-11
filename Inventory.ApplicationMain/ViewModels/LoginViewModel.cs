@@ -109,14 +109,15 @@ namespace Inventory.ApplicationMain.ViewModels {
             Properties.Settings.Default.userIV = service.CurrentUser.IV;
             Properties.Settings.Default.Password =service.CurrentUser.EncryptedPassword;
             Properties.Settings.Default.CredentialsSaved = true;
-            Properties.Settings.Default.DefaultSoftwareVersion = service.SoftwareVersion;
+            Properties.Settings.Default.DefaultSoftwareVersion = InventorySoftwareType.PRODUCTS_SALES;
             Properties.Settings.Default.Save();
         }
 
         private void LogIn()
         {
             if (!string.IsNullOrEmpty(this.Username) && !string.IsNullOrEmpty(this.Password) && !string.IsNullOrEmpty(this.SelectedVersion)) {
-                var version = this.SelectedVersion.GetEnum<InventorySoftwareType>(InventorySoftwareType.MANUFACTURING);
+                //var version = this.SelectedVersion.GetEnum<InventorySoftwareType>(InventorySoftwareType.MANUFACTURING);
+                var version = InventorySoftwareType.PRODUCTS_SALES;
                 this.LoginResponce = this._loginService.LogInWithPassword(this.Username, this.Password,this.SaveLogin,version);
                 if (this.LoginResponce.Success) {
                     if (this.SaveLogin) {

@@ -35,11 +35,11 @@
             <dxlc:LayoutItem Label="Password" LabelPosition="Top" LabelHorizontalAlignment="Center" FontWeight="Bold">
                 <dxe:PasswordBoxEdit EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
             </dxlc:LayoutItem>
-            <dxlc:LayoutItem Label="Selected Version" LabelPosition="Top" LabelHorizontalAlignment="Center" FontWeight="Bold">
+            <!--<dxlc:LayoutItem Label="Selected Version" LabelPosition="Top" LabelHorizontalAlignment="Center" FontWeight="Bold">
                 <dxe:ComboBoxEdit ItemsSource="{Binding Versions,Mode=TwoWay}" 
                                   SelectedItem="{Binding SelectedVersion,Mode=TwoWay}"
                                   Width="150"/>
-            </dxlc:LayoutItem>
+            </dxlc:LayoutItem>-->
             <dxlc:LayoutItem Label="Save Login Info?" LabelPosition="Top" LabelHorizontalAlignment="Center" FontWeight="Bold">
                 <dxe:CheckEdit EditValue="{Binding SaveLogin,Mode=TwoWay}" HorizontalAlignment="Center"/>
             </dxlc:LayoutItem>

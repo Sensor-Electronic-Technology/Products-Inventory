@@ -410,8 +410,8 @@
                                             <dxg:GridColumn FieldName="Power"/>
                                             <dxg:GridColumn FieldName="Voltage"/>
                                             <dxg:GridControl.View>
-                                                <dxg:TableView x:Name="detail" Style="{StaticResource TableViewStyleNoMasterNoGroup}">
-
+                                                <dxg:TableView x:Name="detail"
+                                                               Style="{StaticResource TableViewStyleNoMasterNoGroup}">
                                                 </dxg:TableView>
                                             </dxg:GridControl.View>
                                         </dxg:GridControl>

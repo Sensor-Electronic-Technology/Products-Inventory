@@ -65,21 +65,50 @@
                         </dxb:ToolBarControl>
                     </dxb:BarContainerControl>
                     <dxg:GridControl Style="{StaticResource GridControlStyle}" 
-                                     ItemsSource="{Binding ProductTotals,Mode=TwoWay,IsAsync=True}" 
+                                     ItemsSource="{Binding CurrentInventory,Mode=TwoWay,IsAsync=True}" 
                                      ShowLoadingPanel="{Binding IsLoading,IsAsync=True,Mode=TwoWay}">
                         <dxmvvm:Interaction.Behaviors>
                             <Services:GridExportService x:Name="TotalInventoryExportService"/>
                         </dxmvvm:Interaction.Behaviors>
+                        <dxg:GridControl.GroupSummary>
+                            <dxg:GridSummaryItem FieldName="Quantity"
+                                                 DisplayFormat="[Total Quantity: {0:n}]"
+                                                 ShowInColumn="Quantity"
+                                                 SummaryType="Sum" />
+                            <dxg:GridSummaryItem FieldName="UnitCost"
+                                                 DisplayFormat="[Avg UnitCost: {0:c3}]"
+                                                 ShowInColumn="UnitCost"
+                                                 SummaryType="Average" />
+                            <dxg:GridSummaryItem FieldName="TotalCost"
+                                                 DisplayFormat="[TotalCost: {0:c3}]"
+                                                 ShowInColumn="TotalCost"
+                                                 SummaryType="Sum" />
+                            <dxg:GridSummaryItem FieldName="Age"
+                                                 DisplayFormat="[Avg Age: {0:n}]"
+                                                 ShowInColumn="Age"
+                                                 SummaryType="Average" />
+                        </dxg:GridControl.GroupSummary>
                         <dxg:GridControl.View>
-                            <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroup}" 
-                                           SearchColumns="Product.Name" 
+                            <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
+                                           SearchColumns="ProductName"
                                            SearchPanelNullText="Search by Product"
-                                           ShowTotalSummary="True"/>
+                                           ShowTotalSummary="True" />
                         </dxg:GridControl.View>
-                        <dxg:GridColumn FieldName="Product.Name" Header="Part Number"/>
-                        <dxg:GridColumn FieldName="Product.Total" Header="Quantity">
+                        <dxg:GridColumn FieldName="ProductName" Header="Part Number" GroupIndex="0"/>
+                        <dxg:GridColumn FieldName="LotNumber" />
+                        <dxg:GridColumn FieldName="DateIn" />
+                        <dxg:GridColumn FieldName="Age" />
+
+                        <dxg:GridColumn FieldName="Quantity">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn FieldName="UnitCost">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings MaskType="Numeric"
+                                                      MaskUseAsDisplayFormat="True"
+                                                      Mask="c" />
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                         <dxg:GridColumn FieldName="TotalCost">
@@ -88,7 +117,7 @@
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                         <dxg:GridControl.TotalSummary>
-                            <dxg:GridSummaryItem FieldName="Product.Total" SummaryType="Sum" DisplayFormat="Total Quantity: {0:d}"/>
+                            <dxg:GridSummaryItem FieldName="Quantity" SummaryType="Sum" DisplayFormat="Total Quantity: {0:d}"/>
                             <dxg:GridSummaryItem FieldName="TotalCost" SummaryType="Sum" DisplayFormat="Total Cost: {0:c2}"/>
                         </dxg:GridControl.TotalSummary>
                     </dxg:GridControl>

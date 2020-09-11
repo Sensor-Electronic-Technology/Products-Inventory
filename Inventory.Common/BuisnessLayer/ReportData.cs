@@ -7,34 +7,58 @@ using System.Threading.Tasks;
 
 namespace Inventory.Common.BuisnessLayer {
 
+    public class CurrentInventoryProduct {
+        public string ProductName { get; set; }
+        public string LotNumber { get; set; }
+        public DateTime DateIn { get; set; }
+        public int Age { get; set; }
+        public int Quantity { get; set; }
+        public double UnitCost { get; set; }
+        public double TotalCost { get; set; }
+    }
+
     public class CurrentInventoryItem{
         public string ProductName { get; set; }
         public int Quanity { get; set; }      
         public double TotalCost { get; set; }
-        public IEnumerable<Lot> Lots { get; set; }
+        public List<LotDto> Lots { get; set; }
 
-        public CurrentInventoryItem(Product product) {
-            this.ProductName = product.Name;
-            this.Quanity = product.Total;
-            this.Lots = new List<Lot>(product.Lots);
-
+        public CurrentInventoryItem(string name,int quantity,double totalCost) {
+            this.ProductName = name;
+            this.Quanity = quantity;
+            this.TotalCost = totalCost;
+            this.Lots = new List<LotDto>();
         }
 
+        public CurrentInventoryItem() {
+            this.ProductName = "N/A";
+            this.Quanity = 0;
+            this.TotalCost = 0;
+            this.Lots = new List<LotDto>();
+        }
     }
 
     public class LotDto {
         public string LotNumber { get; set; }
+        public DateTime DateIn { get; set; }
         public int Quantity { get; set; }
         public double UnitCost { get; set; }
-        public double Cost { get; set; }
+        public double TotalCost { get; set; }
         public int Age { get; set; }
 
-        public LotDto(Lot lot) {
-            this.LotNumber = String.Concat(lot.LotNumber, ",", lot.SupplierPoNumber);
-            this.UnitCost = lot.Cost.Amount;
-            this.Quantity = lot.ProductInstances.Sum(e => e.Quantity);
-            
-            //this.Age=lot.
+        public LotDto(string lotNumber,string poNumber,double cost,int quantity,int age,DateTime recieved) {
+            this.LotNumber = String.Concat(lotNumber, ",", poNumber);
+            this.UnitCost = cost;
+            this.Quantity = quantity;
+            this.Age = age;
+            this.DateIn = recieved;
+        }
+
+        public LotDto() {
+            this.LotNumber = "xx,xx";
+            this.UnitCost = 0.00;
+            this.Quantity = 0;
+            this.Age = -1;
         }
     }
 

@@ -24,17 +24,17 @@ namespace Inventory.Reporting.ViewModels {
     public class ReportsCurrentInventoryViewModel : InventoryViewModelBase {
         public IExportService ExportServiceTotalInventory { get => ServiceContainer.GetService<IExportService>("TotalInventoryExportService"); }
         public IDispatcherService DispatcherService { get => ServiceContainer.GetService<IDispatcherService>("ReportTotalsProductDispatcher"); }
+
         private InventoryContext _context;
-
         private ObservableCollection<TotalReportDataRow> _productTotals = new ObservableCollection<TotalReportDataRow>();
+        private ObservableCollection<CurrentInventoryProduct> _currentInventory = new ObservableCollection<CurrentInventoryProduct>();
         private bool _isLoading = false;
-
         public AsyncCommand CollectProductTotalsCommand { get; set; }
         public AsyncCommand<ExportFormat> ExportProductTotalsCommand { get; set; }
 
         public ReportsCurrentInventoryViewModel(InventoryContext context) {
             this._context = context;
-            this.CollectProductTotalsCommand = new AsyncCommand(this.CollectProductTotalsHandler);
+            this.CollectProductTotalsCommand = new AsyncCommand(this.CollectProductTotalsHandler_v2);
             this.ExportProductTotalsCommand = new AsyncCommand<ExportFormat>(this.ExportProductTotalsHandler);
         }
 
@@ -52,14 +52,19 @@ namespace Inventory.Reporting.ViewModels {
             set => SetProperty(ref this._isLoading, value, "IsLoading");
         }
 
+        public ObservableCollection<CurrentInventoryProduct> CurrentInventory { 
+            get => this._currentInventory; 
+            set => SetProperty(ref this._currentInventory,value);
+        }
+
         private async Task CollectProductTotalsHandler() {
             ObservableCollection<TotalReportDataRow> summary = new ObservableCollection<TotalReportDataRow>();
             double total = 0;
             this.IsLoading = true;
             var products = await this._context.InventoryItems.OfType<Product>()
                 .AsNoTracking().Include(e => e.Lots.Select(x => x.ProductInstances))
-                .Include(e => e.Lots.Select(x => x.Cost)).ToListAsync();
-
+                .Include(e => e.Lots.Select(x => x.Cost))
+                .ToListAsync();
             await Task.Run(() => {
                 foreach (var product in products) {
                     var row = new TotalReportDataRow();
@@ -85,6 +90,57 @@ namespace Inventory.Reporting.ViewModels {
                 }
             });
             this.ProductTotals = summary;
+            this.IsLoading = false;
+        }
+
+        private async Task CollectProductTotalsHandler_v2() {
+            ObservableCollection<CurrentInventoryProduct> summary = new ObservableCollection<CurrentInventoryProduct>();
+            this.IsLoading = true;
+            var now = DateTime.Now;
+            var products = await this._context.InventoryItems.OfType<Product>().AsNoTracking()
+                .Include(e => e.Lots.Select(x => x.ProductInstances))
+                .Include(e => e.Lots.Select(x => x.Cost))
+                .ToListAsync();
+            await Task.Run(() => {
+                foreach (var product in products) {
+                    var inventoryItem = new CurrentInventoryProduct();
+                    double totalCost=0;
+                    int totalQuantity=0;
+                    
+                    foreach(var lot in product.Lots) {
+                        inventoryItem.LotNumber = String.Concat(lot.LotNumber, ",", lot.SupplierPoNumber);
+                        var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
+                        totalQuantity += quantity;
+                        inventoryItem.Quantity = quantity;
+                        if (lot.Recieved.HasValue) {
+                            inventoryItem.DateIn = lot.Recieved.Value;
+                            inventoryItem.Age = (now - lot.Recieved.Value).Days;
+                        } else {
+                            inventoryItem.Age = -1;
+                        }
+                        if (lot.Cost != null) {
+                            inventoryItem.UnitCost = lot.Cost.Amount;
+                            inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
+                        } else {
+                            var cost = this._context.Rates.OfType<Cost>()
+                                        .Include(e => e.Lot)
+                                        .FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
+                            if (cost != null) {
+                                inventoryItem.UnitCost = cost.Amount;
+                                inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
+                            } else {
+                                inventoryItem.UnitCost = 0;
+                                inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
+                            }
+                        }
+                        totalCost += inventoryItem.TotalCost;
+                    }
+                    inventoryItem.ProductName = product.Name;
+                    inventoryItem.TotalCost = totalCost;
+                    summary.Add(inventoryItem);
+                }
+            });
+            this.CurrentInventory = summary;
             this.IsLoading = false;
         }
 
