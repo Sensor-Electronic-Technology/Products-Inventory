@@ -32,7 +32,7 @@
     <SuiteName>InventorySuite</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>28</ApplicationRevision>
+    <ApplicationRevision>29</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -168,16 +168,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Themes.All">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="Effortless.Net.Encryption">
       <Version>3.2.0</Version>

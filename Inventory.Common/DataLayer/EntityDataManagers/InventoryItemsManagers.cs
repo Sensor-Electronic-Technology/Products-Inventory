@@ -736,7 +736,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
         public InventoryActionResponce ReturnQuantityToInventory(ProductInstance entity, int quantity, string buyerPo = null, string rma = null) {
             var rank = this._context.Instances
                 .OfType<ProductInstance>()
-                .Include(e => e.Lot)
+                .Include(e => e.Lot.Cost)
                 .Include(e => e.Transactions)
                 .Include(e => e.InventoryItem)
                 .FirstOrDefault(e=>e.Id==entity.Id);

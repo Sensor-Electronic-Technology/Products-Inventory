@@ -23,6 +23,12 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductDataManager _dataManager;
         public IMessageBoxService MessageBoxService { get { return ServiceContainer.GetService<IMessageBoxService>("IncomingProductFormNotifications"); } }
         private Lot _lot = new Lot();
+        private string _lotNumber;
+        private string _supplierPoNumber;
+        private string _rankName;
+        private int _quantity;
+        private DateTime _recieved;
+        
         private ProductInstance _rank = new ProductInstance();
         private ProductInstance _selectedRank = new ProductInstance();
         private Product _selectedProduct = new Product();
@@ -113,18 +119,47 @@ namespace Inventory.ProductsManagment.ViewModels {
             set => SetProperty(ref this._unitCost, value, "UnitCost");
         }
 
+        public string LotNumber{ 
+            get => this._lotNumber; 
+            set => SetProperty(ref this._lotNumber,value);
+        }
+
+        public string SupplierPoNumber { 
+            get => this._supplierPoNumber; 
+            set => SetProperty(ref this._supplierPoNumber, value);
+        }
+
+        public string RankName {
+            get => this._rankName;
+            set => SetProperty(ref this._rankName, value);
+        }
+
+        public int Quantity { 
+            get => this._quantity; 
+            set => SetProperty(ref this._quantity,value);
+        }
+
+        public DateTime Recieved { 
+            get => _recieved;
+            set => SetProperty(ref this._recieved, value);
+        }
 
         private void SetLotHandler() {
-            bool validated= this.Lot.LotNumber != Constants.DefaultLotNumber
-                && this.Lot.SupplierPoNumber != Constants.DefaultSupplierPo;
+            //bool validated= this.Lot.LotNumber != Constants.DefaultLotNumber && this.Lot.SupplierPoNumber != Constants.DefaultSupplierPo;
+            bool validated = !string.IsNullOrEmpty(this.LotNumber) && !string.IsNullOrEmpty(this.SupplierPoNumber);
             if(validated) {
                 this.SetLotEnabled = false;
-                this.SetLot = "("+this.Lot.LotNumber + "," + this.Lot.SupplierPoNumber + ")";
+                this.SetLot = "("+this.LotNumber + "," + this.SupplierPoNumber + ")";
                 Cost newCost =new Cost();
                 newCost.Amount = this.UnitCost;
+                this.Lot.LotNumber = this.LotNumber;
+                this.Lot.Recieved = this.Recieved;
+                this.Lot.SupplierPoNumber = this.SupplierPoNumber;
                 this.Lot.Cost = newCost;
                 this.Lot.Product = this.SelectedProduct;
                 this._lotInProgress = true;
+            } else {
+                this.MessageBoxService.ShowMessage("Error: SupplierPo and LotNumber must not be empty", "Input Error", MessageButton.OK, MessageIcon.Error);
             }
         }
 
@@ -145,14 +180,27 @@ namespace Inventory.ProductsManagment.ViewModels {
 
         private void AddRankToLotHandler() {
             ProductInstance newRank = new ProductInstance();
-            newRank.Name = this.Rank.Name;
-            newRank.Quantity = this.Rank.Quantity;
-            newRank.Wavelength = this.Rank.Wavelength;
-            newRank.Power = this.Rank.Power;
-            newRank.Voltage = this.Rank.Voltage;
+            newRank.Name = this.RankName;
+            newRank.Quantity = this.Quantity;
+            //newRank.Wavelength = this.Rank.Wavelength;
+            //newRank.Power = this.Rank.Power;
+            //newRank.Voltage = this.Rank.Voltage;
             newRank.InventoryItem = this.SelectedProduct;
-            this.Ranks.Add(newRank);
-            this.SetRankDefaults();
+            if(!string.IsNullOrEmpty(this.RankName) && this.Quantity != 0){
+                this.Ranks.Add(newRank);
+                this.SetRankDefaults();
+            } else {
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine("Process had warning, please see below: ");
+                if (string.IsNullOrEmpty(this.RankName)) {
+                    builder.AppendLine("Rank Name: Cannot be empty");
+                }
+                if (!(this.Quantity>0)) {
+                    builder.AppendLine("Rank Quantity: Cannot be 0");
+                }
+                this.MessageBoxService.ShowMessage(builder.ToString(), "Input Error", MessageButton.OK, MessageIcon.Error);
+            }
+
         }
 
         private void AddLotToIncomingHandler() {
@@ -170,6 +218,7 @@ namespace Inventory.ProductsManagment.ViewModels {
                 rank.Lot = newLot;
                 newLot.ProductInstances.Add(rank);
             }
+
             IncomingLotCarrier carrier = new IncomingLotCarrier();
             carrier.Lot = newLot;
             carrier.RMA = string.IsNullOrEmpty(this.RmaNumber) ? "" : this.RmaNumber;
@@ -211,15 +260,15 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private void SetDefaults() {
+            this.Quantity = 0;
+            this.Recieved = DateTime.Now;
             this.SetLotDefaults();
-            this.SetRankDefaults();
+            //this.SetRankDefaults();
             this.SetLotEnabled = true;
         }
 
         private void SetLotDefaults() {
-            this.Lot.Recieved = DateTime.Now;
-            this.Lot.LotNumber = Constants.DefaultLotNumber;
-            this.Lot.SupplierPoNumber = Constants.DefaultSupplierPo;
+            //this.Recie
             this.UnitCost = 0.00;
             this.Lot.ProductInstances.Clear();
             this.Ranks.Clear();
@@ -229,13 +278,14 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private void SetRankDefaults() {
-            this.Rank.Name = Constants.DefaultRankName;
-            this.Rank.Quantity = 0;
-            this.Rank.Wavelength = "";
-            this.Rank.Power = "";
-            this.Rank.Voltage = "";
-            this.Rank.InventoryItem = null;
-            RaisePropertyChanged("Rank");
+           
+
+            //this.Rank.Quantity = 0;
+            //this.Rank.Wavelength = "";
+            //this.Rank.Power = "";
+            //this.Rank.Voltage = "";
+            //this.Rank.InventoryItem = null;
+            //RaisePropertyChanged("Rank");
         }
 
         public override bool IsNavigationTarget(NavigationContext navigationContext) {

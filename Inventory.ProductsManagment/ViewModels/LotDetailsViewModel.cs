@@ -27,7 +27,6 @@ namespace Inventory.ProductsManagment.ViewModels {
         private Attachment _selectedAttachment = new Attachment();
         private FileNameViewModel _fileNameViewModel = null;
 
-
         public IMessageBoxService MessageBoxService { get=>ServiceContainer.GetService<IMessageBoxService>("LotDetailsNotifications"); } 
         public IDispatcherService Dispatcher { get => ServiceContainer.GetService<IDispatcherService>("LotDispatcher"); }
         protected IDialogService FileNameDialog { get { return ServiceContainer.GetService<IDialogService>("LotFileNameDialog"); } }

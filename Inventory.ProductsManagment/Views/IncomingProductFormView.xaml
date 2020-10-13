@@ -43,16 +43,18 @@
                     <dxlc:LayoutGroup Orientation="Vertical">
                         <dxlc:LayoutGroup>
                             <dxlc:LayoutItem Label="Lot Number" Style="{StaticResource LayoutItemStyle}">
-                                <dxe:TextEdit Text="{Binding Lot.LotNumber,Mode=TwoWay}" 
+                                <dxe:TextEdit Text="{Binding LotNumber,Mode=TwoWay}" 
                                               NullText="Enter Lot Number" 
                                               HorizontalContentAlignment="Center"
-                                              IsEnabled="{Binding SetLotEnabled}"/>
+                                              IsEnabled="{Binding SetLotEnabled}"
+                                              AllowNullInput="True"/>
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Supplier Po" Style="{StaticResource LayoutItemStyle}">
-                                <dxe:TextEdit Text="{Binding Lot.SupplierPoNumber,Mode=TwoWay}" 
+                                <dxe:TextEdit Text="{Binding SupplierPoNumber,Mode=TwoWay}" 
                                               NullText="Enter Po Number" 
                                               HorizontalContentAlignment="Center"
-                                              IsEnabled="{Binding SetLotEnabled}"/>
+                                              IsEnabled="{Binding SetLotEnabled}"
+                                              AllowNullInput="True"/>
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
                         <dxlc:LayoutGroup>
@@ -66,7 +68,7 @@
                                               IsEnabled="{Binding SetLotEnabled}"/>
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Recieved" Style="{StaticResource LayoutItemStyle}">
-                                <dxe:DateEdit EditValue="{Binding Lot.Recieved,Mode=TwoWay}" 
+                                <dxe:DateEdit EditValue="{Binding Recieved,Mode=TwoWay}" 
                                               IsEnabled="{Binding SetLotEnabled}"
                                               HorizontalContentAlignment="Center"/>
                             </dxlc:LayoutItem>
@@ -103,20 +105,21 @@
                     <dxlc:LayoutGroup Orientation="Vertical">
                         <dxlc:LayoutGroup>
                             <dxlc:LayoutItem Label="Enter Rank" Style="{StaticResource LayoutItemStyle}">
-                                <dxe:TextEdit EditValue="{Binding Rank.Name}" 
+                                <dxe:TextEdit EditValue="{Binding RankName}" 
                                               NullText="Enter Rank Text" 
+                                              AllowNullInput="True"
                                               HorizontalContentAlignment="Left"
                                               IsEnabled="{Binding EditLotEnabled}"/>
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Enter Quantity" Style="{StaticResource LayoutItemStyle}">
-                                <dxe:SpinEdit EditValue="{Binding Rank.Quantity}" 
+                                <dxe:SpinEdit EditValue="{Binding Quantity}" 
                                               EditValueType="{x:Type sys:Int32}"
                                               NullText="0" MinValue="0" 
                                               Increment="1" MaskType="Numeric" 
                                               IsEnabled="{Binding EditLotEnabled}"/>
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
-                        <dxlc:LayoutGroup>
+                        <!--<dxlc:LayoutGroup>
                             <dxlc:LayoutItem Label="Wavelength" Style="{StaticResource LayoutItemStyle}">
                                 <dxe:TextEdit EditValue="{Binding Rank.Wavelength}" HorizontalContentAlignment="Center" IsEnabled="{Binding EditLotEnabled}"/>
                             </dxlc:LayoutItem>
@@ -126,7 +129,7 @@
                             <dxlc:LayoutItem Label="Voltage" Style="{StaticResource LayoutItemStyle}">
                                 <dxe:TextEdit EditValue="{Binding Rank.Voltage}" HorizontalContentAlignment="Center" IsEnabled="{Binding EditLotEnabled}"/>
                             </dxlc:LayoutItem>
-                        </dxlc:LayoutGroup>
+                        </dxlc:LayoutGroup>-->
                         <dxlc:LayoutItem Label="Set Lot" Style="{StaticResource LayoutItemStyle}">
                             <dxe:TextEdit EditValue="{Binding SetLot,Mode=TwoWay}" Background="Bisque" 
                                           HorizontalContentAlignment="Center" IsReadOnly="True"/>

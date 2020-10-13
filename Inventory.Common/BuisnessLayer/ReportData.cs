@@ -17,6 +17,20 @@ namespace Inventory.Common.BuisnessLayer {
         public double TotalCost { get; set; }
     }
 
+    public class CurrentInventoryProductV2 {
+        public string ProductName { get; set; }
+        public string LotNumber { get; set; }
+        public DateTime DateIn { get; set; }
+        public DateTime DateSelected { get; set; }
+        public int Age { get; set; }
+        public int EndAge { get; set; }
+        public double UnitCost { get; set; }
+        public double QtyEnd { get; set; }
+        public double CostEnd { get; set; }
+        public double QtyCurrent { get; set; }
+        public double CostCurrent { get; set; }
+    }
+
     public class CurrentInventoryItem{
         public string ProductName { get; set; }
         public int Quanity { get; set; }      

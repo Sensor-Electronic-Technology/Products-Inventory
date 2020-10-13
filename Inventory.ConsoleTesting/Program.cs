@@ -30,8 +30,91 @@ namespace Inventory.ConsoleTesting {
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
             //DeleteProductNew("TCDM9H2D_1");
-            DeleteLot("SVC20200827-003_TBD", "036373");
+            //DeleteLot("SVC20200909-101LI3_TBD", "Sample");
+
             //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
+            using (var context = new InventoryContext()) {
+                var transaction= context.Transactions.FirstOrDefault(e => e.Id == 3968);
+                transaction.TimeStamp = new DateTime(year: 2020, month: 9, day: 20);
+                context.Entry(transaction).State = EntityState.Modified;
+                context.SaveChanges();
+                Console.WriteLine("Should be done");
+            }
+        }
+
+        private static void InventoryAgeTesting() {
+            var now = DateTime.Now;
+            var context = new InventoryContext();
+            var date = new DateTime(2020, 10, 1, 0, 0, 0, DateTimeKind.Local);
+            var products=context.InventoryItems.OfType<Product>().AsNoTracking()
+                .Include(e => e.Lots.Select(x => x.ProductInstances))
+                .Include(e => e.Lots.Select(x => x.Cost))
+                .ToList();
+
+            foreach(var product in products) {
+                foreach(var lot in product.Lots) {
+                    
+                    
+                    var incomingTransactions = from instance in product.Instances
+                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                               where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.INCOMING)
+                                               select transaction;
+
+                    var returningTransactions = from instance in product.Instances
+                                                from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                                where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.RETURNING)
+                                                select transaction;
+
+                    var outgoingTransactions = from instance in product.Instances
+                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                               where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.OUTGOING)
+                                               select transaction;
+
+                    //Returning
+                    var returningQtyTotal = returningTransactions.Sum(e => e.Quantity);
+                    var returningCostTotal = returningTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    //Incoming
+
+                    var incomingQtyTotal = incomingTransactions.Sum(e => e.Quantity);
+                    var incomingCostTotal = incomingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+
+                    //Outgoing
+
+                    var consumerQty = outgoingTransactions.Where(e => e.Location.Name == "Customer").Sum(e => e.Quantity);
+                    var consumerCost = outgoingTransactions.Where(e => e.Location.Name == "Customer").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var internalQty = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => e.Quantity);
+                    var internalCost = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var qualityScrapQty = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => e.Quantity);
+                    var qualityScrapCost = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var totalOutgoingQuantity = outgoingTransactions.Sum(e => e.Quantity);
+                    var totalOutingCost=outgoingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    CurrentInventoryProductV2 inventoryItem = new CurrentInventoryProductV2();
+                    inventoryItem.LotNumber = String.Concat("[", lot.LotNumber, "],[", lot.SupplierPoNumber, "]");
+                    
+                    var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
+                    var cost = lot.Cost.Amount;
+                    inventoryItem.QtyEnd = (quantity - incomingQtyTotal) + totalOutgoingQuantity;
+                    inventoryItem.QtyCurrent = (cost - incomingCostTotal) + totalOutingCost;
+                    inventoryItem.QtyCurrent = quantity;
+                    inventoryItem.CostCurrent = cost*quantity;
+                    inventoryItem.UnitCost = cost;
+                    
+                    if (lot.Recieved.HasValue) {
+                        inventoryItem.DateIn = lot.Recieved.Value;
+                        inventoryItem.Age = (now - lot.Recieved.Value).Days;
+                        inventoryItem.EndAge = (date - lot.Recieved.Value).Days;
+                    } else {
+                        inventoryItem.Age = -1;
+                        inventoryItem.EndAge = -1;
+                    }
+                }
+            }
         }
 
         private static void MovePartItems(string oldPart,string newpart) {

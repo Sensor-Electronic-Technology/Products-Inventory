@@ -19,6 +19,8 @@ using System.Data.Entity;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
+using DevExpress.XtraRichEdit.Model;
+using DevExpress.DataProcessing;
 
 namespace Inventory.Reporting.ViewModels {
     public class ReportsCurrentInventoryViewModel : InventoryViewModelBase {
@@ -27,15 +29,18 @@ namespace Inventory.Reporting.ViewModels {
 
         private InventoryContext _context;
         private ObservableCollection<TotalReportDataRow> _productTotals = new ObservableCollection<TotalReportDataRow>();
-        private ObservableCollection<CurrentInventoryProduct> _currentInventory = new ObservableCollection<CurrentInventoryProduct>();
+        private ObservableCollection<CurrentInventoryProductV2> _currentInventory = new ObservableCollection<CurrentInventoryProductV2>();
         private bool _isLoading = false;
+        private DateTime _date;
+
         public AsyncCommand CollectProductTotalsCommand { get; set; }
         public AsyncCommand<ExportFormat> ExportProductTotalsCommand { get; set; }
 
         public ReportsCurrentInventoryViewModel(InventoryContext context) {
             this._context = context;
-            this.CollectProductTotalsCommand = new AsyncCommand(this.CollectProductTotalsHandler_v2);
+            this.CollectProductTotalsCommand = new AsyncCommand(this.CollectAgingReport);
             this.ExportProductTotalsCommand = new AsyncCommand<ExportFormat>(this.ExportProductTotalsHandler);
+            this.Date = DateTime.Now;
         }
 
         public override bool KeepAlive {
@@ -52,9 +57,101 @@ namespace Inventory.Reporting.ViewModels {
             set => SetProperty(ref this._isLoading, value, "IsLoading");
         }
 
-        public ObservableCollection<CurrentInventoryProduct> CurrentInventory { 
+        public ObservableCollection<CurrentInventoryProductV2> CurrentInventory { 
             get => this._currentInventory; 
             set => SetProperty(ref this._currentInventory,value);
+        }
+
+        public DateTime Date { 
+            get => this._date; 
+            set => SetProperty(ref this._date,value);
+        }
+
+        private async Task CollectAgingReport() {
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+            var now = DateTime.Now;
+            var date = new DateTime(this._date.Year, this._date.Month, this._date.Day, 0, 0, 0, DateTimeKind.Local);
+            await this._context.Lots
+                .Include(e => e.ProductInstances.Select(x => x.Transactions.Select(y=>y.Location)))
+                .Include(e => e.Product)
+                .Include(e => e.Cost)
+                .LoadAsync();
+            var lots = await this._context.Lots
+                .Include(e => e.ProductInstances.Select(x => x.Transactions.Select(y => y.Location)))
+                .Include(e => e.Product)
+                .Include(e => e.Cost).ToListAsync();
+            ObservableCollection<CurrentInventoryProductV2> currentInventory = new ObservableCollection<CurrentInventoryProductV2>();
+            await Task.Run(() => {
+                foreach (var lot in lots) {
+                    var incomingTransactions = from instance in lot.ProductInstances
+                                                from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                                where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.INCOMING)
+                                                select transaction;
+
+                    var returningTransactions = from instance in lot.ProductInstances
+                                                from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                                where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.RETURNING)
+                                                select transaction;
+
+                    var outgoingTransactions = from instance in lot.ProductInstances
+                                               from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                                where (transaction.TimeStamp >= date && transaction.InventoryAction == InventoryAction.OUTGOING)
+                                                select transaction;
+
+                    //Returning
+                    var returningQtyTotal = returningTransactions.Sum(e => e.Quantity);
+                    var returningCostTotal = returningTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    //Incoming
+
+                    var incomingQtyTotal = incomingTransactions.Sum(e => e.Quantity);
+                    var incomingCostTotal = incomingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+
+                    //Outgoing
+
+                    var consumerQty = outgoingTransactions.Where(e => e.Location.Name == "Customer").Sum(e => e.Quantity);
+                    var consumerCost = outgoingTransactions.Where(e => e.Location.Name == "Customer").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var internalQty = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => e.Quantity);
+                    var internalCost = outgoingTransactions.Where(e => e.Location.Name == "Internal").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var qualityScrapQty = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => e.Quantity);
+                    var qualityScrapCost = outgoingTransactions.Where(e => e.Location.Name == "Quality Scrap").Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    var totalOutgoingQuantity = outgoingTransactions.Sum(e => e.Quantity);
+                    var totalOutingCost = outgoingTransactions.Sum(e => { return (e.TotalCost.HasValue) ? e.TotalCost.Value : 0; });
+
+                    CurrentInventoryProductV2 inventoryItem = new CurrentInventoryProductV2();
+                    inventoryItem.LotNumber = String.Concat("[", lot.LotNumber, "],[", lot.SupplierPoNumber, "]");
+
+                    
+                    var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
+                    var cost = lot.Cost.Amount;
+                    var totalCost = cost * quantity;
+                    inventoryItem.DateSelected = date;
+                    inventoryItem.ProductName = lot.Product.Name;
+                    inventoryItem.QtyEnd = (quantity - incomingQtyTotal-returningQtyTotal) + totalOutgoingQuantity;
+                    inventoryItem.CostEnd = (totalCost - incomingCostTotal-returningCostTotal) + totalOutingCost;
+                    inventoryItem.QtyCurrent = quantity;
+                    inventoryItem.CostCurrent = cost * quantity;
+                    inventoryItem.UnitCost = cost;
+
+                    if (lot.Recieved.HasValue) {
+                        inventoryItem.DateIn = lot.Recieved.Value;
+                        inventoryItem.Age = (now - lot.Recieved.Value).Days;
+                        inventoryItem.EndAge = (date - lot.Recieved.Value).Days;
+                    } else {
+                        inventoryItem.Age = -1;
+                        inventoryItem.EndAge = -1;
+                    }
+                    if (inventoryItem.QtyEnd > 0) {
+                        currentInventory.Add(inventoryItem);
+                    }
+                }
+            });
+            this.CurrentInventory = currentInventory;
+            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
 
         private async Task CollectProductTotalsHandler() {
@@ -90,52 +187,6 @@ namespace Inventory.Reporting.ViewModels {
                 }
             });
             this.ProductTotals = summary;
-            this.IsLoading = false;
-        }
-
-        private async Task CollectProductTotalsHandler_v2() {
-            ObservableCollection<CurrentInventoryProduct> summary = new ObservableCollection<CurrentInventoryProduct>();
-            this.IsLoading = true;
-            var now = DateTime.Now;
-            var products = await this._context.InventoryItems.OfType<Product>().AsNoTracking()
-                .Include(e => e.Lots.Select(x => x.ProductInstances))
-                .Include(e => e.Lots.Select(x => x.Cost))
-                .ToListAsync();
-            //var lots = await this._context.Lots.AsNoTracking().Include(e => e.Product.Instances).Include(e => e.Cost).ToListAsync();
-            await Task.Run(() => {
-                foreach (var product in products) {              
-                    foreach(var lot in product.Lots) {
-                        var inventoryItem = new CurrentInventoryProduct();
-                        inventoryItem.LotNumber = String.Concat("[",lot.LotNumber, "],[", lot.SupplierPoNumber,"]");
-                        var quantity = lot.ProductInstances.Sum(rank => rank.Quantity);
-                        inventoryItem.Quantity = quantity;
-                        if (lot.Recieved.HasValue) {
-                            inventoryItem.DateIn = lot.Recieved.Value;
-                            inventoryItem.Age = (now - lot.Recieved.Value).Days;
-                        } else {
-                            inventoryItem.Age = -1;
-                        }
-                        if (lot.Cost != null) {
-                            inventoryItem.UnitCost = lot.Cost.Amount;
-                            inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
-                        } else {
-                            var cost = this._context.Rates.OfType<Cost>()
-                                        .Include(e => e.Lot)
-                                        .FirstOrDefault(x => x.LotNumber == lot.LotNumber && x.SupplierPoNumber == lot.SupplierPoNumber);
-                            if (cost != null) {
-                                inventoryItem.UnitCost = cost.Amount;
-                                inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
-                            } else {
-                                inventoryItem.UnitCost = 0;
-                                inventoryItem.TotalCost = inventoryItem.Quantity * inventoryItem.UnitCost;
-                            }
-                        }
-                        inventoryItem.ProductName = product.Name;
-                        summary.Add(inventoryItem);
-                    }
-                }
-            });
-            this.CurrentInventory = summary;
             this.IsLoading = false;
         }
 

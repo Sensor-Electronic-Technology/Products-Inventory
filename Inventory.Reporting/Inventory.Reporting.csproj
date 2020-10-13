@@ -110,19 +110,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Mvvm">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PivotGrid">
-      <Version>19.1.9</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
