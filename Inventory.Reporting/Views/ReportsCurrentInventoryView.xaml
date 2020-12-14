@@ -103,6 +103,7 @@
                         </dxg:GridControl.View>
                         <dxg:GridColumn FieldName="ProductName" Header="Part Number" GroupIndex="0"/>
                         <dxg:GridColumn FieldName="LotNumber" />
+                        <dxg:GridColumn FieldName="LocationName" Header="Location"/>
                         <dxg:GridColumn FieldName="DateIn" />
                         <dxg:GridColumn FieldName="DateSelected" />
                         <dxg:GridColumn FieldName="EndAge" Header="Adjusted Age" />

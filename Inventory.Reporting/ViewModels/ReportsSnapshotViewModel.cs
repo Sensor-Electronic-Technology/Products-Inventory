@@ -65,10 +65,12 @@ namespace Inventory.Reporting.ViewModels {
             var dStop = new DateTime(this._stop.Year, this._stop.Month, this._stop.Day, 23, 59, 59, DateTimeKind.Local);
 
             await this._context.InventoryItems.OfType<Product>()
+                .Include(e=>e.Warehouse)
                 .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions.Select(l => l.Location))))
                 .Include(e => e.Lots.Select(i => i.Cost)).LoadAsync();
 
             var products = await this._context.InventoryItems.OfType<Product>()
+                .Include(e => e.Warehouse)
                 .Include(e => e.Lots.Select(i => i.ProductInstances.Select(x => x.Transactions.Select(l => l.Location))))
                 .Include(e => e.Lots.Select(i => i.Cost)).ToListAsync();
 
@@ -157,6 +159,9 @@ namespace Inventory.Reporting.ViewModels {
 
                     ProductSnapshot snapshot = new ProductSnapshot();
                     snapshot.ProductName = product.Name;
+                    if (product.Warehouse != null) {
+                        snapshot.LocationName = product.Warehouse.Name;
+                    }
                     snapshot.QtyStart = starting;
                     snapshot.CostStart = startingCost;
                     snapshot.QtyEnd = ending;

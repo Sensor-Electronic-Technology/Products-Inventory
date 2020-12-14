@@ -73,12 +73,12 @@ namespace Inventory.Reporting.ViewModels {
             var date = new DateTime(this._date.Year, this._date.Month, this._date.Day, 0, 0, 0, DateTimeKind.Local);
             await this._context.Lots
                 .Include(e => e.ProductInstances.Select(x => x.Transactions.Select(y=>y.Location)))
-                .Include(e => e.Product)
+                .Include(e => e.Product.Warehouse)
                 .Include(e => e.Cost)
                 .LoadAsync();
             var lots = await this._context.Lots
                 .Include(e => e.ProductInstances.Select(x => x.Transactions.Select(y => y.Location)))
-                .Include(e => e.Product)
+                .Include(e => e.Product.Warehouse)
                 .Include(e => e.Cost).ToListAsync();
             ObservableCollection<CurrentInventoryProductV2> currentInventory = new ObservableCollection<CurrentInventoryProductV2>();
             await Task.Run(() => {
@@ -131,6 +131,11 @@ namespace Inventory.Reporting.ViewModels {
                     var totalCost = cost * quantity;
                     inventoryItem.DateSelected = date;
                     inventoryItem.ProductName = lot.Product.Name;
+                    if (lot.Product.Warehouse != null) {
+                        inventoryItem.LocationName = lot.Product.Warehouse.Name;
+                    }
+                    
+
                     inventoryItem.QtyEnd = (quantity - incomingQtyTotal-returningQtyTotal) + totalOutgoingQuantity;
                     inventoryItem.CostEnd = (totalCost - incomingCostTotal-returningCostTotal) + totalOutingCost;
                     inventoryItem.QtyCurrent = quantity;

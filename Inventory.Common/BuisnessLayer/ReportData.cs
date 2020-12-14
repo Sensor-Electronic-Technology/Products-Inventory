@@ -22,6 +22,7 @@ namespace Inventory.Common.BuisnessLayer {
         public string LotNumber { get; set; }
         public DateTime DateIn { get; set; }
         public DateTime DateSelected { get; set; }
+        public string LocationName { get; set; }
         public int Age { get; set; }
         public int EndAge { get; set; }
         public double UnitCost { get; set; }
@@ -193,6 +194,7 @@ namespace Inventory.Common.BuisnessLayer {
         }
 
         public string ProductName { get; set; }
+        public string LocationName { get; set; }
 
         public double QtyStart { get; set; }
         public double CostStart { get; set; }

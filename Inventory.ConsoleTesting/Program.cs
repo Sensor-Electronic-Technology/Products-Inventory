@@ -30,16 +30,16 @@ namespace Inventory.ConsoleTesting {
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
             //DeleteProductNew("TCDM9H2D_1");
-            //DeleteLot("SVC20200909-101LI3_TBD", "Sample");
+            DeleteLot("20729U005S-7890112", "036462");
 
             //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
-            using (var context = new InventoryContext()) {
-                var transaction= context.Transactions.FirstOrDefault(e => e.Id == 3968);
-                transaction.TimeStamp = new DateTime(year: 2020, month: 9, day: 20);
-                context.Entry(transaction).State = EntityState.Modified;
-                context.SaveChanges();
-                Console.WriteLine("Should be done");
-            }
+            //using (var context = new InventoryContext()) {
+            //    var transaction= context.Transactions.FirstOrDefault(e => e.Id == 3968);
+            //    transaction.TimeStamp = new DateTime(year: 2020, month: 9, day: 20);
+            //    context.Entry(transaction).State = EntityState.Modified;
+            //    context.SaveChanges();
+            //    Console.WriteLine("Should be done");
+            //}
         }
 
         private static void InventoryAgeTesting() {
