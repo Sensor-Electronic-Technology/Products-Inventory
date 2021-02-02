@@ -44,6 +44,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand OnCopyingToClipboardCommand { get; private set; }
         public AsyncCommand InitializeCommand { get; private set; }
         public AsyncCommand RefreshDataCommand { get; private set; }
+        public AsyncCommand BulkImportCommand { get; private set; }
         public PrismCommands.DelegateCommand ClearDetailViewsCommand { get; private set; }
 
         public ProductSelectorViewModel(ProductDataManager dataManager, IEventAggregator eventAggregator, IRegionManager regionManager) {
@@ -59,6 +60,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.RefreshDataCommand = new AsyncCommand(this.RefreshHandler, this.CanExecute);
             this.ClearDetailViewsCommand = new PrismCommands.DelegateCommand(this.ClearDetailViewsHandler, this.CanExecute);
             this.InitializeCommand = new AsyncCommand(this.PopulateAsync);
+            this.BulkImportCommand = new AsyncCommand(this.BulkImportHandler);
 
             this.OnCopyingToClipboardCommand = new PrismCommands.DelegateCommand(this.OnCopyingToClipboardHandler);
 
@@ -176,6 +178,14 @@ namespace Inventory.ProductsManagment.ViewModels {
             }
         }
 
+        private async Task BulkImportHandler() {
+            await this.DispatcherService.BeginInvoke(()=>{ 
+                this.incomingInProgress = true;
+                NavigationParameters parameters = new NavigationParameters();
+                this._regionManager.RequestNavigate(Regions.ProductLotRankRegion, AppViews.ImportLotsView);
+            });
+        }
+
         private void CheckInDoneHandler() {
             this.incomingInProgress = false;
             this._regionManager.Regions[Regions.ProductLotRankRegion].RemoveAll();
@@ -219,21 +229,21 @@ namespace Inventory.ProductsManagment.ViewModels {
         }
 
         private async Task RefreshHandler() {
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
             await this._dataManager.UpdateProductTotalsAsync();
             await this._dataManager.ProductProvider.LoadDataAsync();
             this.Products =(await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
 
         private async Task PopulateAsync() {
             if (!this._isInitialized) {
-                this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+                await this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
                 await this._dataManager.ProductProvider.LoadDataAsync();
                 await this._dataManager.UpdateProductTotalsAsync();
                 this.Products = (await this._dataManager.ProductProvider.GetEntityListAsync()).ToList();
                 this._isInitialized = true;
-                this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
+                await this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
             }
         }
 

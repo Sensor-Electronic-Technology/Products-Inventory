@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E36921B-76DF-4871-AACC-B2A228155001}</ProjectGuid>
+    <ProjectGuid>{2B137729-3494-4270-A655-B9583F1F0840}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Inventory.UserManagment</RootNamespace>
-    <AssemblyName>Inventory.UserManagment</AssemblyName>
+    <RootNamespace>Inventory.LocationManagement</RootNamespace>
+    <AssemblyName>Inventory.LocationManagement</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Mvvm.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Data.Desktop.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Core.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -53,7 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserManagmentModule.cs" />
+    <Compile Include="LocationManagementModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,6 +63,26 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ConsumerDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ConsumerTableViewModel.cs" />
+    <Compile Include="ViewModels\LocationMainViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseDetailsViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseTableViewModel.cs" />
+    <Compile Include="Views\ConsumerDetailsView.xaml.cs">
+      <DependentUpon>ConsumerDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConsumerTableView.xaml.cs">
+      <DependentUpon>ConsumerTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LocationMainView.xaml.cs">
+      <DependentUpon>LocationMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WarehouseDetailsView.xaml.cs">
+      <DependentUpon>WarehouseDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WarehouseTableView.xaml.cs">
+      <DependentUpon>WarehouseTableView.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -78,20 +94,53 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="DevExpress.Mvvm">
-      <Version>20.2.5</Version>
+    <PackageReference Include="DevExpress.Wpf.Core">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.Grid">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.Layout">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.Navigation">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.PrismAdapters">
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>7.2.0.1367</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="app.config" />
+    <Page Include="Views\ConsumerDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConsumerTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LocationMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WarehouseDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WarehouseTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Inventory.Common\Inventory.Common.csproj">
+      <Project>{4b1da1db-ed85-44e1-b0e6-2190c3c2a615}</Project>
+      <Name>Inventory.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,7 +30,7 @@ namespace Inventory.ConsoleTesting {
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
             //DeleteProductNew("TCDM9H2D_1");
-            DeleteLot("20729U005S-7890112", "036462");
+            DeleteLot("SOC20201207-001", "036457");
 
             //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
             //using (var context = new InventoryContext()) {

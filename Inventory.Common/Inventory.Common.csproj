@@ -37,89 +37,98 @@
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.CodeParser.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.CodeParser.19.1.11\lib\net452\DevExpress.CodeParser.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.CodeParser.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.CodeParser.20.2.5\lib\net452\DevExpress.CodeParser.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Data.19.1.11\lib\net452\DevExpress.Data.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.Desktop.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.Desktop.20.2.5\lib\net452\DevExpress.Data.Desktop.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.DataAccess.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.DataAccess.19.1.11\lib\net452\DevExpress.DataAccess.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.20.2.5\lib\net452\DevExpress.Data.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Images.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Images.19.1.11\lib\net452\DevExpress.Images.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.DataAccess.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.DataAccess.20.2.5\lib\net452\DevExpress.DataAccess.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Mvvm.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Mvvm.19.1.11\lib\net452\DevExpress.Mvvm.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Images.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Images.20.2.5\lib\net452\DevExpress.Images.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Office.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Office.Core.19.1.11\lib\net452\DevExpress.Office.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Mvvm.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Mvvm.20.2.5\lib\net452\DevExpress.Mvvm.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Pdf.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Pdf.Core.19.1.11\lib\net452\DevExpress.Pdf.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Office.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Office.Core.20.2.5\lib\net452\DevExpress.Office.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Printing.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Printing.Core.19.1.11\lib\net452\DevExpress.Printing.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Core.20.2.5\lib\net452\DevExpress.Pdf.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.RichEdit.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Core.19.1.11\lib\net452\DevExpress.RichEdit.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v20.2.Drawing, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Drawing.20.2.5\lib\net452\DevExpress.Pdf.v20.2.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.RichEdit.v19.1.Export, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Export.19.1.11\lib\net452\DevExpress.RichEdit.v19.1.Export.dll</HintPath>
+    <Reference Include="DevExpress.Printing.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Printing.Core.20.2.5\lib\net452\DevExpress.Printing.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Accordion.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.Accordion.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Core.20.2.5\lib\net452\DevExpress.RichEdit.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Controls.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.Controls.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v20.2.Export, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Export.20.2.5\lib\net452\DevExpress.RichEdit.v20.2.Export.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Core.19.1.11\lib\net452\DevExpress.Xpf.Core.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Accordion.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Accordion.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v19.1.Extensions, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Core.19.1.11\lib\net452\DevExpress.Xpf.Core.v19.1.Extensions.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Controls.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Controls.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Docking.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.Docking.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Core.20.2.5\lib\net452\DevExpress.Xpf.Core.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.DocumentViewer.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.DocumentViewer.Core.19.1.11\lib\net452\DevExpress.Xpf.DocumentViewer.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v20.2.Extensions, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Core.20.2.5\lib\net452\DevExpress.Xpf.Core.v20.2.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.ExpressionEditor.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.ExpressionEditor.19.1.11\lib\net452\DevExpress.Xpf.ExpressionEditor.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Docking.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Docking.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.19.1.11\lib\net452\DevExpress.Xpf.Grid.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.DocumentViewer.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.DocumentViewer.Core.20.2.5\lib\net452\DevExpress.Xpf.DocumentViewer.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.19.1.11\lib\net452\DevExpress.Xpf.Grid.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.ExpressionEditor.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.ExpressionEditor.20.2.5\lib\net452\DevExpress.Xpf.ExpressionEditor.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v19.1.Extensions, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.19.1.11\lib\net452\DevExpress.Xpf.Grid.v19.1.Extensions.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Layout.v19.1.Core, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.Layout.v19.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Layout.19.1.11\lib\net452\DevExpress.Xpf.LayoutControl.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v20.2.Extensions, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.NavBar.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.NavBar.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Layout.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Layout.v20.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Printing.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Printing.19.1.11\lib\net452\DevExpress.Xpf.Printing.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Layout.20.2.5\lib\net452\DevExpress.Xpf.LayoutControl.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Ribbon.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.19.1.11\lib\net452\DevExpress.Xpf.Ribbon.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.NavBar.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.NavBar.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.RichEdit.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.RichEdit.19.1.11\lib\net452\DevExpress.Xpf.RichEdit.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Office.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Office.20.2.5\lib\net452\DevExpress.Xpf.Office.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Themes.Office2016White.19.1.11\lib\net452\DevExpress.Xpf.Themes.Office2016White.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Printing.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Printing.20.2.5\lib\net452\DevExpress.Xpf.Printing.v20.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpo.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Xpo.19.1.11\lib\net452\DevExpress.Xpo.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Ribbon.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Ribbon.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.RichEdit.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.RichEdit.20.2.5\lib\net452\DevExpress.Xpf.RichEdit.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Themes.Office2019Colorful.20.2.5\lib\net452\DevExpress.Xpf.Themes.Office2019Colorful.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Xpo.20.2.5\lib\net452\DevExpress.Xpo.v20.2.dll</HintPath>
     </Reference>
     <Reference Include="Effortless.Net.Encryption, Version=3.2.0.0, Culture=neutral, PublicKeyToken=603f9a8e5bb15e51, processorArchitecture=MSIL">
       <HintPath>..\packages\Effortless.Net.Encryption.3.2.0\lib\net40\Effortless.Net.Encryption.dll</HintPath>
@@ -206,6 +215,7 @@
     <Compile Include="ApplicationLayer\UI Services\GridExportService.cs" />
     <Compile Include="ApplicationLayer\UI Services\IExportService.cs" />
     <Compile Include="ApplicationLayer\UI Services\UpdateService.cs" />
+    <Compile Include="BuisnessLayer\ImportService.cs" />
     <Compile Include="BuisnessLayer\IQRCodeGenerator.cs" />
     <Compile Include="BuisnessLayer\ReportData.cs" />
     <Compile Include="DataLayer\EntityDataManagers\CategoryDataManager.cs" />
@@ -253,6 +263,7 @@
     <Compile Include="DataLayer\Services\IEntityTriggers.cs" />
     <Compile Include="BuisnessLayer\IFileService.cs" />
     <Compile Include="BuisnessLayer\ILogInService.cs" />
+    <Compile Include="DataLayer\Services\IImportService.cs" />
     <Compile Include="DataLayer\Services\IUserService.cs" />
     <Compile Include="BuisnessLayer\LogInService.cs" />
     <Compile Include="BuisnessLayer\UserService.cs" />
@@ -307,7 +318,35 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <ItemGroup>
     <Page Include="ApplicationLayer\Resources\CommonControlResources.xaml">
       <Generator>MSBuild:Compile</Generator>

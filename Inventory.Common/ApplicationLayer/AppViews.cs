@@ -26,6 +26,7 @@
         public static string IncomingProductListView { get => "IncomingProductListView"; }
         public static string IncomingProductFormView { get => "IncomingProductFormView"; }
         public static string IncomingInstructionsView { get => "IncomingInstructionsView"; }
+        public static string ImportLotsView { get=> "ImportLotsView"; }
 
         //Location Module
         public static string WarehouseTableView { get { return "WarehouseTableView"; } }

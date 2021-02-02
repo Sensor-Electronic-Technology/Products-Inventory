@@ -195,6 +195,9 @@ namespace Inventory.Common.BuisnessLayer {
 
         public string ProductName { get; set; }
         public string LocationName { get; set; }
+        public DateTime LastDate { get; set; }
+        public int Age { get; set; }
+        public int EndAge { get; set; }
 
         public double QtyStart { get; set; }
         public double CostStart { get; set; }

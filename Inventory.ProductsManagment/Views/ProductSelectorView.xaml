@@ -58,6 +58,13 @@
                                            BarItemDisplayMode="ContentAndGlyph" 
                                            Content="Clear Detail Views" 
                                            Glyph="{dx:DXImage Image=ClearAll_16x16.png}"/>
+                        
+                        <dxb:BarButtonItem x:Name="_bulkImport" 
+                                           Command="{Binding BulkImportCommand}"
+                                           BarItemDisplayMode="ContentAndGlyph" 
+                                           Content="Start Bulk Import" 
+                                           Glyph="{dx:DXImage Image=Open2_16x16.png}"/>
+
                     </dxb:ToolBarControl>
                 </dxb:BarContainerControl>
                 <dxg:GridControl x:Name="_listOfProducts"  

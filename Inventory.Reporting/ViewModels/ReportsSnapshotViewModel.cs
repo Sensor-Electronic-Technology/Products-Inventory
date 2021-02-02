@@ -60,7 +60,7 @@ namespace Inventory.Reporting.ViewModels {
         }
 
         private async Task CollectSnapshotHandler() {
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
             var dStart = new DateTime(this._start.Year, this._start.Month, this._start.Day, 0, 0, 0, DateTimeKind.Local);
             var dStop = new DateTime(this._stop.Year, this._stop.Month, this._stop.Day, 23, 59, 59, DateTimeKind.Local);
 
@@ -157,6 +157,21 @@ namespace Inventory.Reporting.ViewModels {
                     var ending = (starting + incomingQtyRange+returningQtyRange) - outgoingQtyRange;
                     var endingCost = (startingCost + incomingCostRange+returningCostRange) - outgoingCostRange;
 
+                    //var outgoingNoFilter = from instance in product.Instances
+                    //                       from transaction in instance.Transactions.OfType<ProductTransaction>()
+                    //                       where (transaction.InventoryAction == InventoryAction.OUTGOING)
+                    //                       select transaction;
+
+                    //var incomingNoFilter = from instance in product.Instances
+                    //                       from transaction in instance.Transactions.OfType<ProductTransaction>()
+                    //                       where (transaction.InventoryAction == InventoryAction.INCOMING)
+                    //                       select transaction;
+
+                    var noFilter = from instance in product.Instances
+                                    from transaction in instance.Transactions
+                                    where (transaction.InventoryAction!=InventoryAction.RETURNING)
+                                    select transaction;
+
                     ProductSnapshot snapshot = new ProductSnapshot();
                     snapshot.ProductName = product.Name;
                     if (product.Warehouse != null) {
@@ -184,13 +199,56 @@ namespace Inventory.Reporting.ViewModels {
                     snapshot.ProductIncoming.Quantity = incomingQtyRange;
                     snapshot.ProductIncoming.Cost = incomingCostRange;
 
+                    //outgoingNoFilter.OrderByDescending(e => e.TimeStamp);
+                    //incomingNoFilter.OrderByDescending(e => e.TimeStamp);
+                    noFilter=noFilter.OrderByDescending(e => e.TimeStamp);
+
+                    if (noFilter.Count() != 0) {
+                        snapshot.LastDate = noFilter.First().TimeStamp;
+                        snapshot.Age = (now - snapshot.LastDate).Days;
+                        snapshot.EndAge = (dStop - snapshot.LastDate).Days;
+                    } else {
+                        snapshot.Age = -1;
+                        snapshot.EndAge = -1;
+                    }
+
+                    //var outT =(outgoingNoFilter.Count() != 0) ? outgoingNoFilter.First().TimeStamp:DateTime.Now;
+                    //var inT= (incomingNoFilter.Count() != 0) ? incomingNoFilter.First().TimeStamp : DateTime.Now;
+                    //if(outgoingNoFilter.Count()!=0 && incomingNoFilter.Count() != 0) {
+                    //    if (outT > inT) {
+                    //        snapshot.LastDate = outgoingNoFilter.First().TimeStamp;
+                    //        snapshot.Age = (now - snapshot.LastDate).Days;
+                    //        snapshot.EndAge = (dStop - snapshot.LastDate).Days;
+                    //    } else {
+                    //        snapshot.LastDate = incomingNoFilter.First().TimeStamp;
+                    //        snapshot.Age = (now - snapshot.LastDate).Days;
+                    //        snapshot.EndAge = (dStop - snapshot.LastDate).Days;
+                    //    }
+                    //} else {
+                    //    if (outgoingNoFilter.Count() != 0) {
+
+                    //        snapshot.LastDate = outgoingNoFilter.First().TimeStamp;
+                    //        snapshot.Age = (now - snapshot.LastDate).Days;
+                    //        snapshot.EndAge = (dStop - snapshot.LastDate).Days;
+                    //    } else {
+                    //        if (incomingNoFilter.Count() > 0) {
+
+                    //            snapshot.LastDate = incomingNoFilter.First().TimeStamp;
+                    //            snapshot.Age = (now - snapshot.LastDate).Days;
+                    //            snapshot.EndAge = (dStop - snapshot.LastDate).Days;
+                    //        } else {
+                    //            snapshot.Age = -1;
+                    //            snapshot.EndAge = -1;
+                    //        }
+                    //    }
+                    //}
                     temp.Add(snapshot);
                 }
             });
 
             this.ProductSnapshot = temp;
             //RaisePropertyChanged("ProductSnapshot");
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
 
         private async Task ExportSnapshotHandler(ExportFormat format) {

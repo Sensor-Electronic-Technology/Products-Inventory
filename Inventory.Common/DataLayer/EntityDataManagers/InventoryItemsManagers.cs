@@ -371,6 +371,100 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             return new InventoryActionResponce(true, message.ToString());
         }
 
+        public InventoryActionResponce CheckIn(IList<Lot> items) {
+            StringBuilder failedBuilder = new StringBuilder();
+            StringBuilder successBuilder = new StringBuilder();
+            StringBuilder message = new StringBuilder();
+            bool failures = false;
+
+
+            var defaultDistributor = this._context.Distributors.AsNoTracking().FirstOrDefault(x => x.Name == "SVC");
+            var warehouse = this._context.Locations.AsNoTracking().FirstOrDefault(x => x.Name == "Products");
+            for (int i = 0; i < items.Count; i++) {
+                StringBuilder builder = new StringBuilder();
+                string lotNumber = items[i].LotNumber;
+                string po = items[i].SupplierPoNumber;
+                int id = items[i].Product.Id;
+                var lotExist = this._context.Lots.AsNoTracking().FirstOrDefault(x => x.SupplierPoNumber == po && x.LotNumber == lotNumber);
+                var productEntity = this._context.InventoryItems.AsNoTracking().OfType<Product>().FirstOrDefault(x => x.Id == id);
+
+                if (lotExist == null && defaultDistributor != null && productEntity != null && warehouse != null) {
+                    var newLot = this._context.Lots.Create();
+                    newLot.LotNumber = items[i].LotNumber;
+                    newLot.SupplierPoNumber = items[i].SupplierPoNumber;
+                    newLot.Recieved = items[i].Recieved;
+                    newLot.ProductId = productEntity.Id;
+                    newLot.ProductName = productEntity.Name;
+                    productEntity.Lots.Add(newLot);
+
+                    this._context.Lots.Add(newLot);
+
+                    var newCost = this._context.Rates.Create<Cost>();
+                    newCost.Amount = items[i].Cost.Amount;
+                    newCost.DistributorId = defaultDistributor.Id;
+                    newCost.Lot = newLot;
+                    newCost.TimeStamp = DateTime.Now;
+                    newLot.CostId = newCost.Id;
+                    this._context.Rates.Add(newCost);
+
+                    items[i].ProductInstances.ToList().ForEach(item => {
+                        var newRank = this._context.Instances.Create<ProductInstance>();
+                        newRank.Name = item.Name;
+                        newRank.Power = item.Power;
+                        newRank.Wavelength = item.Wavelength;
+                        newRank.Voltage = item.Voltage;
+                        newRank.Quantity = item.Quantity;
+                        newRank.LotNumber = newLot.LotNumber;
+                        newRank.SupplierPoNumber = newLot.SupplierPoNumber;
+                        newRank.InventoryItemId = productEntity.Id;
+
+                        this._context.Instances.Add(newRank);
+
+                        var transaction = this._context.Transactions.Create<ProductTransaction>();
+                        transaction.InstanceId = newRank.Id;
+                        transaction.LocationId = warehouse.Id;
+                        transaction.TimeStamp = items[i].Recieved.HasValue ? items[i].Recieved.Value : DateTime.Now;
+                        transaction.SessionId = this._userService.CurrentSession.Id;
+                        transaction.Quantity = newRank.Quantity;
+                        transaction.InventoryAction = InventoryAction.INCOMING;
+                        transaction.IsReturning = false;
+                        transaction.ProductName = productEntity.Name;
+                        transaction.UnitCost = newLot.Cost.Amount;
+                        transaction.TotalCost = transaction.UnitCost * transaction.Quantity;
+
+                        this._context.Transactions.Add(transaction);
+
+                        try {
+                            this._context.SaveChanges();
+                            successBuilder.AppendFormat("Lot: ({0},{1}) Rank: {2} => Input Quantity({3}) UnitCost: ${4}", newLot.LotNumber, newLot.SupplierPoNumber, newRank.Name, newRank.Quantity, newLot.Cost.Amount).AppendLine();
+                        } catch {
+                            failures = true;
+                            failedBuilder.AppendFormat("Lot: ({0},{1}) or Product Id: {2} or Distributor: SVC Not Found, Internal Error See Administrator", lotExist.LotNumber, po, id);
+                            this._context.UndoDbContext();
+                        }
+                    });
+                } else {
+                    failures = true;
+                    if (lotExist != null) {
+                        failedBuilder.AppendFormat("Lot: ({0},{1}) Exits, Please Check Lot Input and Try Again", lotNumber, po).AppendLine();
+                    } else {
+                        failedBuilder.AppendFormat("Product Id: {0} or Distributor: SVC or Warehouse: Products Not Found,Internal Error: Please see Administrator", id).AppendLine();
+                    }
+                }
+            }
+            if (failures) {
+                message.AppendLine("Errors While Saving, Please See Below: ");
+                message.Append(failedBuilder.ToString()).AppendLine();
+                message.AppendLine("Items Succeeded Below: ");
+                message.Append(successBuilder.ToString());
+            } else {
+                message.AppendLine("Succeeded");
+                message.AppendLine("Items Succeeded Below: ");
+                message.Append(successBuilder.ToString());
+            }
+            return new InventoryActionResponce(true, message.ToString());
+        }
+
         public InventoryActionResponce Checkin(IList<ProductInstance> items,Product product,Lot lot,Cost cost,string rma=null) {
             StringBuilder builder = new StringBuilder();
             var lotentity = this._context.Lots.FirstOrDefault(x => x.SupplierPoNumber == lot.SupplierPoNumber && x.LotNumber == lot.LotNumber);

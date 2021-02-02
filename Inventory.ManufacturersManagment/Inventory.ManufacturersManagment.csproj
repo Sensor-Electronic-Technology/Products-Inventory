@@ -85,6 +85,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DevExpress.Mvvm">
+      <Version>20.2.5</Version>
+    </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.4.0</Version>
     </PackageReference>

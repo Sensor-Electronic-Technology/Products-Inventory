@@ -82,11 +82,8 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Spreadsheet.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -171,19 +168,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>20.2.5</Version>
-    </PackageReference>
-    <PackageReference Include="DevExpress.Mvvm">
-      <Version>20.2.5</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>20.2.5</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
-      <Version>20.2.5</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Themes.All">
-      <Version>20.2.5</Version>
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="Effortless.Net.Encryption">
       <Version>3.2.0</Version>

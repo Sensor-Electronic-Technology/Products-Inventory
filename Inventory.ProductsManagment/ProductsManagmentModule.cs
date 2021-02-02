@@ -24,6 +24,7 @@ namespace Inventory.ProductsManagment
             containerRegistry.RegisterForNavigation<OutgoingProductListView>(AppViews.OutgoingProductListView);
             containerRegistry.RegisterForNavigation<IncomingProductFormView>(AppViews.IncomingProductFormView);
             containerRegistry.RegisterForNavigation<IncomingProductListView>(AppViews.IncomingProductListView);
+            containerRegistry.RegisterForNavigation<ImportLotsView>(AppViews.ImportLotsView);
         }
     }
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E36921B-76DF-4871-AACC-B2A228155001}</ProjectGuid>
+    <ProjectGuid>{2C373920-EC37-4FF8-AB71-821E2910633E}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Inventory.UserManagment</RootNamespace>
-    <AssemblyName>Inventory.UserManagment</AssemblyName>
+    <RootNamespace>Inventory.Reporting</RootNamespace>
+    <AssemblyName>Inventory.Reporting</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,10 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Mvvm.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Data.Desktop.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Core.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -53,7 +50,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserManagmentModule.cs" />
+    <Compile Include="ReportingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,6 +64,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ReportsCurrentInventoryViewModel.cs" />
+    <Compile Include="ViewModels\ReportsMainViewModel.cs" />
+    <Compile Include="ViewModels\ReportsSnapshotViewModel.cs" />
+    <Compile Include="ViewModels\ReportsTransactionSummaryViewModel.cs" />
+    <Compile Include="Views\ReportsCurrentInventoryView.xaml.cs">
+      <DependentUpon>ReportsCurrentInventoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsMainView.xaml.cs">
+      <DependentUpon>ReportsMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsSnapshotView.xaml.cs">
+      <DependentUpon>ReportsSnapshotView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsTransactionSummaryView.xaml.cs">
+      <DependentUpon>ReportsTransactionSummaryView.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -78,20 +91,46 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
+    <Page Include="Views\ReportsCurrentInventoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsSnapshotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsTransactionSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DevExpress.Mvvm">
-      <Version>20.2.5</Version>
+    <PackageReference Include="DevExpress.Data">
+      <Version>19.1.11</Version>
     </PackageReference>
-    <PackageReference Include="Prism.Core">
-      <Version>7.2.0.1367</Version>
+    <PackageReference Include="DevExpress.Mvvm">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.Core">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.Layout">
+      <Version>19.1.11</Version>
+    </PackageReference>
+    <PackageReference Include="DevExpress.Wpf.PivotGrid">
+      <Version>19.1.11</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\Inventory.Common\Inventory.Common.csproj">
+      <Project>{4b1da1db-ed85-44e1-b0e6-2190c3c2a615}</Project>
+      <Name>Inventory.Common</Name>
+    </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

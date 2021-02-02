@@ -85,6 +85,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DevExpress.Mvvm">
+      <Version>20.2.5</Version>
+    </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>7.2.0.1367</Version>
     </PackageReference>

@@ -89,17 +89,20 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DevExpress.Mvvm">
+      <Version>20.2.5</Version>
+    </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>19.1.11</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>19.1.11</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>19.1.11</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Navigation">
-      <Version>19.1.11</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>7.2.0.1367</Version>

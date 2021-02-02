@@ -68,7 +68,7 @@ namespace Inventory.Reporting.ViewModels {
         }
 
         private async Task CollectAgingReport() {
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = true);
             var now = DateTime.Now;
             var date = new DateTime(this._date.Year, this._date.Month, this._date.Day, 0, 0, 0, DateTimeKind.Local);
             await this._context.Lots
@@ -141,22 +141,36 @@ namespace Inventory.Reporting.ViewModels {
                     inventoryItem.QtyCurrent = quantity;
                     inventoryItem.CostCurrent = cost * quantity;
                     inventoryItem.UnitCost = cost;
+                    var outgoingNoFilter = from instance in lot.ProductInstances
+                                           from transaction in instance.Transactions.OfType<ProductTransaction>()
+                                           where (transaction.InventoryAction == InventoryAction.OUTGOING)
+                                           select transaction;
 
-                    if (lot.Recieved.HasValue) {
-                        inventoryItem.DateIn = lot.Recieved.Value;
-                        inventoryItem.Age = (now - lot.Recieved.Value).Days;
-                        inventoryItem.EndAge = (date - lot.Recieved.Value).Days;
+                    if (outgoingNoFilter.Count() != 0) {
+                        outgoingNoFilter.OrderByDescending(e => e.TimeStamp);
+                        inventoryItem.DateIn = outgoingNoFilter.First().TimeStamp;
+                        inventoryItem.Age = (now - inventoryItem.DateIn).Days;
+                        inventoryItem.EndAge = (date - inventoryItem.DateIn).Days;
+                        if (inventoryItem.QtyEnd > 0) {
+                            currentInventory.Add(inventoryItem);
+                        }
                     } else {
-                        inventoryItem.Age = -1;
-                        inventoryItem.EndAge = -1;
-                    }
-                    if (inventoryItem.QtyEnd > 0) {
-                        currentInventory.Add(inventoryItem);
+                        if (lot.Recieved.HasValue) {
+                            inventoryItem.DateIn = lot.Recieved.Value;
+                            inventoryItem.Age = (now - lot.Recieved.Value).Days;
+                            inventoryItem.EndAge = (date - lot.Recieved.Value).Days;
+                        } else {
+                            inventoryItem.Age = -1;
+                            inventoryItem.EndAge = -1;
+                        }
+                        if (inventoryItem.QtyEnd > 0) {
+                            currentInventory.Add(inventoryItem);
+                        }
                     }
                 }
             });
             this.CurrentInventory = currentInventory;
-            this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
+            await this.DispatcherService.BeginInvoke(() => this.IsLoading = false);
         }
 
         private async Task CollectProductTotalsHandler() {

@@ -103,19 +103,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>18.2.4</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>18.2.4</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>18.2.4</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>18.2.4</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
-      <Version>18.2.4</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.2.0</Version>

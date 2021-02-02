@@ -50,7 +50,19 @@
                                 <dxg:GridColumn FieldName="LocationName" Header="Location" />
                             </dxg:GridControlBand>
 
-                            <dxg:GridControlBand Header="Start" VisibleIndex="2">
+                            <dxg:GridControlBand Header="None" OverlayHeaderByChildren="True" VisibleIndex="2">
+                                <dxg:GridColumn FieldName="LastDate" Header="Last Date" />
+                            </dxg:GridControlBand>
+
+                            <dxg:GridControlBand Header="None" OverlayHeaderByChildren="True" VisibleIndex="3">
+                                <dxg:GridColumn FieldName="Age" Header="Age" />
+                            </dxg:GridControlBand>
+
+                            <dxg:GridControlBand Header="None" OverlayHeaderByChildren="True" VisibleIndex="4">
+                                <dxg:GridColumn FieldName="EndAge" Header="Adjusted Age" />
+                            </dxg:GridControlBand>
+
+                            <dxg:GridControlBand Header="Start" VisibleIndex="5">
                                 <dxg:GridColumn FieldName="QtyStart" Header="Quantity">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -62,7 +74,7 @@
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                             </dxg:GridControlBand>
-                            <dxg:GridControlBand Header="Returning" VisibleIndex="3">
+                            <dxg:GridControlBand Header="Returning" VisibleIndex="6">
                                 <dxg:GridColumn FieldName="Return.Quantity" Header="Quantity">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -74,7 +86,7 @@
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                             </dxg:GridControlBand>
-                            <dxg:GridControlBand Header="Incoming" VisibleIndex="4">
+                            <dxg:GridControlBand Header="Incoming" VisibleIndex="7">
                                 <dxg:GridColumn FieldName="ProductIncoming.Quantity" Header="Quantity">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -86,7 +98,7 @@
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                             </dxg:GridControlBand>
-                            <dxg:GridControlBand Header="Outgoing" VisibleIndex="5">
+                            <dxg:GridControlBand Header="Outgoing" VisibleIndex="8">
                                 <dxg:GridControlBand.Bands >
                                     <dxg:GridControlBand Header="Customer" VisibleIndex="0">
                                         <dxg:GridColumn FieldName="Customer.Quantity" Header="Quantity">
@@ -100,7 +112,7 @@
                                             </dxg:GridColumn.EditSettings>
                                         </dxg:GridColumn>
                                     </dxg:GridControlBand>
-                                    <dxg:GridControlBand Header="Internal" VisibleIndex="6">
+                                    <dxg:GridControlBand Header="Internal" VisibleIndex="9">
                                         <dxg:GridColumn FieldName="Internal.Quantity" Header="Quantity">
                                             <dxg:GridColumn.EditSettings>
                                                 <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -112,7 +124,7 @@
                                             </dxg:GridColumn.EditSettings>
                                         </dxg:GridColumn>
                                     </dxg:GridControlBand>
-                                    <dxg:GridControlBand Header="Quality Scrap" VisibleIndex="7">
+                                    <dxg:GridControlBand Header="Quality Scrap" VisibleIndex="10">
                                         <dxg:GridColumn FieldName="QualityScrap.Quantity" Header="Quantity">
                                             <dxg:GridColumn.EditSettings>
                                                 <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -126,7 +138,7 @@
                                     </dxg:GridControlBand>
                                 </dxg:GridControlBand.Bands>
                             </dxg:GridControlBand>
-                            <dxg:GridControlBand Header="End" VisibleIndex="8">
+                            <dxg:GridControlBand Header="End" VisibleIndex="11">
                                 <dxg:GridColumn FieldName="QtyEnd" Header="Quantity">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
@@ -138,7 +150,7 @@
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                             </dxg:GridControlBand>
-                            <dxg:GridControlBand Header="Current" VisibleIndex="9">
+                            <dxg:GridControlBand Header="Current" VisibleIndex="12">
                                 <dxg:GridColumn FieldName="QtyCurrent" Header="Quantity">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="d" />
