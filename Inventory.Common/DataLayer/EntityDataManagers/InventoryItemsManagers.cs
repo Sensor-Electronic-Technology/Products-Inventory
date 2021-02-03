@@ -274,8 +274,6 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             }
         }
 
-
-
         public InventoryActionResponce CheckIn(IList<Lot> items,IList<string> rmas) {
             StringBuilder failedBuilder = new StringBuilder();
             StringBuilder successBuilder = new StringBuilder();
@@ -561,7 +559,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
                         failedBuilder.AppendFormat("Product: {0} Rank: {1} : Outgoing Quantity({2}) Current Stock({3}) ",rank.InventoryItem.Name,rank.Name,item.Quantity,rank.Quantity).AppendLine();
                     }
                 } else {
-                    error = true;
+                    //error = true;
                     failedBuilder.AppendLine("Error: Rank and Lot not found, Please check with administrator");
                 }
             }
@@ -580,7 +578,7 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
                     message.Append(successBuilder.ToString());
                     return new InventoryActionResponce(true, message.ToString());
                 }
-            } catch {
+            } catch(Exception e) {
                 this.UndoChanges();
                 message.AppendLine("Failed while saving");
                 message.AppendLine(" Please try again or contact administrator");
@@ -588,6 +586,70 @@ namespace Inventory.Common.DataLayer.EntityDataManagers {
             }
         }
 
+        public async Task<InventoryActionResponce> CheckOutSingle(ImportLotData lotData) {
+            var defaultDistributor = await this._context.Distributors.AsNoTracking().FirstOrDefaultAsync(x => x.Name == "SVC");
+            var warehouse = await this._context.Locations.AsNoTracking().FirstOrDefaultAsync(x => x.Name == "Products");
+            var lotExist = await this._context.Lots.AsNoTracking().FirstOrDefaultAsync(x => x.SupplierPoNumber == lotData.PoNumber && x.LotNumber == lotData.LotNumber);
+            var productEntity = await this._context.InventoryItems.AsNoTracking().OfType<Product>().FirstOrDefaultAsync(x => x.Name == lotData.ProductName);
+            if (lotExist == null && defaultDistributor != null && productEntity != null && warehouse != null) {
+                var newLot = this._context.Lots.Create();
+                newLot.LotNumber = lotData.LotNumber;
+                newLot.SupplierPoNumber = lotData.PoNumber;
+                newLot.Recieved = lotData.LotDate;
+                newLot.ProductId = productEntity.Id;
+                newLot.ProductName = productEntity.Name;
+                productEntity.Lots.Add(newLot);
+
+                this._context.Lots.Add(newLot);
+
+                var newCost = this._context.Rates.Create<Cost>();
+                newCost.Amount = lotData.UnitCost;
+                newCost.DistributorId = defaultDistributor.Id;
+                newCost.Lot = newLot;
+                newCost.TimeStamp = DateTime.Now;
+                newLot.CostId = newCost.Id;
+                this._context.Rates.Add(newCost);
+                var newRank = this._context.Instances.Create<ProductInstance>();
+                newRank.Name = lotData.Rank;
+                newRank.Quantity = lotData.Quantity;
+                newRank.LotNumber = newLot.LotNumber;
+                newRank.SupplierPoNumber = newLot.SupplierPoNumber;
+                newRank.InventoryItemId = productEntity.Id;
+
+                this._context.Instances.Add(newRank);
+
+                var transaction = this._context.Transactions.Create<ProductTransaction>();
+                transaction.InstanceId = newRank.Id;
+                transaction.LocationId = warehouse.Id;
+                transaction.TimeStamp = lotData.LotDate;
+                transaction.SessionId = this._userService.CurrentSession.Id;
+                transaction.Quantity = newRank.Quantity;
+                transaction.InventoryAction = InventoryAction.INCOMING;
+                transaction.IsReturning = false;
+                transaction.ProductName = productEntity.Name;
+                transaction.UnitCost = newLot.Cost.Amount;
+                transaction.TotalCost = transaction.UnitCost * transaction.Quantity;
+
+                this._context.Transactions.Add(transaction);
+
+                try {
+                    var count=await this._context.SaveChangesAsync();
+                    if (count != 0) {
+                        return new InventoryActionResponce(true, "Success");
+                    } else {
+                        this._context.UndoDbContext();
+                        return new InventoryActionResponce(false, "Failed");
+                    }
+                } catch(Exception e) {
+                    this._context.UndoDbContext();
+                    return new InventoryActionResponce(false, e.Message);
+                }
+            } else {
+                this._context.UndoDbContext();
+                return new InventoryActionResponce(false, "Failed");
+            }
+         }
+        
         public InventoryActionResponce RenameLot(Lot entity, string newLotNum, string newPo) {
             if (this._userService.Validate(UserAction.Edit)) {
                 var lot = this._lotOperations.Delete(entity);

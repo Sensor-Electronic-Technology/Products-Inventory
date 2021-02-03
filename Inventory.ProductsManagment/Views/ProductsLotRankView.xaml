@@ -89,124 +89,118 @@
         <dxmvvm:DispatcherService x:Name="ProductRankLotDispatcher"/>
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
-        <dxlc:GroupBox>
-            <dxlc:GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="Product Details" HorizontalAlignment="Center" FontSize="16"/>
-                </DataTemplate>
-            </dxlc:GroupBox.HeaderTemplate>
-            <dxlc:DockLayoutControl>
-                <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top">
-                    <dx:SimpleButton Content="Check Out" HorizontalAlignment="Stretch" MaxWidth="2000"
+        <dxlc:DockLayoutControl>
+            <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Top">
+                <dx:SimpleButton Content="Check Out" HorizontalAlignment="Stretch" MaxWidth="2000"
                                      Command="{Binding CheckOutCommand}"
                                      Glyph="{dx:DXImage Image=Outbox_16x16.png}"
                                      ToolTip="Check out products" Height="50"/>
-                </dxlc:LayoutGroup>
-                <dx:DXTabControl dxlc:DockLayoutControl.Dock="Client" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
-                    <dx:DXTabItem Header="Summary" Glyph="{dx:DXImage Image=ErrorBarsStandardDeviation_16x16.png}" TabIndex="0">
-                        <dxlc:LayoutControl>
-                            <dxlc:LayoutGroup Orientation="Vertical">
-                                <dxlc:LayoutGroup>
-                                    <dxlc:LayoutItem Label="Name" LabelPosition="Top" LabelHorizontalAlignment="Center" BorderBrush="Black">
-                                        <dxe:TextEdit Text="{Binding SelectedProduct.Name}" 
+            </dxlc:LayoutGroup>
+            <dx:DXTabControl dxlc:DockLayoutControl.Dock="Client" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
+                <dx:DXTabItem Header="Summary" Glyph="{dx:DXImage Image=ErrorBarsStandardDeviation_16x16.png}" TabIndex="0">
+                    <dxlc:LayoutControl>
+                        <dxlc:LayoutGroup Orientation="Vertical">
+                            <dxlc:LayoutGroup>
+                                <dxlc:LayoutItem Label="Name" LabelPosition="Top" LabelHorizontalAlignment="Center" BorderBrush="Black">
+                                    <dxe:TextEdit Text="{Binding SelectedProduct.Name}" 
                                                       IsReadOnly="False" HorizontalContentAlignment="Left"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem Label="Package Type"
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Package Type"
                                                      LabelPosition="Top" 
                                                      LabelHorizontalAlignment="Center"
                                                      BorderBrush="Black">
-                                        <dxe:ComboBoxEdit ItemsSource="{Binding ProductTypes,IsAsync=True,Mode=TwoWay}" 
+                                    <dxe:ComboBoxEdit ItemsSource="{Binding ProductTypes,IsAsync=True,Mode=TwoWay}" 
                                                           SelectedItem="{Binding SelectedProductType,Mode=TwoWay}"
                                                           ApplyItemTemplateToSelectedItem="True" IsTextEditable="False" 
                                                           IsSynchronizedWithCurrentItem="True">
-                                            <dxe:ComboBoxEdit.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
-                                                </DataTemplate>
-                                            </dxe:ComboBoxEdit.ItemTemplate>                                                                         
-                                        </dxe:ComboBoxEdit>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem Label="Warehouse"
+                                        <dxe:ComboBoxEdit.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                            </DataTemplate>
+                                        </dxe:ComboBoxEdit.ItemTemplate>
+                                    </dxe:ComboBoxEdit>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Warehouse"
                                                      LabelPosition="Top" 
                                                      LabelHorizontalAlignment="Center"
                                                      BorderBrush="Black">
-                                        <dxe:ComboBoxEdit ItemsSource="{Binding Warehouses,Mode=TwoWay,IsAsync=True}" 
+                                    <dxe:ComboBoxEdit ItemsSource="{Binding Warehouses,Mode=TwoWay,IsAsync=True}" 
                                           SelectedItem="{Binding SelectedWareHouse,Mode=TwoWay,IsAsync=True}"
                                           ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
-                                            <dxe:ComboBoxEdit.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
-                                                </DataTemplate>
-                                            </dxe:ComboBoxEdit.ItemTemplate>
-                                        </dxe:ComboBoxEdit>
-                                    </dxlc:LayoutItem>
-                                </dxlc:LayoutGroup>
-                                <dxlc:LayoutGroup>
-                                    <dxlc:LayoutItem Label="Custom Part Name" LabelPosition="Top" LabelHorizontalAlignment="Center"
+                                        <dxe:ComboBoxEdit.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                            </DataTemplate>
+                                        </dxe:ComboBoxEdit.ItemTemplate>
+                                    </dxe:ComboBoxEdit>
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup>
+                                <dxlc:LayoutItem Label="Custom Part Name" LabelPosition="Top" LabelHorizontalAlignment="Center"
                                                      BorderBrush="Black">
-                                        <dxe:TextEdit Text="{Binding SelectedProduct.CustomPartName}" 
+                                    <dxe:TextEdit Text="{Binding SelectedProduct.CustomPartName}" 
                                                       IsReadOnly="False" 
                                                       HorizontalContentAlignment="Left"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem Label="Legacy Part Name" LabelPosition="Top" LabelHorizontalAlignment="Center"
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Legacy Part Name" LabelPosition="Top" LabelHorizontalAlignment="Center"
                                                      BorderBrush="Black">
-                                        <dxe:TextEdit Text="{Binding SelectedProduct.LegacyName}" 
+                                    <dxe:TextEdit Text="{Binding SelectedProduct.LegacyName}" 
                                                       IsReadOnly="False" 
                                                       HorizontalContentAlignment="Left"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem Label="Is Outdated?" LabelPosition="Top" LabelHorizontalAlignment="Center">
-                                        <dxe:ToggleSwitch IsChecked="{Binding SelectedProduct.Obsolete}" HorizontalAlignment="Center" 
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Is Outdated?" LabelPosition="Top" LabelHorizontalAlignment="Center">
+                                    <dxe:ToggleSwitch IsChecked="{Binding SelectedProduct.Obsolete}" HorizontalAlignment="Center" 
                                                           IsThreeState="False" CheckedStateContent="Is Outdated" 
                                                           UncheckedStateContent="Not Outdated" ContentPlacement="Both"/>
-                                    </dxlc:LayoutItem>
-                                </dxlc:LayoutGroup>
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
 
-                                <dxlc:LayoutGroup>
-                                    <dxlc:LayoutItem Label="Description" 
+                            <dxlc:LayoutGroup>
+                                <dxlc:LayoutItem Label="Description" 
                                              LabelPosition="Top" 
                                              LabelHorizontalAlignment="Center"
                                              BorderBrush="Black">
-                                        <dxe:TextEdit  Text="{Binding SelectedProduct.Description}" MinHeight="50" 
+                                    <dxe:TextEdit  Text="{Binding SelectedProduct.Description}" MinHeight="50" 
                                                        TextWrapping="WrapWithOverflow" AcceptsReturn="True" AcceptsTab="True"
                                                        HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                                    </dxlc:LayoutItem>
-                                </dxlc:LayoutGroup>
-                                <dxlc:LayoutItem Label="Product Cost Summary" LabelPosition="Top" LabelHorizontalAlignment="Center"
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutItem Label="Product Cost Summary" LabelPosition="Top" LabelHorizontalAlignment="Center"
                                                  VerticalAlignment="Stretch" BorderBrush="Black" FontSize="16">
-                                    <DockPanel>
-                                        <dxb:BarContainerControl DockPanel.Dock="Top">
-                                            <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                                <DockPanel>
+                                    <dxb:BarContainerControl DockPanel.Dock="Top">
+                                        <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
                                                 AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
                                                 BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
 
-                                                <dxb:BarButtonItem x:Name="_exportExcel" 
+                                            <dxb:BarButtonItem x:Name="_exportExcel" 
                                                    Command="{Binding ExportCostSummaryCommand}"
                                                    CommandParameter="Xlsx"                                                   
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export Excel" 
                                                    Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
 
-                                                <dxb:BarButtonItem x:Name="_exportPDF" 
+                                            <dxb:BarButtonItem x:Name="_exportPDF" 
                                                    Command="{Binding ExportCostSummaryCommand}"
                                                    CommandParameter="Pdf"                                                                                                     
                                                    Content="Export PDF" 
                                                    Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
                                                    BarItemDisplayMode="ContentAndGlyph"/>
 
-                                                <dxb:BarButtonItem x:Name="_exportCSV" 
+                                            <dxb:BarButtonItem x:Name="_exportCSV" 
                                                    Command="{Binding ExportCostSummaryCommand}"
                                                    CommandParameter="Csv"
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export CSV" 
                                                    Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
-                                            </dxb:ToolBarControl>
-                                        </dxb:BarContainerControl>
-                                        <dxg:GridControl ItemsSource="{Binding ProductCostSummary,Mode=TwoWay,IsAsync=True}" 
+                                        </dxb:ToolBarControl>
+                                    </dxb:BarContainerControl>
+                                    <dxg:GridControl ItemsSource="{Binding ProductCostSummary,Mode=TwoWay,IsAsync=True}" 
                                                      Style="{StaticResource GridControlStyle}">
-                                            <dxmvvm:Interaction.Behaviors>
-                                                <commonservice:GridExportService x:Name="CostSummaryExportService"/>
-                                            </dxmvvm:Interaction.Behaviors>
-                                            <dxg:GridControl.View>
+                                        <dxmvvm:Interaction.Behaviors>
+                                            <commonservice:GridExportService x:Name="CostSummaryExportService"/>
+                                        </dxmvvm:Interaction.Behaviors>
+                                        <dxg:GridControl.View>
                                             <dxg:TableView Style="{StaticResource TableViewStyleNoMasterNoGroupNoSearch}"/>
                                         </dxg:GridControl.View>
                                         <dxg:GridColumn FieldName="Rank"/>
@@ -225,385 +219,395 @@
                                             <dxg:GridSummaryItem FieldName="Quantity" SummaryType="Sum" DisplayFormat="Total Quantity: {0:d}"/>
                                             <dxg:GridSummaryItem FieldName="TotalCost" SummaryType="Sum" DisplayFormat="Total Cost: {0:c2}"/>
                                         </dxg:GridControl.TotalSummary>
-                                    </dxg:GridControl>                                        
-                                    </DockPanel>
+                                    </dxg:GridControl>
+                                </DockPanel>
 
 
-                                </dxlc:LayoutItem>
-                            </dxlc:LayoutGroup>
-                        </dxlc:LayoutControl>
-                    </dx:DXTabItem>
-                    <dx:DXTabItem Header="Ranks" Glyph="{dx:DXImage Image=RedYellowGreen_16x16.png}" TabIndex="1">
-                        <dxlc:LayoutControl>
-                            <dxlc:LayoutGroup>
-                                <DockPanel>
-                                    <dxb:BarContainerControl DockPanel.Dock="Top">
-                                        <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutControl>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Ranks" Glyph="{dx:DXImage Image=RedYellowGreen_16x16.png}" TabIndex="1">
+                    <dxlc:LayoutControl>
+                        <dxlc:LayoutGroup>
+                            <DockPanel>
+                                <dxb:BarContainerControl DockPanel.Dock="Top">
+                                    <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
                                                             AllowCustomizationMenu="False" AllowQuickCustomization="False" 
                                                             AllowHide="False" 
                                                             BarItemDisplayMode="ContentAndGlyph" 
                                                             Orientation="Horizontal">
-                                            <dxb:BarButtonItem x:Name="_rankExportExcel" 
+                                        <dxb:BarButtonItem x:Name="_rankExportExcel" 
                                                    Command="{Binding ExportRanksCommand}"
                                                    CommandParameter="Xlsx"                                                   
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export Excel" 
                                                    Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
 
-                                            <dxb:BarButtonItem x:Name="_rankExportPDF" 
+                                        <dxb:BarButtonItem x:Name="_rankExportPDF" 
                                                    Command="{Binding ExportRanksCommand}"
                                                    CommandParameter="Pdf"                                                                                                     
                                                    Content="Export PDF" 
                                                    Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
                                                    BarItemDisplayMode="ContentAndGlyph"/>
 
-                                            <dxb:BarButtonItem x:Name="_rankExportCSV" 
+                                        <dxb:BarButtonItem x:Name="_rankExportCSV" 
                                                    Command="{Binding ExportRanksCommand}"
                                                    CommandParameter="Csv"
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export CSV" 
                                                    Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
-                                        </dxb:ToolBarControl>
-                                    </dxb:BarContainerControl>
-                                    <dxg:GridControl x:Name="_listOfRanks" Style="{StaticResource GridControlStyle}"
+
+                                        <dxb:BarItemSeparator/>
+                                        <dxb:BarButtonItem x:Name="_multipleOutgoing" 
+                                                   Command="{Binding AddMultipleToOutgoingCommand}"
+                                                   BarItemDisplayMode="ContentAndGlyph" 
+                                                   Content="Add Multiple Outgoing" 
+                                                   Glyph="{dx:DXImage Image=AddNewDataSource_16x16.png}"/>
+
+                                    </dxb:ToolBarControl>
+                                </dxb:BarContainerControl>
+                                <dxg:GridControl x:Name="_listOfRanks" Style="{StaticResource GridControlMultiSelectStyle}"
                                                  ItemsSource="{Binding Ranks, IsAsync=True, Mode=TwoWay}"
                                                  SelectedItem="{Binding SelectedRank,Mode=TwoWay,IsAsync=True}"
+                                                 SelectedItems="{Binding SelectedRanks,Mode=TwoWay}"
                                                  AllowUpdateTwoWayBoundPropertiesOnSynchronization="True"
+                                                 SelectionMode="MultipleRow"
                                                  FontSize="11"
                                                  ClipboardCopyMode="ExcludeHeader"
                                                  AutoExpandAllGroups="True"
                                                  CopyingToClipboard="_listOfRanks_CopyingToClipboard">
-                                        <dxmvvm:Interaction.Behaviors>
-                                            <commonservice:GridExportService x:Name="RankExportService"/>
-                                        </dxmvvm:Interaction.Behaviors>
-                                        <dxg:GridControl.GroupSummary>
-                                            <dxg:GridSummaryItem FieldName="Quantity" DisplayFormat="[Total Quantity: {0:n}]" ShowInColumn="" SummaryType="Sum" />
-                                            <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Avg Cost: {0:c3}]" ShowInColumn="" SummaryType="Average"/>
-                                            <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Min Cost: {0:c3}]" ShowInColumn="" SummaryType="Min" />
-                                            <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Max Cost: {0:c3}]" ShowInColumn="" SummaryType="Max" />
-                                        </dxg:GridControl.GroupSummary>
-                                        <dxg:GridControl.View>
-                                            <dxg:TableView ShowSearchPanelMode="Always"
+                                    <dxmvvm:Interaction.Behaviors>
+                                        <commonservice:GridExportService x:Name="RankExportService"/>
+                                    </dxmvvm:Interaction.Behaviors>
+
+                                    <dxg:GridControl.GroupSummary>
+                                        <dxg:GridSummaryItem FieldName="Quantity" DisplayFormat="[Total Quantity: {0:n}]" ShowInColumn="" SummaryType="Sum" />
+                                        <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Avg Cost: {0:c3}]" ShowInColumn="" SummaryType="Average"/>
+                                        <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Min Cost: {0:c3}]" ShowInColumn="" SummaryType="Min" />
+                                        <dxg:GridSummaryItem FieldName="Lot.Cost.Amount" DisplayFormat="[Max Cost: {0:c3}]" ShowInColumn="" SummaryType="Max" />
+                                    </dxg:GridControl.GroupSummary>
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView ShowSearchPanelMode="Always"
                                                    Style="{StaticResource TableViewStyleNoMaster}"
                                                    SearchPanelNullText="Search By Rank" 
                                                    AllowGrouping="True" ShowGroupPanel="True" 
-                                                   SearchColumns="Name" >
-                                                <dxg:TableView.RowCellMenuCustomizations>
-                                                    <dxb:BarButtonItem Content="View Details" 
+                                                   SearchColumns="Name" NavigationStyle="Row">
+                                            <dxg:TableView.RowCellMenuCustomizations>
+                                                <dxb:BarButtonItem Content="View Details" 
                                                                    Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.ViewRankDetailsCommand}"/>
-                                                    <dxb:BarButtonItem Content="Edit Rank" 
+                                                <dxb:BarButtonItem Content="Edit Rank" 
                                                                    Glyph="{dx:DXImage Image=Action_Edit.png}"
                                                                    Command="{Binding Path=View.DataContext.EditRankCommand}"/>
-                                                    <dxb:BarItemSeparator/>
-                                                    <dxb:BarButtonItem Content="Reserve Stock" 
+                                                <dxb:BarItemSeparator/>
+                                                <dxb:BarButtonItem Content="Reserve Stock" 
                                                                    Glyph="{dx:DXImage Image=BOOrder_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.ReserveStockCommand}"/>
-                                                    
-                                                    <dxb:BarButtonItem Content="Add To Outgoing" 
+
+                                                <dxb:BarButtonItem Content="Add To Outgoing" 
                                                                    Glyph="{dx:DXImage Image=Right_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.AddToOutgoingCommand}"/>
 
-                                                    <dxb:BarButtonItem Content="Return Partial Quantity" 
+                                                <dxb:BarButtonItem Content="Return Partial Quantity" 
                                                                    Glyph="{dx:DXImage Image=Left_16x16.png}"
                                                                    Command="{Binding Path=View.DataContext.ReturnPartialCommand}"/>
 
-                                                </dxg:TableView.RowCellMenuCustomizations>
-                                                <dxg:TableView.FormatConditions>
-                                                    <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="IsReserved" Value1="True">
-                                                        <dx:Format Background="Gold"/>
-                                                    </dxg:FormatCondition>
-                                                    <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
-                                                        <dx:Format Background="Red"/>
-                                                    </dxg:FormatCondition>
-                                                </dxg:TableView.FormatConditions>
-                                            </dxg:TableView>
-                                        </dxg:GridControl.View>
-                                        <dxg:GridColumn FieldName="Name" Header="Rank" AllowSearchPanel="true" GroupIndex="0"/>
-                                        <dxg:GridColumn FieldName="Quantity"/>
-                                        <dxg:GridColumn FieldName="LotNumber" AllowGrouping="True"/>
-                                        <dxg:GridColumn FieldName="SupplierPoNumber" AllowGrouping="True"/>
-                                        <dxg:GridColumn FieldName="Lot.Cost.Amount" Header="Unit Cost"/>
-                                        <dxg:GridColumn FieldName="Wavelength" AllowGrouping="True"/>
-                                        <dxg:GridColumn FieldName="Power" AllowGrouping="True"/>
-                                        <dxg:GridColumn FieldName="Voltage" AllowGrouping="True"/>
-                                        <dxg:GridColumn FieldName="IsReserved" Header="Reserved"/>
-                                        <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
-                                        <dxg:GridColumn FieldName="Lot.Quarantined" Header="Quarantined"/>
-                                    </dxg:GridControl>
-                                </DockPanel>
-                            </dxlc:LayoutGroup>
-                        </dxlc:LayoutControl>
+                                            </dxg:TableView.RowCellMenuCustomizations>
+                                            <dxg:TableView.FormatConditions>
+                                                <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="IsReserved" Value1="True">
+                                                    <dx:Format Background="Gold"/>
+                                                </dxg:FormatCondition>
+                                                <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
+                                                    <dx:Format Background="Red"/>
+                                                </dxg:FormatCondition>
+                                            </dxg:TableView.FormatConditions>
+                                        </dxg:TableView>
+                                    </dxg:GridControl.View>
+                                    <dxg:GridColumn FieldName="Name" Header="Rank" AllowSearchPanel="true" GroupIndex="0"/>
+                                    <dxg:GridColumn FieldName="Quantity"/>
+                                    <dxg:GridColumn FieldName="LotNumber" AllowGrouping="True"/>
+                                    <dxg:GridColumn FieldName="SupplierPoNumber" AllowGrouping="True"/>
+                                    <dxg:GridColumn FieldName="Lot.Cost.Amount" Header="Unit Cost"/>
+                                    <dxg:GridColumn FieldName="Wavelength" AllowGrouping="True"/>
+                                    <dxg:GridColumn FieldName="Power" AllowGrouping="True"/>
+                                    <dxg:GridColumn FieldName="Voltage" AllowGrouping="True"/>
+                                    <dxg:GridColumn FieldName="IsReserved" Header="Reserved"/>
+                                    <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
+                                    <dxg:GridColumn FieldName="Lot.Quarantined" Header="Quarantined"/>
+                                </dxg:GridControl>
+                            </DockPanel>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutControl>
 
-                    </dx:DXTabItem>
-                    <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" TabIndex="2">
-                        <DockPanel>
-                            <dxb:BarContainerControl DockPanel.Dock="Top">
-                                <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Lots" Glyph="{dx:DXImage Image=BOProductGroup_16x16.png}" TabIndex="2">
+                    <DockPanel>
+                        <dxb:BarContainerControl DockPanel.Dock="Top">
+                            <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
                                                     AllowCustomizationMenu="False" 
                                                     AllowQuickCustomization="False" 
                                                     AllowHide="False" 
                                                     BarItemDisplayMode="ContentAndGlyph" 
                                                     Orientation="Horizontal">
-                                    <dxb:BarButtonItem x:Name="_lotExportExcel" 
+                                <dxb:BarButtonItem x:Name="_lotExportExcel" 
                                                    Command="{Binding ExportLotsCommand}"
                                                    CommandParameter="Xlsx"                                                   
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export Excel" 
                                                    Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
 
-                                    <dxb:BarButtonItem x:Name="_lotExportPDF" 
+                                <dxb:BarButtonItem x:Name="_lotExportPDF" 
                                                    Command="{Binding ExportLotsCommand}"
                                                    CommandParameter="Pdf"                                                                                                     
                                                    Content="Export PDF" 
                                                    Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
                                                    BarItemDisplayMode="ContentAndGlyph"/>
 
-                                    <dxb:BarButtonItem x:Name="_lotExportCSV" 
+                                <dxb:BarButtonItem x:Name="_lotExportCSV" 
                                                    Command="{Binding ExportLotsCommand}"
                                                    CommandParameter="Csv"
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export CSV" 
                                                    Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
-                                    <dxb:BarItemSeparator/>
-                                    <dxb:BarButtonItem x:Name="_viewRankFromLot" Content="View Rank in Table"
+                                <dxb:BarItemSeparator/>
+                                <dxb:BarButtonItem x:Name="_viewRankFromLot" Content="View Rank in Table"
                                                        Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                        Command="{Binding ViewRankInTableFromLotsCommand}"/>
-                                </dxb:ToolBarControl>
-                            </dxb:BarContainerControl>
-                            <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
+                            </dxb:ToolBarControl>
+                        </dxb:BarContainerControl>
+                        <dxg:GridControl x:Name="_listOfLots" Style="{StaticResource GridControlStyle}" 
                                          ItemsSource="{Binding Lots, IsAsync=True, Mode=TwoWay}"
                                          SelectedItem="{Binding SelectedLot,Mode=TwoWay,IsAsync=True}">
-                                <dxmvvm:Interaction.Behaviors>
-                                    <commonservice:GridExportService x:Name="LotExportService"/>
-                                </dxmvvm:Interaction.Behaviors>
-                                <dxg:GridControl.View>
-                                    <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}"                                      
+                            <dxmvvm:Interaction.Behaviors>
+                                <commonservice:GridExportService x:Name="LotExportService"/>
+                            </dxmvvm:Interaction.Behaviors>
+                            <dxg:GridControl.View>
+                                <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}"                                      
                                                SearchPanelNullText="Search By Po Number" SearchColumns="SupplierPoNumber">
-                                        <dxg:TableView.RowCellMenuCustomizations>
-                                            <dxb:BarButtonItem Content="View Details"
+                                    <dxg:TableView.RowCellMenuCustomizations>
+                                        <dxb:BarButtonItem Content="View Details"
                                                                Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.ViewLotDetailsCommand}"/>
-                                            <dxb:BarButtonItem Content="Edit Lot" 
+                                        <dxb:BarButtonItem Content="Edit Lot" 
                                                                Glyph="{dx:DXImage Image=Action_Edit.png}"
                                                                Command="{Binding Path=View.DataContext.EditLotCommand}"/>
-                                            <dxb:BarButtonItem Content="Rename Lot" 
+                                        <dxb:BarButtonItem Content="Rename Lot" 
                                                                Glyph="{dx:DXImage Image=EditName_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.RenameLotCommand}"/>
-                                            <dxb:BarItemSeparator />
-                                            <dxb:BarButtonItem Content="View in Ranks Table"
+                                        <dxb:BarItemSeparator />
+                                        <dxb:BarButtonItem Content="View in Ranks Table"
                                                                Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.ViewRankInTableFromLotsCommand}"/>
-                                        </dxg:TableView.RowCellMenuCustomizations>
-                                        <dxg:TableView.FormatConditions>
-                                            <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
-                                                <dx:Format Background="Red"/>
-                                            </dxg:FormatCondition>
-                                            <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Quarantined" Value1="True">
-                                                <dx:Format Background="Salmon"/>
-                                            </dxg:FormatCondition>
-                                        </dxg:TableView.FormatConditions>
-                                    </dxg:TableView>
-                                </dxg:GridControl.View>
-                                <dxg:GridControl.DetailDescriptor>
-                                    <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances}">
-                                        <dxg:GridControl Style="{StaticResource GridControlStyle}"
+                                    </dxg:TableView.RowCellMenuCustomizations>
+                                    <dxg:TableView.FormatConditions>
+                                        <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Obsolete" Value1="True">
+                                            <dx:Format Background="Red"/>
+                                        </dxg:FormatCondition>
+                                        <dxg:FormatCondition ValueRule="Equal" ApplyToRow="True" FieldName="Quarantined" Value1="True">
+                                            <dx:Format Background="Salmon"/>
+                                        </dxg:FormatCondition>
+                                    </dxg:TableView.FormatConditions>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridControl.DetailDescriptor>
+                                <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ProductInstances}">
+                                    <dxg:GridControl Style="{StaticResource GridControlStyle}"
                                                          SelectedItem="{Binding SelectedRankLot,Mode=TwoWay,IsAsync=True}">
-                                            <dxg:GridColumn FieldName="Name" Header="Rank"/>
-                                            <dxg:GridColumn FieldName="Quantity"/>
-                                            <dxg:GridColumn FieldName="Wavelength"/>
-                                            <dxg:GridColumn FieldName="Power"/>
-                                            <dxg:GridColumn FieldName="Voltage"/>
-                                            <dxg:GridControl.View>
-                                                <dxg:TableView x:Name="detail"
+                                        <dxg:GridColumn FieldName="Name" Header="Rank"/>
+                                        <dxg:GridColumn FieldName="Quantity"/>
+                                        <dxg:GridColumn FieldName="Wavelength"/>
+                                        <dxg:GridColumn FieldName="Power"/>
+                                        <dxg:GridColumn FieldName="Voltage"/>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView x:Name="detail"
                                                                Style="{StaticResource TableViewStyleNoMasterNoGroup}">
-                                                </dxg:TableView>
-                                            </dxg:GridControl.View>
-                                        </dxg:GridControl>
-                                    </dxg:DataControlDetailDescriptor>
-                                </dxg:GridControl.DetailDescriptor>
-                                <dxg:GridColumn FieldName="Recieved" Header="Received"/>
-                                <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowSearchPanel="true"/>
-                                <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
-                                <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>
-                                <dxg:GridColumn FieldName="ManufacturedDate" Header="Manufactured Date"/>
-                                <dxg:GridColumn FieldName="Quarantined" />
-                                <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
-                            </dxg:GridControl>
-                        </DockPanel>
-                    </dx:DXTabItem>
-                    <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}" TabIndex="3">
-                        <DockPanel>
-                            <dxb:BarContainerControl DockPanel.Dock="Top">
-                                <dxb:ToolBarControl ShowDragWidget="False"
+                                            </dxg:TableView>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </dxg:DataControlDetailDescriptor>
+                            </dxg:GridControl.DetailDescriptor>
+                            <dxg:GridColumn FieldName="Recieved" Header="Received"/>
+                            <dxg:GridColumn FieldName="LotNumber" Header="Lot Number" AllowSearchPanel="true"/>
+                            <dxg:GridColumn FieldName="SupplierPoNumber" Header="Supplier Po"/>
+                            <dxg:GridColumn FieldName="Cost.Amount" Header="Unit Cost"/>
+                            <dxg:GridColumn FieldName="ManufacturedDate" Header="Manufactured Date"/>
+                            <dxg:GridColumn FieldName="Quarantined" />
+                            <dxg:GridColumn FieldName="Obsolete" Header="Outdated"/>
+                        </dxg:GridControl>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Attachments" Glyph="{dx:DXImage Image=LoadFrom_16x16.png}" TabIndex="3">
+                    <DockPanel>
+                        <dxb:BarContainerControl DockPanel.Dock="Top">
+                            <dxb:ToolBarControl ShowDragWidget="False"
                                                     AllowCustomizationMenu="False"
                                                     AllowQuickCustomization="False"
                                                     AllowHide="False"
                                                     BarItemDisplayMode="ContentAndGlyph"
                                                     Orientation="Horizontal">
-                                    <dxb:BarButtonItem Content="Upload File" 
+                                <dxb:BarButtonItem Content="Upload File" 
                                                        Command="{Binding NewAttachmentCommand}" 
                                                        Glyph="{dx:DXImage Image=Add_16x16.png}" 
                                                        BarItemDisplayMode="ContentAndGlyph"
                                                        ShowScreenTip="True"
                                                        ToolTipService.ToolTip="Upload New Attachment"/>
-                                </dxb:ToolBarControl>
-                            </dxb:BarContainerControl>
-                            <dxg:GridControl x:Name="_productAttachments" 
+                            </dxb:ToolBarControl>
+                        </dxb:BarContainerControl>
+                        <dxg:GridControl x:Name="_productAttachments" 
                                              ItemsSource="{Binding Attachments}" 
                                              SelectedItem="{Binding SelectedAttachment, Mode=TwoWay}">
-                                <dxg:GridControl.View>
-                                    <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}" >
-                                        <dxg:TableView.RowCellMenuCustomizations>
-                                            <dxb:BarButtonItem Content="Open File"
+                            <dxg:GridControl.View>
+                                <dxg:TableView Style="{StaticResource TableViewStyleWithMasterNoGroup}" >
+                                    <dxg:TableView.RowCellMenuCustomizations>
+                                        <dxb:BarButtonItem Content="Open File"
                                                                Glyph="{dx:DXImage Image=Open_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.OpenFileCommand}"/>
-                                            <dxb:BarButtonItem Content="Download File" 
+                                        <dxb:BarButtonItem Content="Download File" 
                                                                Glyph="{dx:DXImage Image=Down_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.DownloadFileCommand}"/>
-                                            <dxb:BarButtonItem Content="Delete File"
+                                        <dxb:BarButtonItem Content="Delete File"
                                                                Glyph="{dx:DXImage Image=Close_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.DeleteAttachmentCommand}"/>
-                                        </dxg:TableView.RowCellMenuCustomizations>
-                                    </dxg:TableView>
-                                </dxg:GridControl.View>
-                                <dxg:GridColumn FieldName="Id" Visible="False"/>
-                                <dxg:GridColumn FieldName="Created" Visible="False"/>
-                                <dxg:GridColumn FieldName="Name"/>
-                                <dxg:GridColumn FieldName="Description"/>
-                                <dxg:GridColumn FieldName="Extension"/>
-                            </dxg:GridControl>
-                        </DockPanel>
-                    </dx:DXTabItem>
-                    <dx:DXTabItem Header="Transactions" Glyph="{dx:DXImage Image=AgendaView_16x16.png}" TabIndex="4">
-                        <DockPanel>
-                            <dxb:BarContainerControl DockPanel.Dock="Top">
-                                <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
+                                    </dxg:TableView.RowCellMenuCustomizations>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridColumn FieldName="Id" Visible="False"/>
+                            <dxg:GridColumn FieldName="Created" Visible="False"/>
+                            <dxg:GridColumn FieldName="Name"/>
+                            <dxg:GridColumn FieldName="Description"/>
+                            <dxg:GridColumn FieldName="Extension"/>
+                        </dxg:GridControl>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Transactions" Glyph="{dx:DXImage Image=AgendaView_16x16.png}" TabIndex="4">
+                    <DockPanel>
+                        <dxb:BarContainerControl DockPanel.Dock="Top">
+                            <dxb:ToolBarControl ShowDragWidget="False" ShowBackground="False" 
                                                 AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
                                                 BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
-                                    <dxb:BarButtonItem x:Name="_transactionExportExcel" 
+                                <dxb:BarButtonItem x:Name="_transactionExportExcel" 
                                                    Command="{Binding ExportTransactionsCommand}"
                                                    CommandParameter="Xlsx"                                                   
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export Excel" 
                                                    Glyph="{dx:DXImage Image=ExportToXLSX_16x16.png}"/>
 
-                                    <dxb:BarButtonItem x:Name="_transactionExportPDF" 
+                                <dxb:BarButtonItem x:Name="_transactionExportPDF" 
                                                    Command="{Binding ExportTransactionsCommand}"
                                                    CommandParameter="Pdf"                                                                                                     
                                                    Content="Export PDF" 
                                                    Glyph="{dx:DXImage Image=ExportToPDF_16x16.png}"
                                                    BarItemDisplayMode="ContentAndGlyph"/>
 
-                                    <dxb:BarButtonItem x:Name="_transactionExportCSV" 
+                                <dxb:BarButtonItem x:Name="_transactionExportCSV" 
                                                    Command="{Binding ExportTransactionsCommand}"
                                                    CommandParameter="Csv"
                                                    BarItemDisplayMode="ContentAndGlyph" 
                                                    Content="Export CSV" 
                                                    Glyph="{dx:DXImage Image=ExportToCSV_16x16.png}"/>
-                                </dxb:ToolBarControl>
-                            </dxb:BarContainerControl>
-                            <dxg:GridControl x:Name="_transactions" Style="{StaticResource GridControlStyle}"
+                            </dxb:ToolBarControl>
+                        </dxb:BarContainerControl>
+                        <dxg:GridControl x:Name="_transactions" Style="{StaticResource GridControlStyle}"
                                              ItemsSource="{Binding Transactions,IsAsync=True,Mode=TwoWay}"
                                              SelectedItem="{Binding SelectedTransaction,Mode=TwoWay,IsAsync=True}">
-                                <dxmvvm:Interaction.Behaviors>
-                                    <commonservice:GridExportService x:Name="TransactionExportService"/>
-                                </dxmvvm:Interaction.Behaviors>
-                                <dxg:GridControl.View>
-                                    <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
+                            <dxmvvm:Interaction.Behaviors>
+                                <commonservice:GridExportService x:Name="TransactionExportService"/>
+                            </dxmvvm:Interaction.Behaviors>
+                            <dxg:GridControl.View>
+                                <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
                                                    SearchColumns="Rank" SearchPanelNullText="Search by Rank"
                                                    FontSize="11">
-                                        <dxg:TableView.RowCellMenuCustomizations>
-                                            <dxb:BarButtonItem Content="Undo Transaction"
+                                    <dxg:TableView.RowCellMenuCustomizations>
+                                        <dxb:BarButtonItem Content="Undo Transaction"
                                                                Glyph="{dx:DXImage Image=Undo_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.UndoTransactionCommand}"
                                                                IsEnabled="True"/>
-                                            <dxb:BarItemSeparator Content="None"/>
-                                            <dxb:BarButtonItem Content="View Rank In Table"
+                                        <dxb:BarItemSeparator Content="None"/>
+                                        <dxb:BarButtonItem Content="View Rank In Table"
                                                                Glyph="{dx:DXImage Image=Undo_16x16.png}"
                                                                Command="{Binding Path=View.DataContext.ViewRankCommand}"
                                                                IsEnabled="True"/>
-                                        </dxg:TableView.RowCellMenuCustomizations>
-                                    </dxg:TableView>
-                                </dxg:GridControl.View>
-                                <dxg:GridControl.Columns>
-                                    <dxg:GridColumn FieldName="Id" Visible="False"/>
-                                    <dxg:GridColumn FieldName="TimeStamp"/>
-                                    <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
-                                    <dxg:GridColumn FieldName="Instance.Name" Header="Rank"/>
-                                    <dxg:GridColumn FieldName="InventoryAction" Header="Action" AllowGrouping="True" GroupIndex="0"/>
-                                    <dxg:GridColumn FieldName="Location.Name" Header="Location"/>
-                                    <dxg:GridColumn FieldName="Quantity"/>
-                                    <dxg:GridColumn FieldName="UnitCost" Header="Unit Cost">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="c" AllowNullInput="True"/>
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn FieldName="TotalCost" Header="Total Cost">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="c"/>
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn FieldName="Instance.LotNumber" Header="Lot Number"/>
-                                    <dxg:GridColumn FieldName="Instance.SupplierPoNumber" Header="Supplier Po"/>
-                                    <dxg:GridColumn FieldName="BuyerPoNumber" Header="Buyer Po"/>
-                                    <dxg:GridColumn FieldName="RMA_Number" Header="RMA"/>
-                                    <dxg:GridColumn FieldName="IsReserved" Header="Reserved"/>
-                                </dxg:GridControl.Columns>
-                            </dxg:GridControl>
-                        </DockPanel>
-                    </dx:DXTabItem>
-                    <dx:DXTabItem Header="Product Reservations" Glyph="{dx:DXImage Image=BOOrder_16x16.png}" TabIndex="5">
-                        
-                        <dxg:GridControl x:Name="_reservations" Style="{StaticResource GridControlStyle}"
-                                         ItemsSource="{Binding Reservations,IsAsync=True,Mode=TwoWay}"
-                                         SelectedItem="{Binding SelectedReservation,IsAsync=True,Mode=TwoWay}"
-                                         AllowLiveDataShaping="True" AllowUpdateTwoWayBoundPropertiesOnSynchronization="True">
-                            <dxg:GridControl.View>
-                                <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
-                                               SearchColumns="Rank" SearchPanelNullText="Search by Rank">
-                                    <dxg:TableView.RowCellMenuCustomizations>
-                                        <dxb:BarButtonItem Content="View Details"
-                                                           Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
-                                                           Command="{Binding Path=View.DataContext.ViewReservationDetailsCommand}"
-                                                           IsEnabled="True"/>
-                                        <dxb:BarButtonItem Content="Edit Reservation" 
-                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
-                                                           Command="{Binding Path=View.DataContext.EditReservationCommand}"
-                                                           IsEnabled="True"/>
-                                        <dxb:BarButtonItem Content="Delete Reservation" 
-                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
-                                                           Command="{Binding Path=View.DataContext.DeleteReservationCommand}"
-                                                           IsEnabled="True"/>
                                     </dxg:TableView.RowCellMenuCustomizations>
-                                    <dxg:TableView.FormatConditions>
-                                        <dxg:FormatCondition Expression="[TimeStamp]>=[Expiration]" ApplyToRow="True">
-                                            <dx:Format Background="Goldenrod"/>
-                                        </dxg:FormatCondition>
-                                    </dxg:TableView.FormatConditions>
                                 </dxg:TableView>
                             </dxg:GridControl.View>
                             <dxg:GridControl.Columns>
+                                <dxg:GridColumn FieldName="Id" Visible="False"/>
                                 <dxg:GridColumn FieldName="TimeStamp"/>
-                                <dxg:GridColumn FieldName="Expiration"/>
-                                <dxg:GridColumn FieldName="ProductInstance.Name" Header="Rank" AllowGrouping="true" GroupIndex="0"/>
-                                <dxg:GridColumn FieldName="User.UserName" Header="Username"/>
+                                <dxg:GridColumn FieldName="Session.UserName" Header="Username"/>
+                                <dxg:GridColumn FieldName="Instance.Name" Header="Rank"/>
+                                <dxg:GridColumn FieldName="InventoryAction" Header="Action" AllowGrouping="True" GroupIndex="0"/>
+                                <dxg:GridColumn FieldName="Location.Name" Header="Location"/>
                                 <dxg:GridColumn FieldName="Quantity"/>
-                                <dxg:GridColumn FieldName="Customer"/>
-                                <dxg:GridColumn FieldName="Note" Header="Notes"/>
-                                <dxg:GridColumn FieldName="LotNumber" Header="Lot Number"/>
-                                <dxg:GridColumn FieldName="PoNumber" Header="Supplier Po"/>
-                                <dxg:GridColumn FieldName="BuyerPoNumber" Header="BuyerPo"/>
-                                <dxg:GridColumn FieldName="RMANumber" Header="RMA"/>
+                                <dxg:GridColumn FieldName="UnitCost" Header="Unit Cost">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="c" AllowNullInput="True"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="TotalCost" Header="Total Cost">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings MaskType="Numeric" MaskUseAsDisplayFormat="True" Mask="c"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="Instance.LotNumber" Header="Lot Number"/>
+                                <dxg:GridColumn FieldName="Instance.SupplierPoNumber" Header="Supplier Po"/>
+                                <dxg:GridColumn FieldName="BuyerPoNumber" Header="Buyer Po"/>
+                                <dxg:GridColumn FieldName="RMA_Number" Header="RMA"/>
+                                <dxg:GridColumn FieldName="IsReserved" Header="Reserved"/>
                             </dxg:GridControl.Columns>
                         </dxg:GridControl>
-                    </dx:DXTabItem>
-                </dx:DXTabControl>
-                <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Bottom" Visibility="{Binding Visibility,Mode=TwoWay}" Height="50">
-                    <dx:SimpleButton Content="Save Product" Command="{Binding SaveProductCommand}" Glyph="{dx:DXImage Image=Save_32x32.png}"/>
-                    <dx:SimpleButton Content="Cancel" Command="{Binding CancelProductCommand}" Glyph="{dx:DXImage Image=Cancel_32x32.png}"/>
-                </dxlc:LayoutGroup>
-            </dxlc:DockLayoutControl>
-        </dxlc:GroupBox>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="Product Reservations" Glyph="{dx:DXImage Image=BOOrder_16x16.png}" TabIndex="5">
+
+                    <dxg:GridControl x:Name="_reservations" Style="{StaticResource GridControlStyle}"
+                                         ItemsSource="{Binding Reservations,IsAsync=True,Mode=TwoWay}"
+                                         SelectedItem="{Binding SelectedReservation,IsAsync=True,Mode=TwoWay}"
+                                         AllowLiveDataShaping="True" AllowUpdateTwoWayBoundPropertiesOnSynchronization="True">
+                        <dxg:GridControl.View>
+                            <dxg:TableView Style="{StaticResource TableViewStyleNoMaster}"
+                                               SearchColumns="Rank" SearchPanelNullText="Search by Rank">
+                                <dxg:TableView.RowCellMenuCustomizations>
+                                    <dxb:BarButtonItem Content="View Details"
+                                                           Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
+                                                           Command="{Binding Path=View.DataContext.ViewReservationDetailsCommand}"
+                                                           IsEnabled="True"/>
+                                    <dxb:BarButtonItem Content="Edit Reservation" 
+                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                           Command="{Binding Path=View.DataContext.EditReservationCommand}"
+                                                           IsEnabled="True"/>
+                                    <dxb:BarButtonItem Content="Delete Reservation" 
+                                                           Glyph="{dx:DXImage Image=Action_Edit.png}"
+                                                           Command="{Binding Path=View.DataContext.DeleteReservationCommand}"
+                                                           IsEnabled="True"/>
+                                </dxg:TableView.RowCellMenuCustomizations>
+                                <dxg:TableView.FormatConditions>
+                                    <dxg:FormatCondition Expression="[TimeStamp]>=[Expiration]" ApplyToRow="True">
+                                        <dx:Format Background="Goldenrod"/>
+                                    </dxg:FormatCondition>
+                                </dxg:TableView.FormatConditions>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="TimeStamp"/>
+                            <dxg:GridColumn FieldName="Expiration"/>
+                            <dxg:GridColumn FieldName="ProductInstance.Name" Header="Rank" AllowGrouping="true" GroupIndex="0"/>
+                            <dxg:GridColumn FieldName="User.UserName" Header="Username"/>
+                            <dxg:GridColumn FieldName="Quantity"/>
+                            <dxg:GridColumn FieldName="Customer"/>
+                            <dxg:GridColumn FieldName="Note" Header="Notes"/>
+                            <dxg:GridColumn FieldName="LotNumber" Header="Lot Number"/>
+                            <dxg:GridColumn FieldName="PoNumber" Header="Supplier Po"/>
+                            <dxg:GridColumn FieldName="BuyerPoNumber" Header="BuyerPo"/>
+                            <dxg:GridColumn FieldName="RMANumber" Header="RMA"/>
+                        </dxg:GridControl.Columns>
+                    </dxg:GridControl>
+                </dx:DXTabItem>
+            </dx:DXTabControl>
+            <dxlc:LayoutGroup dxlc:DockLayoutControl.Dock="Bottom" Visibility="{Binding Visibility,Mode=TwoWay}" Height="50">
+                <dx:SimpleButton Content="Save Product" Command="{Binding SaveProductCommand}" Glyph="{dx:DXImage Image=Save_32x32.png}"/>
+                <dx:SimpleButton Content="Cancel" Command="{Binding CancelProductCommand}" Glyph="{dx:DXImage Image=Cancel_32x32.png}"/>
+            </dxlc:LayoutGroup>
+        </dxlc:DockLayoutControl>
     </dx:LoadingDecorator>
 </UserControl>

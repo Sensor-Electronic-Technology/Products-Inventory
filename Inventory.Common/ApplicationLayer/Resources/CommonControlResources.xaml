@@ -21,6 +21,16 @@
         <Setter Property="AllowLiveDataShaping" Value="True" />
     </Style>
 
+    <Style x:Key="GridControlMultiSelectStyle"
+           TargetType="dxg:GridControl">
+        <Setter Property="AutoGenerateColumns" Value="None" />
+        <Setter Property="SelectionMode" Value="MultipleRow" />
+        <Setter Property="dx:DXSerializer.Enabled" Value="False" />
+        <Setter Property="AllowUpdateTwoWayBoundPropertiesOnSynchronization" Value="True" />
+        <Setter Property="AllowLiveDataShaping" Value="True" />
+    </Style>
+
+
     <Style x:Key="TableViewStyleEdit" TargetType="dxg:TableView">
         <Setter Property="AllowMasterDetail" Value="False"/>
         <Setter Property="ShowSearchPanelMode" Value="Never"/>
@@ -38,6 +48,14 @@
         <Setter Property="AllowGrouping" Value="False"/>
         <Setter Property="ShowGroupPanel" Value="False"/>
 
+    </Style>
+
+    <Style x:Key="PanelStyle"
+               TargetType="{x:Type dxdo:LayoutPanel}">
+        <Setter Property="ShowCloseButton"
+                    Value="False" />
+        <Setter Property="AllowClose"
+                    Value="False" />
     </Style>
 
     <Style x:Key="TableViewStyleNoMaster" TargetType="dxg:TableView">

@@ -29,45 +29,39 @@
         <dxmvvm:EventToCommand EventName="Loaded" Command="{Binding InitializeCommand}" />
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
-        <dxlc:GroupBox >
-            <dxlc:GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="Products" HorizontalAlignment="Center" FontSize="16"/>
-                </DataTemplate>
-            </dxlc:GroupBox.HeaderTemplate>
-            <dxlc:DockLayoutControl>
-                <dxb:BarContainerControl dxlc:DockLayoutControl.Dock="Top">
-                    <dxb:ToolBarControl Caption="Distributor Actions" ShowDragWidget="False" ShowBackground="False"                                        
+        <dxlc:DockLayoutControl>
+            <dxb:BarContainerControl dxlc:DockLayoutControl.Dock="Top">
+                <dxb:ToolBarControl Caption="Distributor Actions" ShowDragWidget="False" ShowBackground="False"                                        
                                         AllowCustomizationMenu="False" AllowQuickCustomization="False" AllowHide="False" 
                                         BarItemDisplayMode="ContentAndGlyph" Orientation="Horizontal">
 
-                        <dxb:BarButtonItem x:Name="_newProduct" 
+                    <dxb:BarButtonItem x:Name="_newProduct" 
                                            Command="{Binding NewProductCommand}"
                                            BarItemDisplayMode="ContentAndGlyph" 
                                            Content="New Product" 
                                            Glyph="{dx:DXImage Image=InsertSheetRows_16x16.png}"/>
 
-                        <dxb:BarButtonItem x:Name="_refresh" 
+                    <dxb:BarButtonItem x:Name="_refresh" 
                                            Command="{Binding RefreshDataCommand}"
                                            BarItemDisplayMode="ContentAndGlyph" 
                                            Content="Refresh Product List" 
                                            Glyph="{dx:DXImage Image=RefreshPivotTable_16x16.png}"/>
 
-                        <dxb:BarButtonItem x:Name="_clearDetails" 
+                    <dxb:BarButtonItem x:Name="_clearDetails" 
                                            Command="{Binding ClearDetailViewsCommand}"
                                            BarItemDisplayMode="ContentAndGlyph" 
                                            Content="Clear Detail Views" 
                                            Glyph="{dx:DXImage Image=ClearAll_16x16.png}"/>
-                        
-                        <dxb:BarButtonItem x:Name="_bulkImport" 
+
+                    <dxb:BarButtonItem x:Name="_bulkImport" 
                                            Command="{Binding BulkImportCommand}"
                                            BarItemDisplayMode="ContentAndGlyph" 
                                            Content="Start Bulk Import" 
                                            Glyph="{dx:DXImage Image=Open2_16x16.png}"/>
 
-                    </dxb:ToolBarControl>
-                </dxb:BarContainerControl>
-                <dxg:GridControl x:Name="_listOfProducts"  
+                </dxb:ToolBarControl>
+            </dxb:BarContainerControl>
+            <dxg:GridControl x:Name="_listOfProducts"  
                                  ItemsSource="{Binding Products,IsAsync=True,Mode=TwoWay}" 
                                  SelectedItem="{Binding SelectedProduct}"
                                  Style="{StaticResource GridControlStyle}"
@@ -75,44 +69,43 @@
                                  dxlc:DockLayoutControl.Dock="Client"
                                  ClipboardCopyMode="ExcludeHeader" 
                                  CopyingToClipboard="_listOfProducts_CopyingToClipboard">
-                    <dxmvvm:Interaction.Behaviors>
-                        <commonservice:GridUpdateService/>
-                    </dxmvvm:Interaction.Behaviors>
-                    <dxg:GridControl.View>
-                        <dxg:TableView ShowSearchPanelMode="Always"
+                <dxmvvm:Interaction.Behaviors>
+                    <commonservice:GridUpdateService/>
+                </dxmvvm:Interaction.Behaviors>
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowSearchPanelMode="Always"
                                        Style="{StaticResource TableViewStyleNoMaster}"
                                        SearchPanelNullText="Search By Part Number" 
                                        AllowGrouping="True" SearchColumns="Name">
-                            <dxg:TableView.RowCellMenuCustomizations>
+                        <dxg:TableView.RowCellMenuCustomizations>
 
-                                <dxb:BarButtonItem Content="View Details" 
+                            <dxb:BarButtonItem Content="View Details" 
                                                    Glyph="{dx:DXImage Image=ConvertToRange_16x16.png}"
                                                    Command="{Binding Path=View.DataContext.ViewProductDetailsCommand}"/>
 
-                                <dxb:BarButtonItem Content="Edit Product Details" 
+                            <dxb:BarButtonItem Content="Edit Product Details" 
                                                    Glyph="{dx:DXImage Image=Action_Edit.png}"
                                                    Command="{Binding Path=View.DataContext.EditProductCommand}"/>
 
-                                <dxb:BarItemSeparator/>
+                            <dxb:BarItemSeparator/>
 
-                                <dxb:BarButtonItem Content="Start Incoming With" 
+                            <dxb:BarButtonItem Content="Start Incoming With" 
                                                    Glyph="{dx:DXImage Image=Inbox_16x16.png}"
                                                    Command="{Binding Path=View.DataContext.StartIncomingWithSelectedCommand}"/>
 
-                                <dxb:BarButtonItem Content="Set In Incoming Form" 
+                            <dxb:BarButtonItem Content="Set In Incoming Form" 
                                                    Glyph="{dx:DXImage Image=Right_16x16.png}"
                                                    Command="{Binding Path=View.DataContext.SetInIncomingFormCommand}"/>
 
-                            </dxg:TableView.RowCellMenuCustomizations>
-                        </dxg:TableView>
-                    </dxg:GridControl.View>
-                    <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="Name" Header="Part Number"/>
-                        <dxg:GridColumn FieldName="ProductType.Name" Header="Package" AllowGrouping="True" GroupIndex="0"/>
-                        <dxg:GridColumn FieldName="Total" Header=" Total Quantity"/>
-                    </dxg:GridControl.Columns>
-                </dxg:GridControl>
-            </dxlc:DockLayoutControl>
-        </dxlc:GroupBox>
+                        </dxg:TableView.RowCellMenuCustomizations>
+                    </dxg:TableView>
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Name" Header="Part Number"/>
+                    <dxg:GridColumn FieldName="ProductType.Name" Header="Package" AllowGrouping="True" GroupIndex="0"/>
+                    <dxg:GridColumn FieldName="Total" Header=" Total Quantity"/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </dxlc:DockLayoutControl>
     </dx:LoadingDecorator>
 </UserControl>

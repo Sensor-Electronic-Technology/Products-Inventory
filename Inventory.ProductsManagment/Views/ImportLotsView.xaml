@@ -30,6 +30,8 @@
         <dx:DXMessageBoxService x:Name="ImportMessageService"/>
         <dxmvvm:OpenFileDialogService x:Name="OpenFileDialog" Title="{Binding Title}"/>
         <dxmvvm:DispatcherService x:Name="ImportDispatcher"/>
+        <dxmvvm:EventToCommand Command="{Binding InitializeCommand}"
+                               EventName="Loaded" />
     </dxmvvm:Interaction.Behaviors>
     <dx:LoadingDecorator>
         <dxlc:GroupBox>
@@ -42,16 +44,20 @@
                 <dxr:RibbonControl x:Name="ribbonControl1" DockPanel.Dock="Top" MinimizationButtonVisibility="Collapsed" RibbonStyle="Office2019"  ShowApplicationButton="False">
                     <dxr:RibbonDefaultPageCategory>
                         <dxr:RibbonPage x:Name="barPageExample" Caption="Lot Import">
-                            <dxr:RibbonPageGroup Caption="Import">
+                            <dxr:RibbonPageGroup Caption="Import" ShowCaptionButton="False">
                                 <dxb:BarButtonItem x:Name="_processLotsbtn" Content="Process Lots" 
                                                    Glyph="{dx:DXImage Image=Export_16x16.png}" 
                                                    LargeGlyph="{dx:DXImageOffice2013 Image=Export_32x32.png}" 
                                                    Command="{Binding ProcessLotsCommand}">
                                 </dxb:BarButtonItem>
-                                <dxb:BarButtonItem x:Name="barBtnUnbind" 
-                                                   Content="Unbind All" 
-                                                   LargeGlyph="{dx:DXImageOffice2013 Image=DeleteDataSource_32x32.png}" 
-                                                   Command="{Binding RemoveBindingCommand}"/>
+                                <dxb:BarButtonItem x:Name="barFinishbtn" 
+                                                   Content="Finished" 
+                                                   LargeGlyph="{dx:DXImage Image=CheckBox_32x32.png}" 
+                                                   Command="{Binding DoneCommand}"/>
+                                <dxb:BarButtonItem x:Name="barCancelbtn" 
+                                                   Content="Cancel" 
+                                                   LargeGlyph="{dx:DXImage Image=Cancel_32x32.png}" 
+                                                   Command="{Binding CancelCommand}"/>
                             </dxr:RibbonPageGroup>
                         </dxr:RibbonPage>
                     </dxr:RibbonDefaultPageCategory>

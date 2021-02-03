@@ -32,13 +32,14 @@ namespace Inventory.ProductsManagment.ViewModels {
         private List<Consumer> _consumers = new List<Consumer>();
         private List<string[]> rma_buyers = new List<string[]>();
         private Consumer _selectedConsumer=new Consumer();
+        private bool _batchImportRunning = false;
         private DateTime _timeStamp;
         private string _buyerPoNumber;
         private string _rmaNumber;
 
         public PrismCommands.DelegateCommand RemoveFromOutgoingDelegate { get; private set; }
 
-        public PrismCommands.DelegateCommand CheckOutCommand { get; private set; }
+        public AsyncCommand CheckOutCommand { get; private set; }
         public PrismCommands.DelegateCommand CancelCommand { get; private set; }
         public AsyncCommand<ExportFormat> ExportCommand { get; private set; }
 
@@ -49,11 +50,13 @@ namespace Inventory.ProductsManagment.ViewModels {
             this._dataManager = productDataManager;
 
             this.RemoveFromOutgoingDelegate = new PrismCommands.DelegateCommand(this.RemoveFromOutgoingHandler);
-            this.CheckOutCommand = new PrismCommands.DelegateCommand(this.CheckOutHandler);
-            this.CancelCommand = new PrismCommands.DelegateCommand(this.CancelHandler);
+            this.CheckOutCommand =new AsyncCommand(this.CheckOutHandler,()=>!this._batchImportRunning);
+            this.CancelCommand = new PrismCommands.DelegateCommand(this.CancelHandler,()=>!this._batchImportRunning);
             this.ExportCommand = new AsyncCommand<ExportFormat>(this.ExportHandler);
 
             this._eventAggregator.GetEvent<AddToOutgoingEvent>().Subscribe(this.AddToOutgoingHandler);
+            this._eventAggregator.GetEvent<BatchImportRunning>().Subscribe(() => this._batchImportRunning = true);
+            this._eventAggregator.GetEvent<BatchImportFinished>().Subscribe(() => this._batchImportRunning = false);
             this.TimeStamp = DateTime.Now;
             this.PopulateConsumers();
         }
@@ -119,22 +122,37 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.Consumers = this._dataManager.ConsumerProvider.GetEntityList().ToList();
         }
 
-        private void CheckOutHandler() {
-            if(this.OutgoingList != null) {
-                if(this.SelectedConsumer != null) {
-                    var responce = this._dataManager.Checkout(this.OutgoingList, this.SelectedConsumer, this.TimeStamp,this.BuyerPoNumber, this.RMA_Number);
-                    if(responce.Success) {
-                        this.MessageBoxService.ShowMessage(responce.Message, "Success", MessageButton.OK, MessageIcon.Information);
-                        this.OutgoingList.Clear();
-                        this._dataManager.UpdateProductTotals();
-                        this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Publish();
+        private async Task CheckOutHandler() {
+            await this._dataManager.LoadAsync();
+            await Task.Run(() => {
+                if (this.OutgoingList != null) {
+                    if (this.SelectedConsumer != null) {
+                        
+                        var responce = this._dataManager.Checkout(this.OutgoingList, this.SelectedConsumer, this.TimeStamp, this.BuyerPoNumber, this.RMA_Number);
+                        if (responce.Success) {
+                            this.Dispatcher.BeginInvoke(() => {
+                                this.MessageBoxService.ShowMessage(responce.Message, "Success", MessageButton.OK, MessageIcon.Information);
+                                this.OutgoingList.Clear();
+                                this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Publish();
+                            });                   
+                            this._dataManager.UpdateProductTotals();
+
+                        } else {
+                            this.Dispatcher.BeginInvoke(() => {
+                                this.MessageBoxService.ShowMessage(responce.Message, "Error", MessageButton.OK, MessageIcon.Error);
+                            });
+                        }
                     } else {
-                        this.MessageBoxService.ShowMessage(responce.Message, "Error", MessageButton.OK, MessageIcon.Error);
+                        this.Dispatcher.BeginInvoke(() => {
+                            this.MessageBoxService.ShowMessage("Consumer Not Selected, Please Make Selection and Try Again", "Error", MessageButton.OK, MessageIcon.Error);
+                        });
                     }
-                } else {
-                    this.MessageBoxService.ShowMessage("Consumer Not Selected, Please Make Selection and Try Again", "Error", MessageButton.OK, MessageIcon.Error);
                 }
-            }
+
+
+
+            });
+
         }
 
         private void CancelHandler() {

@@ -40,6 +40,9 @@
     public class DoneOutgoingListEvent : PubSubEvent { }
     public class StartOutgoingListEvent : PubSubEvent { }
     public class AddToOutgoingEvent : PubSubEvent<ProductInstance> { }
+    public class BatchImportRunning : PubSubEvent { }
+    public class BatchImportFinished : PubSubEvent { }
+
 
     public class CancelIncomingListEvent : PubSubEvent { }
     public class DoneIncomingListEvent : PubSubEvent { }
@@ -49,6 +52,8 @@
     public class AddToIncomingCallback : PubSubEvent<bool> { }
 
     public class ProductEditingDoneEvent : PubSubEvent { }
+
+    public class RenameHeaderEvent : PubSubEvent<string> { }
 
     public class LotRankReservationEditingStartedEvent : PubSubEvent { }
     public class LotRankReservationEditingDoneEvent:PubSubEvent { }

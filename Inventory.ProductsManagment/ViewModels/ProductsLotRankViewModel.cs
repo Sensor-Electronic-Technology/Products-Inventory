@@ -51,6 +51,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         private ProductReservation _selectedReservation = new ProductReservation();
         private ProductTransaction _selectedTransaction = new ProductTransaction();
         private ProductInstance _selectedRankLot = new ProductInstance();
+        private ObservableCollection<ProductInstance> _selectedRanks = new ObservableCollection<ProductInstance>();
         private List<Lot> _lots = new List<Lot>();
         private List<ProductInstance> _ranks = new List<ProductInstance>();
         private List<ProductInstance> _outGoingRanks = new List<ProductInstance>();
@@ -90,6 +91,7 @@ namespace Inventory.ProductsManagment.ViewModels {
         public AsyncCommand<ExportFormat> ExportCostSummaryCommand { get; private set; }
 
         public AsyncCommand UndoTransactionCommand { get; set; }
+        public AsyncCommand AddMultipleToOutgoingCommand { get; private set; }
         public PrismCommands.DelegateCommand ReturnPartialCommand { get; set; }
 
         public ICommand EditRankCommand { get; private set; }
@@ -136,6 +138,8 @@ namespace Inventory.ProductsManagment.ViewModels {
             this.DeleteAttachmentCommand = new PrismCommands.DelegateCommand(this.DeleteAttachmentHandler);
             this.OpenFileCommand = new PrismCommands.DelegateCommand(this.OpenFileHandler);
             this.DownloadFileCommand=new PrismCommands.DelegateCommand(this.DownloadFileHandler);
+
+            this.AddMultipleToOutgoingCommand = new AsyncCommand(this.AddMultipleOutgoingHandler);
 
             this._eventAggregator.GetEvent<StartOutgoingListEvent>().Subscribe(() => this.outGoingInProgress = true);
             this._eventAggregator.GetEvent<DoneOutgoingListEvent>().Subscribe(this.OutgoingListDoneHandler);
@@ -261,14 +265,40 @@ namespace Inventory.ProductsManagment.ViewModels {
             set => SetProperty(ref this._visibility, value, "Visibility");
         }
 
+        public ObservableCollection<ProductInstance> SelectedRanks { 
+            get => this._selectedRanks; 
+            set => SetProperty(ref this._selectedRanks,value); 
+        }
 
         private void OutgoingListDoneHandler() {
             this.outGoingInProgress = false;
         }
 
+        private async Task AddMultipleOutgoingHandler() {
+            if (this.SelectedRanks.Count > 1) {
+                if (!this.outGoingInProgress) {
+                    await this.DispatcherService.BeginInvoke(() => {
+                        NavigationParameters parameters = new NavigationParameters();
+                        parameters.Add("Rank", this.SelectedRank);
+                        this._regionManager.RequestNavigate(Regions.ProductDetailsRegion, AppViews.OutgoingProductListView, parameters);
+                        this.outGoingInProgress = true;
+                        foreach (var rank in this.SelectedRanks) {
+                            this._eventAggregator.GetEvent<AddToOutgoingEvent>().Publish(rank);
+                        }
+                    });
+                } else {
+                    await this.DispatcherService.BeginInvoke(() => {
+                        foreach (var rank in this.SelectedRanks) {
+                            this._eventAggregator.GetEvent<AddToOutgoingEvent>().Publish(rank);
+                        }
+                    });
+                }
+            }
+        }
+
         private void AddToOutgoingHandler() {
-            if(this.SelectedRank != null) {
-                if(!this.outGoingInProgress) {
+            if (this.SelectedRank != null) {
+                if (!this.outGoingInProgress) {
                     NavigationParameters parameters = new NavigationParameters();
                     parameters.Add("Rank", this.SelectedRank);
                     this._regionManager.RequestNavigate(Regions.ProductDetailsRegion, AppViews.OutgoingProductListView, parameters);

@@ -52,8 +52,8 @@
                                      LabelHorizontalAlignment="Center"
                                      BorderBrush="Black">
                             <dxe:ComboBoxEdit ItemsSource="{Binding Consumers,Mode=TwoWay,IsAsync=True}" 
-                                          SelectedItem="{Binding SelectedConsumer,Mode=TwoWay,IsAsync=True}"
-                                          ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
+                                              SelectedItem="{Binding SelectedConsumer,Mode=TwoWay,IsAsync=True}"
+                                              ApplyItemTemplateToSelectedItem="True" IsTextEditable="False">
                                 <dxe:ComboBoxEdit.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch"/>

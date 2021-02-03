@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventory.ProductsManagment.Local {
+namespace Inventory.Common.DataLayer {
     public class ImportLotData {
         public DateTime LotDate { get; set; }
         public string ProductName { get; set; }
@@ -13,5 +13,9 @@ namespace Inventory.ProductsManagment.Local {
         public int Quantity { get; set; }
         public double UnitCost { get; set; }
         public string PoNumber { get; set; }
+        public string BuyerPo { get; set; }
+        public bool Success { get; set; }
+        public string Status { get; set; }
+
     }
 }
