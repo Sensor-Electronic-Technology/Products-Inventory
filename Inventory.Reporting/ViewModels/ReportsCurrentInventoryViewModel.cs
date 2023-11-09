@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Inventory.Common.EntityLayer.Model.Entities;
 using Inventory.Common.ApplicationLayer;
 using DevExpress.Mvvm;
-using Prism.Regions;
-using Prism.Events;
-using PrismCommands = Prism.Commands;
 using System.Threading.Tasks;
-using Inventory.Common.DataLayer.EntityDataManagers;
-using System.Windows.Input;
-using System.Windows;
 using Inventory.Common.ApplicationLayer.Services;
 using Inventory.Common.EntityLayer.Model;
 using System.Collections.ObjectModel;
 using Inventory.Common.BuisnessLayer;
 using System.Data.Entity;
 using System.IO;
-using System.Diagnostics;
 using System.Data;
-using DevExpress.XtraRichEdit.Model;
 using DevExpress.DataProcessing;
+using System.Diagnostics;
+using Microsoft.Office.Interop;
+using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace Inventory.Reporting.ViewModels {
     public class ReportsCurrentInventoryViewModel : InventoryViewModelBase {
@@ -218,7 +213,12 @@ namespace Inventory.Reporting.ViewModels {
                             //ExportType = DevExpress.Export.ExportType.WYSIWYG
                         });
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

@@ -601,7 +601,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                     using(FileStream file = File.Create(path)) {
                         this.TransactionExportService.Export(file, format);
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }
@@ -615,7 +620,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                         ExportType = DevExpress.Export.ExportType.WYSIWYG
                     });
                 }
-                Process.Start(path);
+                using (var process = new Process()) {
+                    process.StartInfo.UseShellExecute = true;
+                    process.StartInfo.FileName = path;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
+                }
             });
             });
         }
@@ -627,7 +637,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                     using(FileStream file = File.Create(path)) {
                         this.RankExportService.Export(file, format);
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }
@@ -639,7 +654,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                     using(FileStream file = File.Create(path)) {
                         this.CostSummaryExportServive.Export(file, format);
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

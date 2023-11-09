@@ -39,12 +39,12 @@ namespace Inventory.ApplicationMain {
             ThemeManager.ApplicationThemeChanged += this.ThemeManager_ApplicationThemeChanged;
             GridControl.AllowInfiniteGridSize = true;
 
-            //DomainManager domainManager = new DomainManager();
-            //UserServiceProvider userServiceProvider = new UserServiceProvider(new InventoryContext(), domainManager);
-            //LogInService logInService = new LogInService(domainManager, userServiceProvider);
-            //var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
-            //this.userService = responce.Service;
-            Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            /*DomainManager domainManager = new DomainManager();
+            UserServiceProvider userServiceProvider = new UserServiceProvider(new InventoryContext(), domainManager);
+            LogInService logInService = new LogInService(domainManager, userServiceProvider);
+            var responce = logInService.LogInWithPassword("AElmendo", "Drizzle123!", false, InventorySoftwareType.PRODUCTS_SALES);
+            this.userService = responce.Service;*/
+           Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             if(this.ShowLogin()) {
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             } else {
@@ -61,6 +61,7 @@ namespace Inventory.ApplicationMain {
             DomainManager domainManager = new DomainManager();
             UserServiceProvider userServiceProvider = new UserServiceProvider(new InventoryContext(), domainManager);
             LogInService logInService = new LogInService(domainManager, userServiceProvider);
+            
             var loginVM = new LoginViewModel(logInService);
             loginVM.LoginCompleted += (sender, args) => {
                 if (loginVM.LoginResponce.Success) {

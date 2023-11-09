@@ -29,8 +29,11 @@ namespace Inventory.ConsoleTesting {
             //DeleteLotFix("Agric Ultra", "18-337");
             //using(InventoryContext context=new InventoryContext()) {
             //TestingDataSummary();
-            //DeleteProductNew("TCDM9H2D_1");
-            DeleteLot("SOC20201207-001", "036457");
+            //DeleteProductNew("TUD79B1D");
+             DeleteLot("TC3BA0012", "036832");
+            //UpdateTransactionDate(11827,12746);
+            //UpdateTransactionDate(12857, 12861);
+            //UpdateTransactionDate(13144, 13243);
 
             //MovePartItems("TCDM9H2D_2", "TCDM9H2D");
             //using (var context = new InventoryContext()) {
@@ -40,6 +43,46 @@ namespace Inventory.ConsoleTesting {
             //    context.SaveChanges();
             //    Console.WriteLine("Should be done");
             //}
+        }
+
+        private static void UpdateTransactionCost() {
+            using (InventoryContext context = new InventoryContext()) {
+                context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions)).Include(e => e.Cost).ToList().ForEach(lot => {
+                    lot.ProductInstances.ToList().ForEach(rank => {
+                        rank.Transactions.ToList().ForEach(t => {
+                            var transaction = context.Entry<ProductTransaction>((ProductTransaction)t);
+                            transaction.Entity.UnitCost = lot.Cost.Amount;
+                            transaction.Entity.TotalCost = transaction.Entity.Quantity * lot.Cost.Amount;
+                            transaction.State = EntityState.Modified;
+                        });
+                    });
+                });
+                try {
+                    context.SaveChanges();
+                    Console.WriteLine("Should be fixed");
+                } catch {
+                    Console.WriteLine("Fix Failed");
+                }
+                Console.ReadKey();
+            }
+        }
+
+        private static void UpdateTransactionDate(int start,int stop) {
+            using (InventoryContext context = new InventoryContext()) {
+                for(int i = start; i <= stop; i++) {
+                    var transaction = context.Transactions.OfType<ProductTransaction>().FirstOrDefault(e => e.Id == i);
+                    var update = context.Entry<ProductTransaction>((ProductTransaction)transaction);
+                    update.Entity.TimeStamp= new DateTime(2023, 1, 1);
+                    update.State = EntityState.Modified;
+                    try {
+                        context.SaveChanges();
+                        Console.WriteLine($"{transaction.Id} fixed");
+                    } catch {
+                        Console.WriteLine($"{transaction.Id} Failed");
+                    }
+                }
+                Console.ReadKey();
+            }
         }
 
         private static void InventoryAgeTesting() {
@@ -361,27 +404,7 @@ namespace Inventory.ConsoleTesting {
             Console.ReadKey();
         }
 
-        private static void UpdateTransactionCost() {
-            using (InventoryContext context = new InventoryContext()) {
-                context.Lots.Include(e => e.ProductInstances.Select(x => x.Transactions)).Include(e => e.Cost).ToList().ForEach(lot => {
-                    lot.ProductInstances.ToList().ForEach(rank => {
-                        rank.Transactions.ToList().ForEach(t => {
-                            var transaction = context.Entry<ProductTransaction>((ProductTransaction)t);
-                            transaction.Entity.UnitCost = lot.Cost.Amount;
-                            transaction.Entity.TotalCost = transaction.Entity.Quantity * lot.Cost.Amount;
-                            transaction.State = EntityState.Modified;
-                        });
-                    });
-                });
-                try {
-                    context.SaveChanges();
-                    Console.WriteLine("Should be fixed");
-                } catch {
-                    Console.WriteLine("Fix Failed");
-                }
-                Console.ReadKey();
-            }
-        }
+
 
         private static void RankChangs() {
             using (InventoryContext context = new InventoryContext()) {

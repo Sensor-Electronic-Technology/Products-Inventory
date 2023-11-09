@@ -1,324 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4B1DA1DB-ED85-44E1-B0E6-2190C3C2A615}</ProjectGuid>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Inventory.Common</RootNamespace>
-    <AssemblyName>Inventory.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="CoContra.net45, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CoContra.1.0.2\lib\net45\CoContra.net45.dll</HintPath>
-    </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeParser.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.CodeParser.20.2.5\lib\net452\DevExpress.CodeParser.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Data.Desktop.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Data.Desktop.20.2.5\lib\net452\DevExpress.Data.Desktop.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Data.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Data.20.2.5\lib\net452\DevExpress.Data.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.DataAccess.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.DataAccess.20.2.5\lib\net452\DevExpress.DataAccess.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Images.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Images.20.2.5\lib\net452\DevExpress.Images.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Mvvm.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Mvvm.20.2.5\lib\net452\DevExpress.Mvvm.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Office.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Office.Core.20.2.5\lib\net452\DevExpress.Office.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Pdf.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Pdf.Core.20.2.5\lib\net452\DevExpress.Pdf.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Pdf.v20.2.Drawing, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Pdf.Drawing.20.2.5\lib\net452\DevExpress.Pdf.v20.2.Drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Printing.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Printing.Core.20.2.5\lib\net452\DevExpress.Printing.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.RichEdit.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Core.20.2.5\lib\net452\DevExpress.RichEdit.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.RichEdit.v20.2.Export, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Export.20.2.5\lib\net452\DevExpress.RichEdit.v20.2.Export.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Accordion.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Accordion.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Controls.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Controls.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Core.20.2.5\lib\net452\DevExpress.Xpf.Core.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v20.2.Extensions, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Core.20.2.5\lib\net452\DevExpress.Xpf.Core.v20.2.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Docking.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Docking.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.DocumentViewer.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.DocumentViewer.Core.20.2.5\lib\net452\DevExpress.Xpf.DocumentViewer.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.ExpressionEditor.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.ExpressionEditor.20.2.5\lib\net452\DevExpress.Xpf.ExpressionEditor.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v20.2.Extensions, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Grid.Core.20.2.5\lib\net452\DevExpress.Xpf.Grid.v20.2.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Layout.v20.2.Core, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Layout.v20.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Layout.20.2.5\lib\net452\DevExpress.Xpf.LayoutControl.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.NavBar.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.NavBar.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Office.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Office.20.2.5\lib\net452\DevExpress.Xpf.Office.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Printing.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Printing.20.2.5\lib\net452\DevExpress.Xpf.Printing.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Ribbon.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Navigation.20.2.5\lib\net452\DevExpress.Xpf.Ribbon.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.RichEdit.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.RichEdit.20.2.5\lib\net452\DevExpress.Xpf.RichEdit.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Wpf.Themes.Office2019Colorful.20.2.5\lib\net452\DevExpress.Xpf.Themes.Office2019Colorful.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpo.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Xpo.20.2.5\lib\net452\DevExpress.Xpo.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="Effortless.Net.Encryption, Version=3.2.0.0, Culture=neutral, PublicKeyToken=603f9a8e5bb15e51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Effortless.Net.Encryption.3.2.0\lib\net40\Effortless.Net.Encryption.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.Triggers, Version=6.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.Triggers.6.1.1\lib\net461\EntityFramework.Triggers.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.TypedOriginalValues, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.TypedOriginalValues.1.1.1\lib\net461\EntityFramework.TypedOriginalValues.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="Prism, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Core.7.2.0.1367\lib\net45\Prism.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.Plugin.Logging.Abstractions, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Abstractions.7.2.0.616\lib\net45\Prism.Plugin.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.Plugin.Logging.Common, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Common.7.2.0.616\lib\net45\Prism.Plugin.Logging.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.Plugin.Logging.Syslog, Version=7.2.0.616, Culture=neutral, PublicKeyToken=fbfaf746d14111cc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Plugin.Logging.Syslog.7.2.0.616\lib\netstandard2.0\Prism.Plugin.Logging.Syslog.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.Wpf, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.7.2.0.1367\lib\net45\Prism.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="QRCoder, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\QRCoder.1.3.5\lib\net40\QRCoder.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.7.2.0.1367\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ApplicationLayer\ApplicationCommands.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\BoundActionField.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\CancelCommand.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\CanExecuteChanged.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\CustomAsyncCommand.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\DisposableHelpers.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\PropertyChangedEventArgsCache.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\ThreadAffinity.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\WeakCollection.cs" />
-    <Compile Include="ApplicationLayer\Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="ApplicationLayer\IApplicationCommands.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\IAsyncCommand.cs" />
-    <Compile Include="ApplicationLayer\AsyncHelpers\NotifyTaskCompletion.cs" />
-    <Compile Include="ApplicationLayer\ProcessAsyncHelper.cs" />
-    <Compile Include="ApplicationLayer\UI Services\GridExportService.cs" />
-    <Compile Include="ApplicationLayer\UI Services\IExportService.cs" />
-    <Compile Include="ApplicationLayer\UI Services\UpdateService.cs" />
-    <Compile Include="BuisnessLayer\ImportService.cs" />
-    <Compile Include="BuisnessLayer\IQRCodeGenerator.cs" />
-    <Compile Include="BuisnessLayer\ReportData.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\CategoryDataManager.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\DataManagerBase.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\InventoryItemsManagers.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\ItemInstanceManager.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\LocationDataManager.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\ManufacturersDataManager.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\IEntityDataManager.cs" />
-    <Compile Include="DataLayer\EntityDataManagers\UserManager.cs" />
-    <Compile Include="DataLayer\EntityOperations\AttachmentOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\CategoryOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\DistributorOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\DomainUserDataOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\IEntityDataOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\InventoryItemOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\ItemInstanceOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\LocationDataOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\LotOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\ManufacturerOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\RateOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\ReservationOperations.cs" />
-    <Compile Include="DataLayer\EntityOperations\UserEntityOperations.cs" />
-    <Compile Include="DataLayer\ImportLotData.cs" />
-    <Compile Include="DataLayer\InventoryTriggers.cs" />
-    <Compile Include="DataLayer\Providers\AttachmentProvider.cs" />
-    <Compile Include="DataLayer\Providers\CategoryProviders.cs" />
-    <Compile Include="DataLayer\Providers\DistributorProvider.cs" />
-    <Compile Include="DataLayer\Providers\IEntityDataProvider.cs" />
-    <Compile Include="DataLayer\Providers\InstanceProvider.cs" />
-    <Compile Include="DataLayer\Providers\InventoryItemProviders.cs" />
-    <Compile Include="DataLayer\Providers\IPermissionProvider.cs" />
-    <Compile Include="DataLayer\Providers\IUserServiceProvider.cs" />
-    <Compile Include="DataLayer\Providers\LocationProvider.cs" />
-    <Compile Include="DataLayer\Providers\LotProvider.cs" />
-    <Compile Include="DataLayer\Providers\ManufacturerProvider.cs" />
-    <Compile Include="DataLayer\Providers\PermissionProvider.cs" />
-    <Compile Include="DataLayer\Providers\ReservationProvider.cs" />
-    <Compile Include="DataLayer\Providers\TransactionProvider.cs" />
-    <Compile Include="DataLayer\Providers\UserProvider.cs" />
-    <Compile Include="DataLayer\Providers\UserServiceProvider.cs" />
-    <Compile Include="BuisnessLayer\DomainManager.cs" />
-    <Compile Include="DataLayer\Services\EncryptString.cs" />
-    <Compile Include="BuisnessLayer\FileService.cs" />
-    <Compile Include="BuisnessLayer\IDomainManager.cs" />
-    <Compile Include="DataLayer\Services\IEntityTriggers.cs" />
-    <Compile Include="BuisnessLayer\IFileService.cs" />
-    <Compile Include="BuisnessLayer\ILogInService.cs" />
-    <Compile Include="DataLayer\Services\IImportService.cs" />
-    <Compile Include="DataLayer\Services\IUserService.cs" />
-    <Compile Include="BuisnessLayer\LogInService.cs" />
-    <Compile Include="BuisnessLayer\UserService.cs" />
-    <Compile Include="ApplicationLayer\AppViews.cs" />
-    <Compile Include="ApplicationLayer\Constants.cs" />
-    <Compile Include="ApplicationLayer\ContainerKeys.cs" />
-    <Compile Include="ApplicationLayer\Events.cs" />
-    <Compile Include="Inventory Extensions\Extensions.cs" />
-    <Compile Include="ApplicationLayer\InventoryOperations.cs" />
-    <Compile Include="ApplicationLayer\Regions.cs" />
-    <Compile Include="EntityLayer\Model\Context\DbContextUndoExtensions.cs" />
-    <Compile Include="EntityLayer\Model\Context\InventoryContext.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Attachment.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Categories.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Contact.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Distributor.cs" />
-    <Compile Include="EntityLayer\Model\Entities\EntityInterface.cs" />
-    <Compile Include="EntityLayer\Model\Entities\InventorySoftwareType.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Location.cs" />
-    <Compile Include="EntityLayer\Model\Entities\LocationType.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Log.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Lot.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Manufacturer.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Parameter.cs" />
-    <Compile Include="EntityLayer\Model\Entities\InventoryItem.cs" />
-    <Compile Include="EntityLayer\Model\Entities\ItemInstance.cs" />
-    <Compile Include="EntityLayer\Migrations\Configuration.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Permission.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Price.cs" />
-    <Compile Include="EntityLayer\Model\Entities\ProductReservation.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Session.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Setting.cs" />
-    <Compile Include="EntityLayer\Model\Entities\Transaction.cs" />
-    <Compile Include="EntityLayer\Model\Entities\User.cs" />
-    <Compile Include="InventoryCommon_Module.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationLayer\InventoryViewModelBase.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
@@ -349,10 +36,44 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ApplicationLayer\Resources\CommonControlResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <PackageReference Include="CoContra" Version="1.0.2" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
+    <PackageReference Include="DevExpress.Data" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Data.Desktop" Version="23.1.6" />
+    <PackageReference Include="DevExpress.DataAccess" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Images" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Mvvm" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Office.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Pdf.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Pdf.Drawing" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Printing.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.RichEdit.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.RichEdit.Export" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.DocumentViewer.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.ExpressionEditor" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Grid.Core" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Office" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Printing" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.RichEdit" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Wpf.Themes.Office2019Colorful" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Xpo" Version="23.1.6" />
+    <PackageReference Include="Effortless.Net.Encryption" Version="4.0.0" />
+    <PackageReference Include="EntityFramework.Triggers" Version="6.2.3" />
+    <PackageReference Include="Prism.Core" Version="7.2.0.1367" />
+    <PackageReference Include="Prism.Plugin.Logging.Abstractions" Version="7.2.0.616" />
+    <PackageReference Include="Prism.Plugin.Logging.Common" Version="7.2.0.616" />
+    <PackageReference Include="Prism.Plugin.Logging.Syslog" Version="7.2.0.616" />
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+    <PackageReference Include="QRCoder" Version="1.3.5" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

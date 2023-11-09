@@ -258,7 +258,12 @@ namespace Inventory.Reporting.ViewModels {
                     using (FileStream file = File.Create(path)) {
                         this.ExportServiceTransactions.Export(file, format);
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

@@ -77,6 +77,10 @@
                                        Style="{StaticResource TableViewStyleNoMaster}"
                                        SearchPanelNullText="Search By Part Number" 
                                        AllowGrouping="True" SearchColumns="Name">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxmvvm:EventToCommand Command="{Binding DoubleClickViewCommand}"
+                                                   EventName="MouseDoubleClick" />
+                        </dxmvvm:Interaction.Behaviors>
                         <dxg:TableView.RowCellMenuCustomizations>
 
                             <dxb:BarButtonItem Content="View Details" 

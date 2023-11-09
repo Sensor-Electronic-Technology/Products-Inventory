@@ -1,136 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C373920-EC37-4FF8-AB71-821E2910633E}</ProjectGuid>
-    <OutputType>library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Inventory.Reporting</RootNamespace>
-    <AssemblyName>Inventory.Reporting</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ReportingModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="ViewModels\ReportsCurrentInventoryViewModel.cs" />
-    <Compile Include="ViewModels\ReportsMainViewModel.cs" />
-    <Compile Include="ViewModels\ReportsSnapshotViewModel.cs" />
-    <Compile Include="ViewModels\ReportsTransactionSummaryViewModel.cs" />
-    <Compile Include="Views\ReportsCurrentInventoryView.xaml.cs">
-      <DependentUpon>ReportsCurrentInventoryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportsMainView.xaml.cs">
-      <DependentUpon>ReportsMainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportsSnapshotView.xaml.cs">
-      <DependentUpon>ReportsSnapshotView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportsTransactionSummaryView.xaml.cs">
-      <DependentUpon>ReportsTransactionSummaryView.xaml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ReportsCurrentInventoryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ReportsMainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ReportsSnapshotView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ReportsTransactionSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>8</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>00020813-0000-0000-c000-000000000046</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>20.2.5</Version>
+      <Version>23.1.6</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Mvvm">
-      <Version>20.2.5</Version>
+      <Version>23.1.6</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Core">
-      <Version>20.2.5</Version>
-    </PackageReference>
-    <PackageReference Include="DevExpress.Wpf.Layout">
-      <Version>20.2.5</Version>
+      <Version>23.1.6</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PivotGrid">
-      <Version>20.2.5</Version>
+      <Version>23.1.6</Version>
     </PackageReference>
+	  <!--<PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />-->
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Inventory.Common\Inventory.Common.csproj">
-      <Project>{4b1da1db-ed85-44e1-b0e6-2190c3c2a615}</Project>
-      <Name>Inventory.Common</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Inventory.Common\Inventory.Common.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

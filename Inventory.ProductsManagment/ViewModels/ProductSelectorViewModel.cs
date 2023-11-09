@@ -42,9 +42,11 @@ namespace Inventory.ProductsManagment.ViewModels {
         public PrismCommands.DelegateCommand EditProductDelegate { get; private set; }
         public PrismCommands.DelegateCommand DeleteProductCommand { get; private set; }
         public PrismCommands.DelegateCommand OnCopyingToClipboardCommand { get; private set; }
+        public PrismCommands.DelegateCommand DoubleClickViewCommand { get; private set; }
         public AsyncCommand InitializeCommand { get; private set; }
         public AsyncCommand RefreshDataCommand { get; private set; }
         public AsyncCommand BulkImportCommand { get; private set; }
+        
         public PrismCommands.DelegateCommand ClearDetailViewsCommand { get; private set; }
 
         public ProductSelectorViewModel(ProductDataManager dataManager, IEventAggregator eventAggregator, IRegionManager regionManager) {
@@ -53,6 +55,7 @@ namespace Inventory.ProductsManagment.ViewModels {
             this._regionManager = regionManager;
 
             this.ViewProductDetailsDelegate = new PrismCommands.DelegateCommand(this.ViewProductDetailsHandler, this.CanExecuteViewDetails);
+            this.DoubleClickViewCommand = new PrismCommands.DelegateCommand(this.ViewProductDetailsHandler, this.CanExecuteViewDetails);
             this.StartIncomingWithDelegate = new PrismCommands.DelegateCommand(this.StartWithSelectedHandler, this.CanExecute);
             this.NewProductCommand = new PrismCommands.DelegateCommand(this.CreateNewProductHandler, this.CanExecute);
             this.SetInIncomingFormDelegate = new PrismCommands.DelegateCommand(this.SetInIncomingHandler, this.CanExecuteIncoming);

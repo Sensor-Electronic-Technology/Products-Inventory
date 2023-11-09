@@ -88,13 +88,16 @@
 
         private void GetLDAPCredentials()
         {
-            this.username=Properties.Settings.Default.LDAP_UserName;
-            var encryptedPass = Properties.Settings.Default.LDAP_EncryptedPassword;
-            var encryptedAddr = Properties.Settings.Default.LDAP_EncryptedAddress;
-            var key =Convert.FromBase64String(Properties.Settings.Default.LDAP_Key);
-            var iv= Convert.FromBase64String(Properties.Settings.Default.LDAP_IV);
-            this.password = Strings.Decrypt(encryptedPass, key, iv);
-            this.address = Strings.Decrypt(encryptedAddr, key, iv);
+            this.username = "elmendorfal";
+            this.password = "!23seti";
+            this.address = "172.20.3.5";
+            //this.username=Properties.Settings.Default.LDAP_UserName;
+            //var encryptedPass = Properties.Settings.Default.LDAP_EncryptedPassword;
+            //var encryptedAddr = Properties.Settings.Default.LDAP_EncryptedAddress;
+            //var key =Convert.FromBase64String(Properties.Settings.Default.LDAP_Key);
+            //var iv= Convert.FromBase64String(Properties.Settings.Default.LDAP_IV);
+            //this.password = Strings.Decrypt(encryptedPass, key, iv);
+            //this.address = Strings.Decrypt(encryptedAddr, key, iv);
             StringBuilder message = new StringBuilder();
             message.AppendFormat("Username: {0} Password: {1} Address: {2}", this.username, this.password, this.address);
         }

@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Inventory.Common.ApplicationLayer.Services;
 using System.IO;
+using System.Diagnostics;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class OutgoingProductListViewModel : InventoryViewModelNavigationBase {
@@ -167,7 +168,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                     using(FileStream file = File.Create(path)) {
                         this.ExportService.Export(file, format);
                     }
-                    System.Diagnostics.Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

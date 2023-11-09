@@ -16,6 +16,7 @@ using Inventory.Common.DataLayer.Providers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.IO;
+using System.Diagnostics;
 
 namespace Inventory.ProductsManagment.ViewModels {
     public class IncomingProductListViewModel : InventoryViewModelNavigationBase {
@@ -115,7 +116,12 @@ namespace Inventory.ProductsManagment.ViewModels {
                             ExportType = DevExpress.Export.ExportType.WYSIWYG
                         });
                     }
-                    System.Diagnostics.Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

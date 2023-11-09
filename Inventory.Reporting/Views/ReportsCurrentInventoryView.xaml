@@ -69,7 +69,8 @@
                     </dxb:BarContainerControl>
                     <dxg:GridControl Style="{StaticResource GridControlStyle}" 
                                      ItemsSource="{Binding CurrentInventory,Mode=TwoWay,IsAsync=True}" 
-                                     ShowLoadingPanel="{Binding IsLoading,IsAsync=True,Mode=TwoWay}">
+                                     ShowLoadingPanel="{Binding IsLoading,IsAsync=True,Mode=TwoWay}"
+                                     >
                         <dxmvvm:Interaction.Behaviors>
                             <Services:GridExportService x:Name="TotalInventoryExportService"/>
                         </dxmvvm:Interaction.Behaviors>

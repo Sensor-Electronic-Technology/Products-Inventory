@@ -7,28 +7,28 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </ItemGroup>
+  <ItemGroup>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="DevExpress.Data">
-		  <Version>23.1.6</Version>
-	  </PackageReference>
+    <PackageReference Include="DevExpress.Data">
+      <Version>20.2.5</Version>
+    </PackageReference>
     <PackageReference Include="DevExpress.Mvvm">
       <Version>23.1.6</Version>
     </PackageReference>
     <PackageReference Include="DevExpress.Wpf.Core">
       <Version>23.1.6</Version>
     </PackageReference>
-    <PackageReference Include="DevExpress.Wpf.Grid">
-      <Version>23.1.6</Version>
+    <PackageReference Include="DevExpress.Wpf.Layout">
+      <Version>20.2.5</Version>
     </PackageReference>
-    <PackageReference Include="DevExpress.Wpf.PrismAdapters">
+    <PackageReference Include="DevExpress.Wpf.PivotGrid">
       <Version>23.1.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Prism.Core">
-      <Version>7.2.0.1367</Version>
-    </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>

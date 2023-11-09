@@ -90,7 +90,12 @@ namespace Inventory.Reporting.ViewModels {
                             //ExportType = DevExpress.Export.ExportType.WYSIWYG
                         });
                     }
-                    Process.Start(path);
+                    using (var process = new Process()) {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.FileName = path;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                    }
                 });
             });
         }

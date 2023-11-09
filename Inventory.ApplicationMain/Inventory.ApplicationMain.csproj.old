@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
@@ -14,7 +14,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>en</TargetCulture>
-    <ProductName>Product Inventory</ProductName>
+    <ProductName>InventoryManagment</ProductName>
     <PublisherName>SETi</PublisherName>
     <SuiteName>InventorySuite</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
@@ -53,15 +53,14 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data">
-      <Version>23.1.6</Version>
+      <Version>20.2.5</Version>
     </PackageReference>
-	  <PackageReference Include="DevExpress.Data.Desktop">
-		  <Version>23.1.6</Version>
-	  </PackageReference>	  
     <PackageReference Include="DevExpress.Mvvm">
       <Version>23.1.6</Version>
     </PackageReference>
-	  
+    <PackageReference Include="DevExpress.Wpf.Navigation">
+      <Version>20.2.5</Version>
+    </PackageReference>
     <PackageReference Include="DevExpress.Wpf.PrismAdapters">
       <Version>23.1.6</Version>
     </PackageReference>
@@ -125,18 +124,5 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\seti_logo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 </Project>
